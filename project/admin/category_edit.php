@@ -19,7 +19,12 @@ admin_header('Edit category');
     <label>Name<input type="text" name="name" value="<?php echo h($category['name']); ?>" required></label>
     <label>Slug<input type="text" name="slug" value="<?php echo h($category['slug']); ?>" required></label>
     <label>Description<textarea name="description" rows="4"><?php echo h($category['description']); ?></textarea></label>
-    <label>Cover image<input type="file" name="hero_image" accept="image/*"></label>
+    <div class="form-field" data-crop-group>
+        <label>Cover image
+            <input type="file" name="hero_image" accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">اضبط المربع الذي تريد استخدامه قبل رفع صورة الغلاف الجديدة.</p>
+    </div>
     <?php if ($category['hero_image']): ?>
         <div>
             <p>Current cover:</p>
@@ -27,7 +32,12 @@ admin_header('Edit category');
             <p><a href="category_hero_delete.php?id=<?php echo (int)$category['id']; ?>" onclick="return confirm('Удалить обложку?');">Удалить обложку</a></p>
         </div>
     <?php endif; ?>
-    <label>Gallery images<input type="file" name="gallery[]" multiple accept="image/*"></label>
+    <div class="form-field" data-crop-group>
+        <label>Gallery images
+            <input type="file" name="gallery[]" multiple accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">اختر القص اليدوي لكل صورة إضافية.</p>
+    </div>
     <?php if ($gallery): ?>
         <div>
             <p>Gallery:</p>

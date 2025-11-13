@@ -226,4 +226,187 @@ document.addEventListener('DOMContentLoaded', () => {
         bindExistingControls();
         rebuildCells();
     });
+
+    const hasCropper = typeof Cropper !== 'undefined';
+    const cropperModal = document.getElementById('imageCropModal');
+    if (hasCropper && cropperModal) {
+        const modalImage = cropperModal.querySelector('[data-crop-image]');
+        const confirmBtn = cropperModal.querySelector('[data-crop-confirm]');
+        const skipBtn = cropperModal.querySelector('[data-crop-skip]');
+        const cancelButtons = cropperModal.querySelectorAll('[data-crop-cancel]');
+        const fileNameTarget = cropperModal.querySelector('[data-crop-filename]');
+        let cropperInstance = null;
+        let resolver = null;
+        let rejecter = null;
+        let currentObjectUrl = null;
+        let activeFile = null;
+
+        const toggleBodyScroll = (lock) => {
+            document.body.classList.toggle('cropper-open', !!lock);
+        };
+
+        const destroyCropper = () => {
+            if (cropperInstance) {
+                cropperInstance.destroy();
+                cropperInstance = null;
+            }
+            if (currentObjectUrl) {
+                URL.revokeObjectURL(currentObjectUrl);
+                currentObjectUrl = null;
+            }
+        };
+
+        const closeCropperModal = () => {
+            destroyCropper();
+            cropperModal.setAttribute('hidden', 'hidden');
+            cropperModal.classList.remove('is-open');
+            toggleBodyScroll(false);
+            if (modalImage) {
+                modalImage.removeAttribute('src');
+                modalImage.onload = null;
+            }
+            activeFile = null;
+            resolver = null;
+            rejecter = null;
+        };
+
+        const openCropperModal = (file) => new Promise((resolve, reject) => {
+            resolver = resolve;
+            rejecter = reject;
+            activeFile = file;
+            if (!modalImage) {
+                resolve(null);
+                return;
+            }
+            if (currentObjectUrl) {
+                URL.revokeObjectURL(currentObjectUrl);
+            }
+            currentObjectUrl = URL.createObjectURL(file);
+            if (fileNameTarget) {
+                fileNameTarget.textContent = file.name || '';
+            }
+            cropperModal.removeAttribute('hidden');
+            cropperModal.classList.add('is-open');
+            toggleBodyScroll(true);
+            modalImage.onload = () => {
+                cropperInstance = new Cropper(modalImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 0.92,
+                    background: false,
+                    movable: true,
+                    responsive: true,
+                });
+            };
+            modalImage.src = currentObjectUrl;
+        });
+
+        const handleCancel = () => {
+            if (rejecter) {
+                rejecter(new Error('cancelled'));
+            }
+            closeCropperModal();
+        };
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => {
+                if (!cropperInstance || !resolver) {
+                    return;
+                }
+                const canvas = cropperInstance.getCroppedCanvas();
+                if (!canvas) {
+                    resolver(null);
+                    closeCropperModal();
+                    return;
+                }
+                const preferredType = (activeFile && /^image\/[-+\.\w]+$/i.test(activeFile.type)) ? activeFile.type : 'image/png';
+                let dataUrl = null;
+                try {
+                    dataUrl = canvas.toDataURL(preferredType, 1);
+                } catch (error) {
+                    console.warn('Unable to export cropped image', error);
+                }
+                resolver(dataUrl ? {
+                    dataUrl,
+                    mimeType: preferredType,
+                    originalName: activeFile ? activeFile.name : 'image',
+                } : null);
+                closeCropperModal();
+            });
+        }
+
+        if (skipBtn) {
+            skipBtn.addEventListener('click', () => {
+                if (!resolver) {
+                    return;
+                }
+                resolver(null);
+                closeCropperModal();
+            });
+        }
+
+        cancelButtons.forEach((btn) => {
+            btn.addEventListener('click', handleCancel);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && cropperModal.classList.contains('is-open')) {
+                handleCancel();
+            }
+        });
+
+        const dataUrlToFile = (dataUrl, originalName, mimeType) => {
+            if (!dataUrl) {
+                return null;
+            }
+            const parts = dataUrl.split(',');
+            if (parts.length < 2) {
+                return null;
+            }
+            const byteString = atob(parts[1]);
+            const array = new Uint8Array(byteString.length);
+            for (let i = 0; i < byteString.length; i += 1) {
+                array[i] = byteString.charCodeAt(i);
+            }
+            const fallbackType = mimeType || (parts[0].match(/data:(.*);base64/i)?.[1]) || 'image/png';
+            const extension = fallbackType.split('/')[1] || 'png';
+            const baseName = originalName && originalName.includes('.')
+                ? originalName.slice(0, originalName.lastIndexOf('.'))
+                : (originalName || 'image');
+            const safeExt = extension.replace(/[^a-z0-9]+/gi, '') || 'png';
+            return new File([array], `${baseName || 'image'}-cropped.${safeExt}`, { type: fallbackType });
+        };
+
+        const processInputFiles = async (input) => {
+            const files = Array.from(input.files || []);
+            if (!files.length || typeof DataTransfer === 'undefined') {
+                return;
+            }
+            const transfer = new DataTransfer();
+            for (const file of files) {
+                let nextFile = file;
+                try {
+                    const result = await openCropperModal(file);
+                    if (result && result.dataUrl) {
+                        const converted = dataUrlToFile(result.dataUrl, result.originalName || file.name, result.mimeType);
+                        if (converted) {
+                            nextFile = converted;
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Cropping cancelled', error);
+                    input.value = '';
+                    return;
+                }
+                transfer.items.add(nextFile);
+            }
+            input.files = transfer.files;
+        };
+
+        document.querySelectorAll('input[type="file"][data-crop-field]').forEach((input) => {
+            input.addEventListener('change', () => {
+                processInputFiles(input);
+            });
+        });
+    }
 });

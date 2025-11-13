@@ -39,7 +39,12 @@ admin_header('Edit group');
     <label>Title<input type="text" name="group_title" value="<?php echo h($group['group_title']); ?>" required></label>
     <label>Left description<textarea name="left_description" rows="4" required><?php echo h($group['left_description']); ?></textarea></label>
     <label>SEO text<textarea name="seo_text" rows="4"><?php echo h($group['seo_text']); ?></textarea></label>
-    <label>Main image<input type="file" name="main_image" accept="image/*"></label>
+    <div class="form-field" data-crop-group>
+        <label>Main image
+            <input type="file" name="main_image" accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">قص مربع قبل استبدال الصورة الرئيسية.</p>
+    </div>
     <?php if (!empty($group['main_image'])): ?>
         <div>
             <p>Current main image:</p>
@@ -47,7 +52,12 @@ admin_header('Edit group');
             <p><a href="group_main_image_delete.php?id=<?php echo (int)$group['id']; ?>" onclick="return confirm('Удалить главное изображение?');">Удалить главное изображение</a></p>
         </div>
     <?php endif; ?>
-    <label>Add images<input type="file" name="images[]" multiple></label>
+    <div class="form-field" data-crop-group>
+        <label>Add images
+            <input type="file" name="images[]" multiple data-crop-field>
+        </label>
+        <p class="form-hint">قم بتحديد موضع القص لكل صورة ترفعها.</p>
+    </div>
     <?php if ($images): ?>
         <div>
             <p>Existing images:</p>

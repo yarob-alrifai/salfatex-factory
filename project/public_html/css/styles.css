@@ -623,6 +623,9 @@ html[data-theme="dark"] [class*="border-slate-800"] {
     color: #0f172a;
     min-height: 100vh;
 }
+.admin-body.cropper-open {
+    overflow: hidden;
+}
 
 .admin-app {
     display: flex;
@@ -778,6 +781,14 @@ html[data-theme="dark"] [class*="border-slate-800"] {
     padding: 2rem;
     box-shadow: 0 25px 60px rgba(15, 23, 42, 0.08);
 }
+.admin-panel .form-field {
+    margin-bottom: 1.5rem;
+}
+.admin-panel .form-hint {
+    margin: 0.35rem 0 0;
+    font-size: 0.85rem;
+    color: var(--admin-muted);
+}
 
 .admin-panel .btn {
     border-radius: 12px;
@@ -803,6 +814,72 @@ html[data-theme="dark"] [class*="border-slate-800"] {
     outline: none;
     border-color: var(--admin-accent);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.admin-cropper {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 999;
+}
+.admin-cropper[hidden] {
+    display: none;
+}
+.admin-cropper__dialog {
+    background: var(--admin-panel);
+    width: min(720px, 100%);
+    border-radius: 24px;
+    box-shadow: 0 35px 80px rgba(15, 23, 42, 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+.admin-cropper__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.admin-cropper__filename {
+    margin: 0.25rem 0 0;
+    font-size: 0.9rem;
+    color: var(--admin-muted);
+}
+.admin-cropper__close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--admin-muted);
+}
+.admin-cropper__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.admin-cropper__canvas {
+    width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
+    max-height: 420px;
+}
+.admin-cropper__canvas img {
+    width: 100%;
+    max-height: 420px;
+    display: block;
+}
+.admin-cropper__hint {
+    margin: 0;
+    color: var(--admin-muted);
+}
+.admin-cropper__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 .btn--primary {

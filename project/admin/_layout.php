@@ -27,6 +27,7 @@ function admin_header(string $title): void
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../public_html/css/styles.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css">
         <?php render_admin_theme_assets(); ?>
     </head>
     <body class="admin-body theme-dark">
@@ -84,6 +85,29 @@ function admin_footer(): void
             </section>
         </main>
     </div>
+    <div id="imageCropModal" class="admin-cropper" hidden>
+        <div class="admin-cropper__dialog" role="dialog" aria-modal="true" aria-labelledby="imageCropTitle">
+            <header class="admin-cropper__header">
+                <div>
+                    <p class="eyebrow" id="imageCropTitle">قص الصورة</p>
+                    <p data-crop-filename class="admin-cropper__filename"></p>
+                </div>
+                <button type="button" class="admin-cropper__close" data-crop-cancel aria-label="إغلاق">×</button>
+            </header>
+            <div class="admin-cropper__body">
+                <div class="admin-cropper__canvas">
+                    <img src="" alt="صورة للقص" data-crop-image>
+                </div>
+                <p class="admin-cropper__hint">حدد المربع الذي تريد استخدامه ثم اضغط «تأكيد القص».</p>
+            </div>
+            <footer class="admin-cropper__actions">
+                <button type="button" class="btn" data-crop-confirm>تأكيد القص</button>
+                <button type="button" class="btn-secondary" data-crop-skip>استخدام القص التلقائي</button>
+                <button type="button" class="btn-secondary" data-crop-cancel>إلغاء</button>
+            </footer>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
     <script src="../public_html/js/main.js"></script>
     </body>
     </html>

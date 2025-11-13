@@ -19,8 +19,18 @@ admin_header('Add group');
     <label>Title<input type="text" name="group_title" required></label>
     <label>Left description<textarea name="left_description" rows="4" required></textarea></label>
     <label>SEO text<textarea name="seo_text" rows="4"></textarea></label>
-    <label>Main image<input type="file" name="main_image" accept="image/*"></label>
-    <label>Gallery images<input type="file" name="images[]" multiple></label>
+    <div class="form-field" data-crop-group>
+        <label>Main image
+            <input type="file" name="main_image" accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">اضبط القص المربع لصورة المنتج الرئيسية.</p>
+    </div>
+    <div class="form-field" data-crop-group>
+        <label>Gallery images
+            <input type="file" name="images[]" multiple data-crop-field>
+        </label>
+        <p class="form-hint">سيتم فتح أداة القص لكل صورة على حدة.</p>
+    </div>
     <div class="table-editor" data-table-editor>
         <h3>Dynamic table</h3>
         <div data-columns class="columns"></div>

@@ -194,7 +194,9 @@ function encode_uploaded_image(array $file): ?string
     if ($contents === false) {
         return null;
     }
+
     $mime = detect_uploaded_mime_type($file, $tmpName);
+
     return 'data:' . $mime . ';base64,' . base64_encode($contents);
 }
 
