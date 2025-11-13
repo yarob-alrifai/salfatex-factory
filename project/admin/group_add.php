@@ -1,20 +1,25 @@
 <?php
 require_once __DIR__ . '/_layout.php';
 require_admin();
-$categories = allowed_categories();
+$categories = get_category_options();
 admin_header('Add group');
 ?>
 <form method="post" action="group_save.php" enctype="multipart/form-data">
     <label>Category
-        <select name="category" required>
-            <?php foreach ($categories as $key => $label): ?>
-                <option value="<?php echo h($key); ?>"><?php echo h($label); ?></option>
+        <select name="category_id" required>
+            <option value="">-- Select category --</option>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?php echo (int)$category['id']; ?>"><?php echo h($category['name']); ?></option>
             <?php endforeach; ?>
         </select>
     </label>
+    <?php if (!$categories): ?>
+        <p class="notice">Сначала создайте категорию.</p>
+    <?php endif; ?>
     <label>Title<input type="text" name="group_title" required></label>
     <label>Left description<textarea name="left_description" rows="4" required></textarea></label>
     <label>SEO text<textarea name="seo_text" rows="4"></textarea></label>
+    <label>Main image<input type="file" name="main_image" accept="image/*"></label>
     <label>Gallery images<input type="file" name="images[]" multiple></label>
     <div class="table-editor" data-table-editor>
         <h3>Dynamic table</h3>

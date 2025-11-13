@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
-$categories = allowed_categories();
+$categories = get_all_categories();
 $latestNews = get_latest_news($pdo, 3);
 $contact = get_contact_info($pdo);
 site_header('Фабрика бумажной продукции');
@@ -20,14 +20,29 @@ site_header('Фабрика бумажной продукции');
 <section class="categories">
     <div class="container">
         <h2>Основные направления</h2>
-        <div class="grid">
-            <?php foreach ($categories as $key => $label): ?>
-                <a class="category-card" href="category.php?category=<?php echo h($key); ?>">
-                    <h3><?php echo h($label); ?></h3>
-                    <p>Стабильное качество и гибкие варианты упаковки.</p>
-                </a>
-            <?php endforeach; ?>
-        </div>
+        <?php if ($categories): ?>
+            <div class="grid">
+                <?php foreach ($categories as $category): ?>
+                    <a class="category-card" href="category.php?category=<?php echo h($category['slug']); ?>">
+                        <div class="category-card__media">
+                            <?php if (!empty($category['hero_image'])): ?>
+                                <img src="uploads/categories/<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
+                            <?php else: ?>
+                                <img src="images/placeholder.svg" alt="<?php echo h($category['name']); ?>">
+                            <?php endif; ?>
+                        </div>
+                        <h3><?php echo h($category['name']); ?></h3>
+                        <?php if (!empty($category['description'])): ?>
+                            <p><?php echo h(mb_substr(strip_tags($category['description']), 0, 120)); ?>...</p>
+                        <?php else: ?>
+                            <p>Стабильное качество и гибкие варианты упаковки.</p>
+                        <?php endif; ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>Добавьте первую категорию, чтобы показать продукцию на главной странице.</p>
+        <?php endif; ?>
     </div>
 </section>
 <section class="about">

@@ -63,21 +63,56 @@ function upload_images(array $files, string $destination): array
     return $uploaded;
 }
 
-function allowed_categories(): array
+function upload_single_image(?array $file, string $destination): ?string
 {
-    return [
-        'napkins' => 'Салфетки',
-        'towels' => 'Бумажные полотенца',
-        'toilet' => 'Туалетная бумага',
-        'cosmetic' => 'Косметические салфетки'
-    ];
-}
-
-function sanitize_category(?string $value): ?string
-{
-    $categories = allowed_categories();
-    if ($value && array_key_exists($value, $categories)) {
-        return $value;
+    if (!$file || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return null;
+    }
+    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $fileName = uniqid('img_', true) . ($ext ? '.' . $ext : '');
+    $targetDir = rtrim($destination, '/');
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
+    $target = $targetDir . '/' . $fileName;
+    if (move_uploaded_file($file['tmp_name'], $target)) {
+        return $fileName;
     }
     return null;
+}
+
+function get_all_categories(): array
+{
+    global $pdo;
+    $stmt = $pdo->query('SELECT * FROM product_categories ORDER BY name');
+    return $stmt->fetchAll();
+}
+
+function get_category_options(): array
+{
+    global $pdo;
+    $stmt = $pdo->query('SELECT id, name FROM product_categories ORDER BY name');
+    return $stmt->fetchAll();
+}
+
+function get_category_by_slug(?string $slug): ?array
+{
+    global $pdo;
+    if (!$slug) {
+        return null;
+    }
+    $slug = strtolower($slug);
+    $stmt = $pdo->prepare('SELECT * FROM product_categories WHERE slug = :slug LIMIT 1');
+    $stmt->execute(['slug' => $slug]);
+    $category = $stmt->fetch();
+    return $category ?: null;
+}
+
+function get_category_by_id(int $id): ?array
+{
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT * FROM product_categories WHERE id = :id LIMIT 1');
+    $stmt->execute(['id' => $id]);
+    $category = $stmt->fetch();
+    return $category ?: null;
 }

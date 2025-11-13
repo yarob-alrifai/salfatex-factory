@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
-$category = sanitize_category($_POST['category'] ?? '');
+$categoryId = (int)($_POST['category_id'] ?? 0);
+$category = $categoryId ? get_category_by_id($categoryId) : null;
 if (!$category) {
     die('Invalid category');
 }
@@ -11,12 +12,14 @@ $seoText = trim($_POST['seo_text'] ?? '');
 $columns = $_POST['columns'] ?? [];
 $rows = $_POST['rows'] ?? [];
 $cells = $_POST['cells'] ?? [];
+$mainImage = upload_single_image($_FILES['main_image'] ?? null, __DIR__ . '/../public_html/uploads/groups');
 $pdo->beginTransaction();
 try {
-    $stmt = $pdo->prepare('INSERT INTO product_groups (category, group_title, left_description, seo_text, created_at) VALUES (:category, :group_title, :left_description, :seo_text, NOW())');
+    $stmt = $pdo->prepare('INSERT INTO product_groups (category_id, group_title, main_image, left_description, seo_text, created_at) VALUES (:category_id, :group_title, :main_image, :left_description, :seo_text, NOW())');
     $stmt->execute([
-        'category' => $category,
+        'category_id' => $category['id'],
         'group_title' => $title,
+        'main_image' => $mainImage,
         'left_description' => $leftDescription,
         'seo_text' => $seoText,
     ]);

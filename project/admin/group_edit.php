@@ -9,7 +9,7 @@ if (!$group) {
     header('Location: groups_list.php');
     exit;
 }
-$categories = allowed_categories();
+$categories = get_category_options();
 $columnStmt = $pdo->prepare('SELECT * FROM product_group_columns WHERE group_id = :id ORDER BY order_index');
 $columnStmt->execute(['id' => $id]);
 $columns = $columnStmt->fetchAll();
@@ -30,15 +30,23 @@ admin_header('Edit group');
 <form method="post" action="group_update.php" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?php echo (int)$group['id']; ?>">
     <label>Category
-        <select name="category" required>
-            <?php foreach ($categories as $key => $label): ?>
-                <option value="<?php echo h($key); ?>" <?php echo $group['category'] === $key ? 'selected' : ''; ?>><?php echo h($label); ?></option>
+        <select name="category_id" required>
+            <?php foreach ($categories as $category): ?>
+                <option value="<?php echo (int)$category['id']; ?>" <?php echo ((int)$group['category_id'] === (int)$category['id']) ? 'selected' : ''; ?>><?php echo h($category['name']); ?></option>
             <?php endforeach; ?>
         </select>
     </label>
     <label>Title<input type="text" name="group_title" value="<?php echo h($group['group_title']); ?>" required></label>
     <label>Left description<textarea name="left_description" rows="4" required><?php echo h($group['left_description']); ?></textarea></label>
     <label>SEO text<textarea name="seo_text" rows="4"><?php echo h($group['seo_text']); ?></textarea></label>
+    <label>Main image<input type="file" name="main_image" accept="image/*"></label>
+    <?php if (!empty($group['main_image'])): ?>
+        <div>
+            <p>Current main image:</p>
+            <img src="../public_html/uploads/groups/<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>">
+            <p><a href="group_main_image_delete.php?id=<?php echo (int)$group['id']; ?>" onclick="return confirm('Удалить главное изображение?');">Удалить главное изображение</a></p>
+        </div>
+    <?php endif; ?>
     <label>Add images<input type="file" name="images[]" multiple></label>
     <?php if ($images): ?>
         <div>

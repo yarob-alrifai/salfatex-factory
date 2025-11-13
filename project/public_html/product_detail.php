@@ -6,7 +6,7 @@ if ($id <= 0) {
     echo 'Группа не найдена';
     exit;
 }
-$groupStmt = $pdo->prepare('SELECT * FROM product_groups WHERE id = :id');
+$groupStmt = $pdo->prepare('SELECT pg.*, pc.name AS category_name, pc.slug AS category_slug FROM product_groups pg JOIN product_categories pc ON pg.category_id = pc.id WHERE pg.id = :id');
 $groupStmt->execute(['id' => $id]);
 $group = $groupStmt->fetch();
 if (!$group) {
@@ -14,8 +14,7 @@ if (!$group) {
     echo 'Группа не найдена';
     exit;
 }
-$categories = allowed_categories();
-$categoryTitle = $categories[$group['category']] ?? 'Продукция';
+$categoryTitle = $group['category_name'] ?? 'Продукция';
 $meta = ['title' => $group['group_title'] . ' — ' . $categoryTitle];
 site_header($group['group_title'], $meta);
 $imageStmt = $pdo->prepare('SELECT * FROM product_group_images WHERE group_id = :id');
@@ -36,7 +35,7 @@ foreach ($cellsStmt as $cell) {
 ?>
 <section class="category-intro">
     <div class="container">
-        <a class="back-link" href="category.php?category=<?php echo h($group['category']); ?>">&larr; Назад к категории</a>
+        <a class="back-link" href="category.php?category=<?php echo h($group['category_slug']); ?>">&larr; Назад к категории</a>
         <h1><?php echo h($group['group_title']); ?></h1>
         <p>Категория: <?php echo h($categoryTitle); ?></p>
     </div>
@@ -44,12 +43,16 @@ foreach ($cellsStmt as $cell) {
 <div class="container">
     <div class="group-body">
         <div class="group-gallery" data-gallery>
+            <?php if (!empty($group['main_image'])): ?>
+                <img class="group-gallery__main" src="uploads/groups/<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>">
+            <?php endif; ?>
             <?php if ($images): ?>
                 <?php foreach ($images as $image): ?>
                     <img src="uploads/groups/<?php echo h($image['image_path']); ?>" alt="<?php echo h($group['group_title']); ?>">
                 <?php endforeach; ?>
-            <?php else: ?>
-                <img src="images/placeholder.jpg" alt="<?php echo h($group['group_title']); ?>">
+            <?php endif; ?>
+            <?php if (empty($group['main_image']) && !$images): ?>
+                <img src="images/placeholder.svg" alt="<?php echo h($group['group_title']); ?>">
             <?php endif; ?>
         </div>
         <div class="group-description">

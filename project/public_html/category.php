@@ -1,24 +1,54 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
-$categories = allowed_categories();
-$categoryKey = sanitize_category($_GET['category'] ?? null);
-if (!$categoryKey) {
+$slug = $_GET['category'] ?? '';
+$category = get_category_by_slug($slug);
+if (!$category) {
     http_response_code(404);
     echo 'Категория не найдена';
     exit;
 }
-$categoryTitle = $categories[$categoryKey];
-$groupStmt = $pdo->prepare('SELECT * FROM product_groups WHERE category = :category ORDER BY created_at DESC');
-$groupStmt->execute(['category' => $categoryKey]);
+$groupStmt = $pdo->prepare('SELECT * FROM product_groups WHERE category_id = :category ORDER BY created_at DESC');
+$groupStmt->execute(['category' => $category['id']]);
 $groups = $groupStmt->fetchAll();
-site_header('Категория: ' . $categoryTitle, ['title' => $categoryTitle]);
+$galleryStmt = $pdo->prepare('SELECT * FROM product_category_images WHERE category_id = :id');
+$galleryStmt->execute(['id' => $category['id']]);
+$categoryGallery = $galleryStmt->fetchAll();
+$meta = [
+    'title' => $category['name'],
+    'description' => $category['description'] ? mb_substr(strip_tags($category['description']), 0, 160) : null,
+];
+site_header('Категория: ' . $category['name'], $meta);
 ?>
 <section class="category-intro">
-    <div class="container">
-        <h1><?php echo h($categoryTitle); ?></h1>
-        <p>Узнайте подробные характеристики каждой серии продукции. Таблицы обновляются автоматически через админ-панель.</p>
+    <div class="container split">
+        <div>
+            <h1><?php echo h($category['name']); ?></h1>
+            <?php if (!empty($category['description'])): ?>
+                <p><?php echo nl2br(h($category['description'])); ?></p>
+            <?php else: ?>
+                <p>Узнайте подробные характеристики каждой серии продукции. Таблицы обновляются автоматически через админ-панель.</p>
+            <?php endif; ?>
+        </div>
+        <div class="category-hero">
+            <?php if (!empty($category['hero_image'])): ?>
+                <img src="uploads/categories/<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
+            <?php else: ?>
+                <img src="images/placeholder.svg" alt="<?php echo h($category['name']); ?>">
+            <?php endif; ?>
+        </div>
     </div>
 </section>
+<?php if ($categoryGallery): ?>
+    <section class="category-gallery">
+        <div class="container">
+            <div class="gallery-track" data-gallery>
+                <?php foreach ($categoryGallery as $image): ?>
+                    <img src="uploads/categories/<?php echo h($image['image_path']); ?>" alt="<?php echo h($category['name']); ?>">
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </section>
+<?php endif; ?>
 <div class="container">
     <?php if ($groups): ?>
         <?php foreach ($groups as $group): ?>
@@ -43,12 +73,16 @@ site_header('Категория: ' . $categoryTitle, ['title' => $categoryTitle]
                 <h2><?php echo h($group['group_title']); ?></h2>
                 <div class="group-body">
                     <div class="group-gallery" data-gallery>
+                        <?php if (!empty($group['main_image'])): ?>
+                            <img class="group-gallery__main" src="uploads/groups/<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>">
+                        <?php endif; ?>
                         <?php if ($images): ?>
                             <?php foreach ($images as $image): ?>
                                 <img src="uploads/groups/<?php echo h($image['image_path']); ?>" alt="<?php echo h($group['group_title']); ?>">
                             <?php endforeach; ?>
-                        <?php else: ?>
-                            <img src="images/placeholder.jpg" alt="<?php echo h($group['group_title']); ?>">
+                        <?php endif; ?>
+                        <?php if (empty($group['main_image']) && !$images): ?>
+                            <img src="images/placeholder.svg" alt="<?php echo h($group['group_title']); ?>">
                         <?php endif; ?>
                     </div>
                     <div class="group-description">

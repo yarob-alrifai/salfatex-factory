@@ -2,9 +2,16 @@
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
 $id = (int)($_POST['id'] ?? 0);
-$category = sanitize_category($_POST['category'] ?? '');
+$categoryId = (int)($_POST['category_id'] ?? 0);
+$category = $categoryId ? get_category_by_id($categoryId) : null;
 if (!$category) {
     die('Invalid category');
+}
+$currentGroupStmt = $pdo->prepare('SELECT main_image FROM product_groups WHERE id = :id');
+$currentGroupStmt->execute(['id' => $id]);
+$currentGroup = $currentGroupStmt->fetch();
+if (!$currentGroup) {
+    die('Group not found');
 }
 $title = trim($_POST['group_title'] ?? '');
 $leftDescription = trim($_POST['left_description'] ?? '');
@@ -12,12 +19,24 @@ $seoText = trim($_POST['seo_text'] ?? '');
 $columns = $_POST['columns'] ?? [];
 $rows = $_POST['rows'] ?? [];
 $cells = $_POST['cells'] ?? [];
+$newMainImage = upload_single_image($_FILES['main_image'] ?? null, __DIR__ . '/../public_html/uploads/groups');
+$mainImage = $currentGroup['main_image'];
+if ($newMainImage) {
+    if ($mainImage) {
+        $file = __DIR__ . '/../public_html/uploads/groups/' . $mainImage;
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+    $mainImage = $newMainImage;
+}
 $pdo->beginTransaction();
 try {
-    $updateGroup = $pdo->prepare('UPDATE product_groups SET category=:category, group_title=:group_title, left_description=:left_description, seo_text=:seo_text WHERE id=:id');
+    $updateGroup = $pdo->prepare('UPDATE product_groups SET category_id=:category_id, group_title=:group_title, main_image=:main_image, left_description=:left_description, seo_text=:seo_text WHERE id=:id');
     $updateGroup->execute([
-        'category' => $category,
+        'category_id' => $category['id'],
         'group_title' => $title,
+        'main_image' => $mainImage,
         'left_description' => $leftDescription,
         'seo_text' => $seoText,
         'id' => $id,
