@@ -30,7 +30,18 @@ function render_admin_theme_assets(): void
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
     <style type="text/tailwindcss">
         @layer base {
-            body.admin-body,
+            body.admin-body {
+                @apply font-sans transition-colors duration-300;
+            }
+
+            body.admin-body.theme-dark {
+                @apply bg-slate-950 text-slate-100;
+            }
+
+            body.admin-body.theme-light {
+                @apply bg-slate-100 text-slate-900;
+            }
+
             body.admin-auth {
                 @apply bg-slate-950 text-slate-100 font-sans;
             }
@@ -102,7 +113,7 @@ function render_admin_theme_assets(): void
             }
 
             .admin-topbar__meta {
-                @apply text-right;
+                @apply flex flex-col gap-3 text-right lg:items-end;
             }
 
             .eyebrow {
@@ -119,6 +130,14 @@ function render_admin_theme_assets(): void
 
             .badge--online {
                 @apply bg-emerald-500/15 text-emerald-200;
+            }
+
+            .admin-theme-toggle {
+                @apply inline-flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-2 text-sm font-semibold text-slate-100 shadow-lg shadow-slate-900/30 transition hover:border-slate-700 hover:bg-slate-900;
+            }
+
+            .admin-theme-toggle__icon {
+                @apply text-lg;
             }
 
             .admin-panel {
@@ -196,6 +215,122 @@ function render_admin_theme_assets(): void
 
             .table-editor textarea {
                 @apply min-h-[60px] rounded-2xl border border-slate-800 bg-slate-950/60 p-3 text-slate-100;
+            }
+
+            body.admin-body.theme-light .admin-app {
+                @apply bg-slate-50 text-slate-900;
+            }
+
+            body.admin-body.theme-light .admin-sidebar {
+                @apply border-slate-200 bg-white text-slate-900;
+            }
+
+            body.admin-body.theme-light .admin-user {
+                @apply border-slate-200 bg-slate-50 text-slate-900;
+            }
+
+            body.admin-body.theme-light .admin-user p {
+                @apply text-slate-500;
+            }
+
+            body.admin-body.theme-light .admin-user strong {
+                @apply text-slate-900;
+            }
+
+            body.admin-body.theme-light .admin-menu__link {
+                @apply text-slate-700 hover:bg-slate-100;
+            }
+
+            body.admin-body.theme-light .admin-menu__link.is-active {
+                @apply bg-slate-900 text-white shadow-lg shadow-slate-300;
+            }
+
+            body.admin-body.theme-light .admin-menu__link.is-destructive {
+                @apply text-rose-600 hover:bg-rose-50 hover:text-rose-700;
+            }
+
+            body.admin-body.theme-light .admin-main {
+                @apply bg-slate-100;
+            }
+
+            body.admin-body.theme-light .admin-topbar {
+                @apply border-slate-200 bg-white text-slate-900 shadow-slate-200;
+            }
+
+            body.admin-body.theme-light .admin-topbar h1 {
+                @apply text-slate-900;
+            }
+
+            body.admin-body.theme-light .eyebrow {
+                @apply text-slate-500;
+            }
+
+            body.admin-body.theme-light .subtitle {
+                @apply text-slate-500;
+            }
+
+            body.admin-body.theme-light .badge--online {
+                @apply bg-emerald-100 text-emerald-700;
+            }
+
+            body.admin-body.theme-light .admin-theme-toggle {
+                @apply border-slate-200 bg-white text-slate-800 shadow-slate-200;
+            }
+
+            body.admin-body.theme-light .admin-panel {
+                @apply border-slate-200 bg-white text-slate-900 shadow-slate-200;
+            }
+
+            body.admin-body.theme-light .admin-panel label {
+                @apply text-slate-900;
+            }
+
+            body.admin-body.theme-light .admin-panel input,
+            body.admin-body.theme-light .admin-panel textarea,
+            body.admin-body.theme-light .admin-panel select {
+                @apply border-slate-200 bg-white text-slate-900 placeholder-slate-400;
+            }
+
+            body.admin-body.theme-light .admin-panel button,
+            body.admin-body.theme-light .admin-panel .btn {
+                @apply shadow-blue-200/70;
+            }
+
+            body.admin-body.theme-light .stats-grid > div {
+                @apply border-slate-200 bg-white text-slate-900 shadow-slate-200;
+            }
+
+            body.admin-body.theme-light .admin-table thead {
+                @apply bg-slate-100;
+            }
+
+            body.admin-body.theme-light .admin-table th {
+                @apply border-slate-200 text-slate-500;
+            }
+
+            body.admin-body.theme-light .admin-table td {
+                @apply border-slate-200 text-slate-800;
+            }
+
+            body.admin-body.theme-light .admin-table tbody tr:hover {
+                @apply bg-slate-50;
+            }
+
+            body.admin-body.theme-light .admin-table a {
+                @apply text-blue-600 hover:text-blue-700;
+            }
+
+            body.admin-body.theme-light .table-editor {
+                @apply border-slate-200 bg-white;
+            }
+
+            body.admin-body.theme-light .table-editor .column-input,
+            body.admin-body.theme-light .table-editor .row-block {
+                @apply border-slate-200 bg-slate-50;
+            }
+
+            body.admin-body.theme-light .table-editor textarea {
+                @apply border-slate-200 bg-white text-slate-900;
             }
 
             .btn--primary {

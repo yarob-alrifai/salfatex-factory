@@ -29,7 +29,7 @@ function admin_header(string $title): void
         <link rel="stylesheet" href="../public_html/css/styles.css">
         <?php render_admin_theme_assets(); ?>
     </head>
-    <body class="admin-body">
+    <body class="admin-body theme-dark">
     <div class="admin-app">
         <aside class="admin-sidebar">
             <div class="admin-brand">
@@ -68,6 +68,10 @@ function admin_header(string $title): void
                 </div>
                 <div class="admin-topbar__meta">
                     <span class="badge badge--online">نشط الآن</span>
+                    <button type="button" class="admin-theme-toggle" data-admin-theme-toggle aria-pressed="true">
+                        <span class="admin-theme-toggle__icon" data-admin-theme-icon>🌙</span>
+                        <span data-admin-theme-label>الوضع الليلي</span>
+                    </button>
                 </div>
             </header>
             <section class="admin-panel">

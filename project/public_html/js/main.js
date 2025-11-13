@@ -27,6 +27,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const adminBody = document.body.classList.contains('admin-body') ? document.body : null;
+    const adminThemeStorageKey = 'salfatex-admin-theme';
+    const adminThemeToggle = document.querySelector('[data-admin-theme-toggle]');
+    const adminThemeLabel = adminThemeToggle ? adminThemeToggle.querySelector('[data-admin-theme-label]') : null;
+    const adminThemeIcon = adminThemeToggle ? adminThemeToggle.querySelector('[data-admin-theme-icon]') : null;
+
+    if (adminBody) {
+        const applyAdminTheme = (theme) => {
+            const nextTheme = theme === 'light' ? 'light' : 'dark';
+            adminBody.classList.remove('theme-light', 'theme-dark');
+            adminBody.classList.add(`theme-${nextTheme}`);
+            if (adminThemeToggle) {
+                adminThemeToggle.setAttribute('aria-pressed', nextTheme === 'dark' ? 'true' : 'false');
+            }
+            if (adminThemeLabel) {
+                adminThemeLabel.textContent = nextTheme === 'dark' ? 'الوضع الليلي' : 'الوضع النهاري';
+            }
+            if (adminThemeIcon) {
+                adminThemeIcon.textContent = nextTheme === 'dark' ? '🌙' : '☀️';
+            }
+        };
+
+        const storedAdminTheme = localStorage.getItem(adminThemeStorageKey);
+        applyAdminTheme(storedAdminTheme === 'light' ? 'light' : 'dark');
+
+        if (adminThemeToggle) {
+            adminThemeToggle.addEventListener('click', () => {
+                const isDark = adminBody.classList.contains('theme-dark');
+                const nextTheme = isDark ? 'light' : 'dark';
+                localStorage.setItem(adminThemeStorageKey, nextTheme);
+                applyAdminTheme(nextTheme);
+            });
+        }
+    }
+
     document.querySelectorAll('[data-gallery]').forEach(track => {
         track.addEventListener('wheel', (event) => {
             if (event.deltaY === 0) return;
