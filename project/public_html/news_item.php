@@ -26,8 +26,9 @@ site_header($news['title'], $meta);
         <a class="back-link" href="news.php">&larr; Все новости</a>
         <h1><?php echo h($news['title']); ?></h1>
         <span class="date"><?php echo date('d.m.Y', strtotime($news['created_at'])); ?></span>
-        <?php if (!empty($news['image'])): ?>
-            <img class="hero-image" src="uploads/<?php echo h($news['image']); ?>" alt="<?php echo h($news['title']); ?>">
+        <?php $imageSrc = news_image_src($news['image']); ?>
+        <?php if ($imageSrc): ?>
+            <img class="hero-image" src="<?php echo h($imageSrc); ?>" alt="<?php echo h($news['title']); ?>">
         <?php endif; ?>
         <div class="full-text">
             <?php echo $news['full_text']; ?>

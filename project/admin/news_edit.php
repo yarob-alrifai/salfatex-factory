@@ -16,7 +16,13 @@ admin_header('Edit news');
     <label>Title<input type="text" name="title" value="<?php echo h($news['title']); ?>" required></label>
     <label>Short text<textarea name="short_text" rows="3" required><?php echo h($news['short_text']); ?></textarea></label>
     <label>Full text<textarea name="full_text" rows="8" required><?php echo h($news['full_text']); ?></textarea></label>
-    <?php if ($news['image']): ?><p>Current image: <?php echo h($news['image']); ?></p><?php endif; ?>
+    <?php $currentImage = news_image_src($news['image']); ?>
+    <?php if ($currentImage): ?>
+        <div>
+            <p>Current image:</p>
+            <img src="<?php echo h($currentImage); ?>" alt="<?php echo h($news['title']); ?>" style="max-width: 240px; height: auto; display: block; margin-bottom: 0.5rem;">
+        </div>
+    <?php endif; ?>
     <label>Image<input type="file" name="image"></label>
     <label>Meta title<input type="text" name="meta_title" value="<?php echo h($news['meta_title']); ?>"></label>
     <label>Meta description<textarea name="meta_description" rows="2"><?php echo h($news['meta_description']); ?></textarea></label>

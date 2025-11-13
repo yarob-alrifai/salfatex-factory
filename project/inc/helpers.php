@@ -216,6 +216,17 @@ function detect_uploaded_mime_type(array $file, string $tmpName): string
     return $type;
 }
 
+function news_image_src(?string $image): ?string
+{
+    if (!$image) {
+        return null;
+    }
+    if (strpos($image, 'data:') === 0) {
+        return $image;
+    }
+    return 'uploads/' . ltrim($image, '/');
+}
+
 function get_all_categories(): array
 {
     global $pdo;

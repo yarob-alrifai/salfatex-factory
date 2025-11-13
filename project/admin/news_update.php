@@ -8,25 +8,7 @@ $full = $_POST['full_text'] ?? '';
 $metaTitle = trim($_POST['meta_title'] ?? '');
 $metaDescription = trim($_POST['meta_description'] ?? '');
 $metaKeywords = trim($_POST['meta_keywords'] ?? '');
-$imageName = null;
-$oldStmt = $pdo->prepare('SELECT image FROM news WHERE id = :id');
-$oldStmt->execute(['id' => $id]);
-$old = $oldStmt->fetch();
-if (!empty($_FILES['image']['name']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    $ext = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-    $imageName = uniqid('news_', true) . '.' . $ext;
-    $targetDir = __DIR__ . '/../public_html/uploads/';
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
-    }
-    move_uploaded_file($_FILES['image']['tmp_name'], $targetDir . $imageName);
-    if ($old && !empty($old['image'])) {
-        $file = __DIR__ . '/../public_html/uploads/' . $old['image'];
-        if (is_file($file)) {
-            unlink($file);
-        }
-    }
-}
+$imageData = upload_single_image($_FILES['image'] ?? null);
 $sql = 'UPDATE news SET title=:title, short_text=:short_text, full_text=:full_text, meta_title=:meta_title, meta_description=:meta_description, meta_keywords=:meta_keywords';
 $params = [
     'title' => $title,
@@ -37,9 +19,9 @@ $params = [
     'meta_keywords' => $metaKeywords,
     'id' => $id,
 ];
-if ($imageName) {
+if ($imageData) {
     $sql .= ', image=:image';
-    $params['image'] = $imageName;
+    $params['image'] = $imageData;
 }
 $sql .= ' WHERE id=:id';
 $stmt = $pdo->prepare($sql);

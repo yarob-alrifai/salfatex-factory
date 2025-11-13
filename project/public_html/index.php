@@ -130,8 +130,11 @@ site_header('Фабрика бумажной продукции');
         <div class="news-grid grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <?php if ($latestNews): ?>
                 <?php foreach ($latestNews as $item): ?>
+                    <?php $imageSrc = news_image_src($item['image']); ?>
                     <article class="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                        <img class="h-48 w-full rounded-2xl object-cover" src="uploads/<?php echo h($item['image']); ?>" alt="<?php echo h($item['title']); ?>">
+                        <?php if ($imageSrc): ?>
+                            <img class="h-48 w-full rounded-2xl object-cover" src="<?php echo h($imageSrc); ?>" alt="<?php echo h($item['title']); ?>">
+                        <?php endif; ?>
                         <div class="mt-5 flex flex-1 flex-col">
                             <h3 class="text-xl font-semibold text-slate-900"><?php echo h($item['title']); ?></h3>
                             <p class="mt-3 flex-1 text-sm text-slate-600"><?php echo h(mb_substr(strip_tags($item['short_text']), 0, 120)); ?>...</p>

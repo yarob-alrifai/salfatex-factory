@@ -22,7 +22,7 @@ CREATE TABLE news (
     title VARCHAR(255) NOT NULL,
     short_text TEXT,
     full_text MEDIUMTEXT,
-    image VARCHAR(255),
+    image MEDIUMTEXT,
     meta_title VARCHAR(255),
     meta_description VARCHAR(255),
     meta_keywords VARCHAR(255),

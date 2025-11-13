@@ -10,9 +10,10 @@ site_header('Новости фабрики');
         <div class="news-grid">
             <?php if ($news): ?>
                 <?php foreach ($news as $item): ?>
+                    <?php $imageSrc = news_image_src($item['image']); ?>
                     <article>
-                        <?php if (!empty($item['image'])): ?>
-                            <img src="uploads/<?php echo h($item['image']); ?>" alt="<?php echo h($item['title']); ?>">
+                        <?php if ($imageSrc): ?>
+                            <img src="<?php echo h($imageSrc); ?>" alt="<?php echo h($item['title']); ?>">
                         <?php endif; ?>
                         <h2><?php echo h($item['title']); ?></h2>
                         <p><?php echo h(mb_substr(strip_tags($item['short_text']), 0, 180)); ?>...</p>
