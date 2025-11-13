@@ -1,4 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const root = document.documentElement;
+    const themeStorageKey = 'salfatex-theme';
+    const themeToggle = document.querySelector('[data-theme-toggle]');
+    const themeToggleText = themeToggle ? themeToggle.querySelector('[data-theme-toggle-text]') : null;
+
+    const applyTheme = (theme) => {
+        const nextTheme = theme === 'dark' ? 'dark' : 'light';
+        root.setAttribute('data-theme', nextTheme);
+        if (themeToggle) {
+            themeToggle.setAttribute('aria-pressed', nextTheme === 'dark' ? 'true' : 'false');
+        }
+        if (themeToggleText) {
+            themeToggleText.textContent = nextTheme === 'dark' ? 'Дневной режим' : 'Ночной режим';
+        }
+    };
+
+    const storedTheme = localStorage.getItem(themeStorageKey);
+    applyTheme(storedTheme === 'dark' ? 'dark' : 'light');
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem(themeStorageKey, nextTheme);
+            applyTheme(nextTheme);
+        });
+    }
+
     document.querySelectorAll('[data-gallery]').forEach(track => {
         track.addEventListener('wheel', (event) => {
             if (event.deltaY === 0) return;

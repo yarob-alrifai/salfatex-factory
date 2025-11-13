@@ -16,9 +16,9 @@ function site_header(string $title, array $meta = []): void
     $metaDesc = h($meta['description'] ?? 'Салфатекс Фабрика — производитель бумажной продукции.');
     $metaKeywords = h($meta['keywords'] ?? 'салфетки, бумажные полотенца, туалетная бумага, косметические салфетки');
 
-    echo <<<HTML
+echo <<<HTML
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,6 @@ function site_header(string $title, array $meta = []): void
 <meta name="keywords" content="{$metaKeywords}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/styles.css">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>
 tailwind.config = {
@@ -51,6 +50,19 @@ tailwind.config = {
 };
 </script>
 <script src="https://cdn.tailwindcss.com?plugins=typography,forms,aspect-ratio"></script>
+<script>
+(function() {
+    try {
+        var storedTheme = localStorage.getItem('salfatex-theme');
+        if (storedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    } catch (error) {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+})();
+</script>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 <header class="site-header sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -58,10 +70,14 @@ tailwind.config = {
         <a class="logo text-lg font-semibold tracking-tight text-slate-900" href="index.php">
             <span class="text-brand">Фабрика</span> Салфатекс
         </a>
-        <nav class="flex items-center gap-6 text-sm font-medium text-slate-600">
+        <nav class="flex items-center gap-4 text-sm font-medium text-slate-600">
             <a class="transition hover:text-slate-900" href="products.php">Продукция</a>
             <a class="transition hover:text-slate-900" href="news.php">Новости</a>
             <a class="transition hover:text-slate-900" href="contact.php">Контакты</a>
+            <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
+                <span class="theme-toggle__icon" aria-hidden="true"></span>
+                <span class="theme-toggle__text" data-theme-toggle-text>Ночной режим</span>
+            </button>
             <a class="hidden rounded-full bg-brand px-4 py-2 text-white shadow-glow transition hover:bg-brand-dark md:inline-flex" href="products.php">Каталог</a>
         </nav>
     </div>
