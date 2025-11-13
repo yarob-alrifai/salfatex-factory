@@ -16,7 +16,7 @@ $existsStmt->execute(['slug' => $slug]);
 if ($existsStmt->fetchColumn() > 0) {
     die('Slug already exists');
 }
-$heroImage = upload_single_image($_FILES['hero_image'] ?? null, __DIR__ . '/../public_html/uploads/categories');
+$heroImage = upload_single_image($_FILES['hero_image'] ?? null);
 $pdo->beginTransaction();
 try {
     $stmt = $pdo->prepare('INSERT INTO product_categories (slug, name, description, hero_image, created_at) VALUES (:slug, :name, :description, :hero_image, NOW())');
@@ -28,7 +28,7 @@ try {
     ]);
     $categoryId = $pdo->lastInsertId();
     if (!empty($_FILES['gallery']['name'][0])) {
-        $uploaded = upload_images($_FILES['gallery'], __DIR__ . '/../public_html/uploads/categories');
+        $uploaded = upload_images($_FILES['gallery']);
         foreach ($uploaded as $fileName) {
             $pdo->prepare('INSERT INTO product_category_images (category_id, image_path) VALUES (:category_id, :image_path)')->execute([
                 'category_id' => $categoryId,

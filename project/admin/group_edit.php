@@ -43,7 +43,7 @@ admin_header('Edit group');
     <?php if (!empty($group['main_image'])): ?>
         <div>
             <p>Current main image:</p>
-            <img src="../public_html/uploads/groups/<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>">
+            <img src="<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>" style="max-width: 240px; height: auto;">
             <p><a href="group_main_image_delete.php?id=<?php echo (int)$group['id']; ?>" onclick="return confirm('Удалить главное изображение?');">Удалить главное изображение</a></p>
         </div>
     <?php endif; ?>
@@ -53,7 +53,10 @@ admin_header('Edit group');
             <p>Existing images:</p>
             <ul>
                 <?php foreach ($images as $image): ?>
-                    <li><?php echo h($image['image_path']); ?> - <a href="group_images_delete.php?id=<?php echo (int)$image['id']; ?>&group_id=<?php echo (int)$group['id']; ?>" onclick="return confirm('Delete image?');">Delete</a></li>
+                    <li>
+                        <img src="<?php echo h($image['image_path']); ?>" alt="<?php echo h($group['group_title']); ?>" style="max-width: 200px; height: auto; display: block; margin-bottom: 0.5rem;">
+                        <a href="group_images_delete.php?id=<?php echo (int)$image['id']; ?>&group_id=<?php echo (int)$group['id']; ?>" onclick="return confirm('Delete image?');">Delete</a>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         </div>

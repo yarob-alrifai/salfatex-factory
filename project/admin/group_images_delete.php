@@ -7,10 +7,6 @@ $stmt = $pdo->prepare('SELECT image_path FROM product_group_images WHERE id = :i
 $stmt->execute(['id' => $id]);
 $image = $stmt->fetch();
 if ($image) {
-    $file = __DIR__ . '/../public_html/uploads/groups/' . $image['image_path'];
-    if (is_file($file)) {
-        unlink($file);
-    }
     $pdo->prepare('DELETE FROM product_group_images WHERE id = :id')->execute(['id' => $id]);
 }
 header('Location: group_edit.php?id=' . $groupId);

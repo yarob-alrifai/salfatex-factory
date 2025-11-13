@@ -23,15 +23,9 @@ $existsStmt->execute(['slug' => $slug, 'id' => $id]);
 if ($existsStmt->fetchColumn() > 0) {
     die('Slug already exists');
 }
-$newHero = upload_single_image($_FILES['hero_image'] ?? null, __DIR__ . '/../public_html/uploads/categories');
+$newHero = upload_single_image($_FILES['hero_image'] ?? null);
 $heroImage = $current['hero_image'];
 if ($newHero) {
-    if ($heroImage) {
-        $file = __DIR__ . '/../public_html/uploads/categories/' . $heroImage;
-        if (is_file($file)) {
-            unlink($file);
-        }
-    }
     $heroImage = $newHero;
 }
 $pdo->beginTransaction();
@@ -45,7 +39,7 @@ try {
         'id' => $id,
     ]);
     if (!empty($_FILES['gallery']['name'][0])) {
-        $uploaded = upload_images($_FILES['gallery'], __DIR__ . '/../public_html/uploads/categories');
+        $uploaded = upload_images($_FILES['gallery']);
         foreach ($uploaded as $fileName) {
             $pdo->prepare('INSERT INTO product_category_images (category_id, image_path) VALUES (:category_id, :image_path)')->execute([
                 'category_id' => $id,

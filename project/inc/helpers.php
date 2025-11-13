@@ -129,42 +129,88 @@ function get_latest_news(PDO $pdo, int $limit = 3): array
     return $stmt->fetchAll();
 }
 
-function upload_images(array $files, string $destination): array
+function upload_images(array $files): array
 {
     $uploaded = [];
-    foreach ($files['name'] as $index => $name) {
-        if ($files['error'][$index] !== UPLOAD_ERR_OK) {
-            continue;
-        }
-        $ext = pathinfo($name, PATHINFO_EXTENSION);
-        $fileName = uniqid('img_', true) . '.' . $ext;
-        $target = rtrim($destination, '/'). '/' . $fileName;
-        if (!is_dir(dirname($target))) {
-            mkdir(dirname($target), 0755, true);
-        }
-        if (move_uploaded_file($files['tmp_name'][$index], $target)) {
-            $uploaded[] = $fileName;
+    $normalized = normalize_uploaded_files($files);
+    foreach ($normalized as $file) {
+        $dataUri = encode_uploaded_image($file);
+        if ($dataUri !== null) {
+            $uploaded[] = $dataUri;
         }
     }
     return $uploaded;
 }
 
-function upload_single_image(?array $file, string $destination): ?string
+function upload_single_image(?array $file): ?string
 {
-    if (!$file || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+    if (!$file) {
         return null;
     }
-    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $fileName = uniqid('img_', true) . ($ext ? '.' . $ext : '');
-    $targetDir = rtrim($destination, '/');
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
+    return encode_uploaded_image($file);
+}
+
+function normalize_uploaded_files(array $files): array
+{
+    if (empty($files)) {
+        return [];
     }
-    $target = $targetDir . '/' . $fileName;
-    if (move_uploaded_file($file['tmp_name'], $target)) {
-        return $fileName;
+    $names = $files['name'] ?? [];
+    $types = $files['type'] ?? [];
+    $tmpNames = $files['tmp_name'] ?? [];
+    $errors = $files['error'] ?? [];
+    $sizes = $files['size'] ?? [];
+    if (!is_array($names)) {
+        $names = [$names];
+        $types = [$types];
+        $tmpNames = [$tmpNames];
+        $errors = [$errors];
+        $sizes = [$sizes];
     }
-    return null;
+    $normalized = [];
+    foreach ($names as $index => $name) {
+        $normalized[] = [
+            'name' => $name,
+            'type' => $types[$index] ?? null,
+            'tmp_name' => $tmpNames[$index] ?? null,
+            'error' => $errors[$index] ?? UPLOAD_ERR_NO_FILE,
+            'size' => $sizes[$index] ?? null,
+        ];
+    }
+    return $normalized;
+}
+
+function encode_uploaded_image(array $file): ?string
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return null;
+    }
+    $tmpName = $file['tmp_name'] ?? '';
+    if (!$tmpName || (!is_uploaded_file($tmpName) && !is_file($tmpName))) {
+        return null;
+    }
+    $contents = file_get_contents($tmpName);
+    if ($contents === false) {
+        return null;
+    }
+    $mime = detect_uploaded_mime_type($file, $tmpName);
+    return 'data:' . $mime . ';base64,' . base64_encode($contents);
+}
+
+function detect_uploaded_mime_type(array $file, string $tmpName): string
+{
+    $type = $file['type'] ?? null;
+    if (!$type && function_exists('finfo_open')) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if ($finfo) {
+            $type = finfo_file($finfo, $tmpName) ?: null;
+            finfo_close($finfo);
+        }
+    }
+    if (!$type) {
+        $type = 'application/octet-stream';
+    }
+    return $type;
 }
 
 function get_all_categories(): array

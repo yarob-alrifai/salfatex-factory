@@ -12,7 +12,7 @@ $seoText = trim($_POST['seo_text'] ?? '');
 $columns = $_POST['columns'] ?? [];
 $rows = $_POST['rows'] ?? [];
 $cells = $_POST['cells'] ?? [];
-$mainImage = upload_single_image($_FILES['main_image'] ?? null, __DIR__ . '/../public_html/uploads/groups');
+$mainImage = upload_single_image($_FILES['main_image'] ?? null);
 $pdo->beginTransaction();
 try {
     $stmt = $pdo->prepare('INSERT INTO product_groups (category_id, group_title, main_image, left_description, seo_text, created_at) VALUES (:category_id, :group_title, :main_image, :left_description, :seo_text, NOW())');
@@ -56,7 +56,7 @@ try {
         }
     }
     if (!empty($_FILES['images']['name'][0])) {
-        $uploaded = upload_images($_FILES['images'], __DIR__ . '/../public_html/uploads/groups');
+        $uploaded = upload_images($_FILES['images']);
         foreach ($uploaded as $fileName) {
             $imgStmt = $pdo->prepare('INSERT INTO product_group_images (group_id, image_path) VALUES (:group_id, :image_path)');
             $imgStmt->execute([

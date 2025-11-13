@@ -34,14 +34,14 @@ CREATE TABLE product_categories (
     slug VARCHAR(120) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
     description TEXT,
-    hero_image VARCHAR(255),
+    hero_image MEDIUMTEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE product_category_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
-    image_path VARCHAR(255) NOT NULL,
+    image_path MEDIUMTEXT NOT NULL,
     CONSTRAINT fk_category_image_category FOREIGN KEY (category_id) REFERENCES product_categories(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -49,7 +49,7 @@ CREATE TABLE product_groups (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
     group_title VARCHAR(255) NOT NULL,
-    main_image VARCHAR(255),
+    main_image MEDIUMTEXT,
     left_description TEXT,
     seo_text TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -59,7 +59,7 @@ CREATE TABLE product_groups (
 CREATE TABLE product_group_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     group_id INT NOT NULL,
-    image_path VARCHAR(255) NOT NULL,
+    image_path MEDIUMTEXT NOT NULL,
     CONSTRAINT fk_group_image_group FOREIGN KEY (group_id) REFERENCES product_groups(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

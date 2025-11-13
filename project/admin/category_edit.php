@@ -23,7 +23,7 @@ admin_header('Edit category');
     <?php if ($category['hero_image']): ?>
         <div>
             <p>Current cover:</p>
-            <img src="../public_html/uploads/categories/<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
+            <img src="<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>" style="max-width: 240px; height: auto;">
             <p><a href="category_hero_delete.php?id=<?php echo (int)$category['id']; ?>" onclick="return confirm('Удалить обложку?');">Удалить обложку</a></p>
         </div>
     <?php endif; ?>
@@ -34,7 +34,7 @@ admin_header('Edit category');
             <ul>
                 <?php foreach ($gallery as $image): ?>
                     <li>
-                        <?php echo h($image['image_path']); ?>
+                        <img src="<?php echo h($image['image_path']); ?>" alt="<?php echo h($category['name']); ?>" style="max-width: 200px; height: auto; display: block; margin-bottom: 0.5rem;">
                         <a href="category_gallery_delete.php?id=<?php echo (int)$image['id']; ?>&category_id=<?php echo (int)$category['id']; ?>" onclick="return confirm('Удалить изображение?');">Удалить</a>
                     </li>
                 <?php endforeach; ?>

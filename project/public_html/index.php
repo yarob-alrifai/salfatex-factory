@@ -50,7 +50,7 @@ site_header('Фабрика бумажной продукции');
                     <a class="category-card group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand hover:shadow-glow" href="category.php?category=<?php echo h($category['slug']); ?>">
                         <div class="category-card__media overflow-hidden rounded-2xl">
                             <?php if (!empty($category['hero_image'])): ?>
-                                <img class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src="uploads/categories/<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
+                                <img class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src="<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
                             <?php else: ?>
                                 <img class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src="images/placeholder.svg" alt="<?php echo h($category['name']); ?>">
                             <?php endif; ?>

@@ -44,11 +44,11 @@ foreach ($cellsStmt as $cell) {
     <div class="group-body">
         <div class="group-gallery" data-gallery>
             <?php if (!empty($group['main_image'])): ?>
-                <img class="group-gallery__main" src="uploads/groups/<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>">
+                <img class="group-gallery__main" src="<?php echo h($group['main_image']); ?>" alt="<?php echo h($group['group_title']); ?>">
             <?php endif; ?>
             <?php if ($images): ?>
                 <?php foreach ($images as $image): ?>
-                    <img src="uploads/groups/<?php echo h($image['image_path']); ?>" alt="<?php echo h($group['group_title']); ?>">
+                    <img src="<?php echo h($image['image_path']); ?>" alt="<?php echo h($group['group_title']); ?>">
                 <?php endforeach; ?>
             <?php endif; ?>
             <?php if (empty($group['main_image']) && !$images): ?>
