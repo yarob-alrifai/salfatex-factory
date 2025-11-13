@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
+require_once __DIR__ . '/_tailwind.php';
 if (!empty($_SESSION['admin_id'])) {
     header('Location: dashboard.php');
     exit;
@@ -34,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../public_html/css/styles.css">
+    <?php render_admin_theme_assets(); ?>
 </head>
 <body class="admin-auth">
 <div class="admin-auth__shell">
