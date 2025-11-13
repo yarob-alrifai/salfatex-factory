@@ -7,7 +7,12 @@ admin_header('Add news');
     <label>Title<input type="text" name="title" required></label>
     <label>Short text<textarea name="short_text" rows="3" required></textarea></label>
     <label>Full text<textarea name="full_text" rows="8" required></textarea></label>
-    <label>Image<input type="file" name="image"></label>
+    <div class="form-field" data-crop-group>
+        <label>Image
+            <input type="file" name="image" accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">قص صورة الخبر بحيث تكون مربعة قبل الحفظ.</p>
+    </div>
     <label>Meta title<input type="text" name="meta_title"></label>
     <label>Meta description<textarea name="meta_description" rows="2"></textarea></label>
     <label>Meta keywords<input type="text" name="meta_keywords"></label>

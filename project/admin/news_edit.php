@@ -23,7 +23,12 @@ admin_header('Edit news');
             <img src="<?php echo h($currentImage); ?>" alt="<?php echo h($news['title']); ?>" style="max-width: 240px; height: auto; display: block; margin-bottom: 0.5rem;">
         </div>
     <?php endif; ?>
-    <label>Image<input type="file" name="image"></label>
+    <div class="form-field" data-crop-group>
+        <label>Image
+            <input type="file" name="image" accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">قص الصورة بعد اختيار ملف جديد لضمان توافق الأبعاد.</p>
+    </div>
     <label>Meta title<input type="text" name="meta_title" value="<?php echo h($news['meta_title']); ?>"></label>
     <label>Meta description<textarea name="meta_description" rows="2"><?php echo h($news['meta_description']); ?></textarea></label>
     <label>Meta keywords<input type="text" name="meta_keywords" value="<?php echo h($news['meta_keywords']); ?>"></label>
