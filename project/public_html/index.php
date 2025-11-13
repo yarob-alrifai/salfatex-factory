@@ -122,20 +122,25 @@ site_header('Фабрика бумажной продукции');
             <p class="text-sm font-semibold uppercase tracking-[0.4em] text-sky-600">Производство</p>
             <h2 class="text-3xl font-semibold text-slate-900">Оборудование и производство</h2>
         </div>
-        <div class="gallery-track flex gap-6 overflow-x-auto pb-4" data-gallery>
-            <?php if ($productionGallery): ?>
-                <?php foreach ($productionGallery as $galleryItem): ?>
-                    <?php $gallerySrc = site_image_src($galleryItem['image_data']); ?>
-                    <?php if ($gallerySrc): ?>
-                        <img class="h-64 w-80 flex-none rounded-3xl object-cover shadow-lg" src="<?php echo h($gallerySrc); ?>" alt="<?php echo h($galleryItem['alt_text'] ?: 'Производство'); ?>" />
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="flex h-64 w-full items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 text-slate-500">
-                    <p>Добавьте изображения производства через панель администратора.</p>
+        <?php if ($productionGallery): ?>
+            <div class="gallery-slider" data-slider data-slider-interval="3000">
+                <div class="gallery-slider__track" data-slider-track>
+                    <?php foreach ($productionGallery as $galleryItem): ?>
+                        <?php $gallerySrc = site_image_src($galleryItem['image_data']); ?>
+                        <?php if ($gallerySrc): ?>
+                            <div class="gallery-slide">
+                                <img class="gallery-slide__image" src="<?php echo h($gallerySrc); ?>" alt="<?php echo h($galleryItem['alt_text'] ?: 'Производство'); ?>" />
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
-            <?php endif; ?>
-        </div>
+                <div class="gallery-slider__dots" data-slider-dots></div>
+            </div>
+        <?php else: ?>
+            <div class="flex h-64 w-full items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 text-slate-500">
+                <p>Добавьте изображения производства через панель администратора.</p>
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 <section class="news bg-slate-50 py-16">
