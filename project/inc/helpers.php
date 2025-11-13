@@ -15,17 +15,84 @@ function site_header(string $title, array $meta = []): void
     $metaTitle = h($meta['title'] ?? $title);
     $metaDesc = h($meta['description'] ?? 'Салфатекс Фабрика — производитель бумажной продукции.');
     $metaKeywords = h($meta['keywords'] ?? 'салфетки, бумажные полотенца, туалетная бумага, косметические салфетки');
-    echo "<!DOCTYPE html>\n";
-    echo "<html lang=\"ru\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>{$metaTitle}</title>\n";
-    echo "<meta name=\"description\" content=\"{$metaDesc}\">\n<meta name=\"keywords\" content=\"{$metaKeywords}\">\n";
-    echo "<link rel=\"stylesheet\" href=\"css/styles.css\">\n</head>\n<body>\n<header class=\"site-header\">\n<div class=\"container\">\n<a class=\"logo\" href=\"index.php\">Фабрика Салфатекс</a>\n<nav>\n<a href=\"products.php\">Продукция</a>\n<a href=\"news.php\">Новости</a>\n<a href=\"contact.php\">Контакты</a>\n</nav>\n</div>\n</header>\n<main class=\"site-main\">";
+
+    echo <<<HTML
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{$metaTitle}</title>
+<meta name="description" content="{$metaDesc}">
+<meta name="keywords" content="{$metaKeywords}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    DEFAULT: '#0ea5e9',
+                    dark: '#0369a1',
+                }
+            },
+            fontFamily: {
+                sans: ['"Inter"', '"Cairo"', 'system-ui', 'sans-serif'],
+                display: ['"Cairo"', '"Inter"', 'sans-serif']
+            },
+            boxShadow: {
+                glow: '0 25px 65px rgba(14,165,233,0.15)'
+            }
+        }
+    }
+};
+</script>
+<script src="https://cdn.tailwindcss.com?plugins=typography,forms,aspect-ratio"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased font-sans">
+<header class="site-header sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
+    <div class="container mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <a class="logo text-lg font-semibold tracking-tight text-slate-900" href="index.php">
+            <span class="text-brand">Фабрика</span> Салфатекс
+        </a>
+        <nav class="flex items-center gap-6 text-sm font-medium text-slate-600">
+            <a class="transition hover:text-slate-900" href="products.php">Продукция</a>
+            <a class="transition hover:text-slate-900" href="news.php">Новости</a>
+            <a class="transition hover:text-slate-900" href="contact.php">Контакты</a>
+            <a class="hidden rounded-full bg-brand px-4 py-2 text-white shadow-glow transition hover:bg-brand-dark md:inline-flex" href="products.php">Каталог</a>
+        </nav>
+    </div>
+</header>
+<main class="site-main min-h-screen pb-16">
+HTML;
 }
 
 function site_footer(): void
 {
     $year = date('Y');
-    echo "</main><footer class=\"site-footer\"><div class=\"container\">&copy; {$year} Фабрика бумажных изделий. Все права защищены.</div></footer>";
-    echo "<script src=\"js/main.js\"></script>\n</body>\n</html>";
+    echo <<<HTML
+</main>
+<footer class="site-footer mt-16 bg-slate-900 text-slate-200">
+    <div class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
+        <div>
+            <p class="text-lg font-semibold">Фабрика бумажных изделий</p>
+            <p class="mt-1 text-sm text-slate-400">Современные линии производства салфеток, полотенец и туалетной бумаги.</p>
+        </div>
+        <div class="flex flex-wrap gap-3 text-sm font-medium">
+            <a class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-brand hover:text-white" href="products.php">Каталог</a>
+            <a class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-brand hover:text-white" href="news.php">Новости</a>
+            <a class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-brand hover:text-white" href="contact.php">Контакты</a>
+        </div>
+    </div>
+    <div class="border-t border-slate-800 px-6 py-4 text-center text-sm text-slate-400">&copy; {$year} Фабрика бумажных изделий. Все права защищены.</div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
+HTML;
 }
 
 function get_contact_info(PDO $pdo): ?array
