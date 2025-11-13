@@ -105,8 +105,9 @@ function site_footer(): void
     </div>
     <div class="border-t border-slate-800 px-6 py-4 text-center text-sm text-slate-400">&copy; {$year} Фабрика бумажных изделий. Все права защищены.</div>
 </footer>
-<a class="contact-floating-btn" href="contact.php" aria-label="اذهب إلى صفحة الاتصال">
-    <span>📞</span>
+<a class="contact-floating-btn" href="contact.php" aria-label="اذهب إلى صفحة اتصل بنا">
+    <span class="contact-floating-btn__icon" aria-hidden="true">📞</span>
+    <span class="contact-floating-btn__label">اتصل بنا</span>
 </a>
 <script src="js/main.js"></script>
 </body>
