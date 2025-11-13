@@ -52,7 +52,7 @@ foreach ($cellsStmt as $cell) {
                 <?php endforeach; ?>
             <?php endif; ?>
             <?php if (empty($group['main_image']) && !$images): ?>
-                <img src="images/placeholder.svg" alt="<?php echo h($group['group_title']); ?>">
+                <div class="flex h-64 w-full items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 text-slate-500">Нет изображений</div>
             <?php endif; ?>
         </div>
         <div class="group-description">

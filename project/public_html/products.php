@@ -18,7 +18,7 @@ site_header('Каталог продукции');
                             <?php if (!empty($category['hero_image'])): ?>
                                 <img class="h-52 w-full object-cover" src="<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
                             <?php else: ?>
-                                <img class="h-52 w-full object-cover" src="images/placeholder.svg" alt="<?php echo h($category['name']); ?>">
+                                <div class="flex h-52 w-full items-center justify-center bg-slate-100 text-sm text-slate-500">Нет изображения</div>
                             <?php endif; ?>
                         </div>
                         <h3 class="text-xl font-semibold text-slate-900"><?php echo h($category['name']); ?></h3>

@@ -3,6 +3,8 @@ require_once __DIR__ . '/../inc/helpers.php';
 $categories = get_all_categories();
 $latestNews = get_latest_news($pdo, 3);
 $contact = get_contact_info($pdo);
+$heroBanner = get_site_image('hero_banner');
+$productionGallery = get_site_images('production_gallery');
 site_header('Фабрика бумажной продукции');
 ?>
 <section class="hero relative overflow-hidden">
@@ -33,7 +35,14 @@ site_header('Фабрика бумажной продукции');
         </div>
         <div class="hero-banner relative">
             <div class="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-tr from-sky-200/80 via-white to-indigo-200 blur-3xl"></div>
-            <img class="relative rounded-[32px] shadow-2xl shadow-sky-200" src="images/banner.jpg" alt="Производство бумаги" />
+            <?php $heroSrc = site_image_src($heroBanner['image_data'] ?? null); ?>
+            <?php if ($heroSrc): ?>
+                <img class="relative rounded-[32px] shadow-2xl shadow-sky-200" src="<?php echo h($heroSrc); ?>" alt="<?php echo h($heroBanner['alt_text'] ?: 'Производство бумаги'); ?>" />
+            <?php else: ?>
+                <div class="relative flex h-80 w-80 items-center justify-center rounded-[32px] border border-dashed border-slate-200 bg-white text-center text-slate-500">
+                    <p class="px-6">Добавьте обложку в разделе «Медиа» панели администратора.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -52,7 +61,7 @@ site_header('Фабрика бумажной продукции');
                             <?php if (!empty($category['hero_image'])): ?>
                                 <img class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src="<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
                             <?php else: ?>
-                                <img class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src="images/placeholder.svg" alt="<?php echo h($category['name']); ?>">
+                                <div class="flex h-52 w-full items-center justify-center bg-slate-100 text-sm text-slate-500">Нет изображения</div>
                             <?php endif; ?>
                         </div>
                         <div class="space-y-2">
@@ -114,10 +123,18 @@ site_header('Фабрика бумажной продукции');
             <h2 class="text-3xl font-semibold text-slate-900">Оборудование и производство</h2>
         </div>
         <div class="gallery-track flex gap-6 overflow-x-auto pb-4" data-gallery>
-            <img class="h-64 w-80 flex-none rounded-3xl object-cover shadow-lg" src="images/machine1.jpg" alt="Линия резки" />
-            <img class="h-64 w-80 flex-none rounded-3xl object-cover shadow-lg" src="images/machine2.jpg" alt="Линия упаковки" />
-            <img class="h-64 w-80 flex-none rounded-3xl object-cover shadow-lg" src="images/machine3.jpg" alt="Склад" />
-            <img class="h-64 w-80 flex-none rounded-3xl object-cover shadow-lg" src="images/machine4.jpg" alt="Контроль качества" />
+            <?php if ($productionGallery): ?>
+                <?php foreach ($productionGallery as $galleryItem): ?>
+                    <?php $gallerySrc = site_image_src($galleryItem['image_data']); ?>
+                    <?php if ($gallerySrc): ?>
+                        <img class="h-64 w-80 flex-none rounded-3xl object-cover shadow-lg" src="<?php echo h($gallerySrc); ?>" alt="<?php echo h($galleryItem['alt_text'] ?: 'Производство'); ?>" />
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="flex h-64 w-full items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 text-slate-500">
+                    <p>Добавьте изображения производства через панель администратора.</p>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </section>

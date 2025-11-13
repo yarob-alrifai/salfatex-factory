@@ -234,6 +234,34 @@ function get_all_categories(): array
     return $stmt->fetchAll();
 }
 
+function get_site_image(string $key): ?array
+{
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT * FROM site_images WHERE asset_key = :key ORDER BY sort_order DESC, id DESC LIMIT 1');
+    $stmt->execute(['key' => $key]);
+    $row = $stmt->fetch();
+    return $row ?: null;
+}
+
+function get_site_images(string $key): array
+{
+    global $pdo;
+    $stmt = $pdo->prepare('SELECT * FROM site_images WHERE asset_key = :key ORDER BY sort_order DESC, id DESC');
+    $stmt->execute(['key' => $key]);
+    return $stmt->fetchAll();
+}
+
+function site_image_src(?string $image): ?string
+{
+    if (!$image) {
+        return null;
+    }
+    if (strpos($image, 'data:') === 0) {
+        return $image;
+    }
+    return 'uploads/' . ltrim($image, '/');
+}
+
 function get_category_options(): array
 {
     global $pdo;

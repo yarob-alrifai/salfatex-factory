@@ -95,3 +95,13 @@ CREATE TABLE messages (
     message TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE site_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    asset_key VARCHAR(100) NOT NULL,
+    image_data MEDIUMTEXT NOT NULL,
+    alt_text VARCHAR(255),
+    sort_order INT DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_site_images_key (asset_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
