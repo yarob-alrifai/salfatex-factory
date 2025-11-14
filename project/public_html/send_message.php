@@ -4,12 +4,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: contact.php');
     exit;
 }
-$name = trim($_POST['name'] ?? '');
-$phone = trim($_POST['phone'] ?? '');
-$email = trim($_POST['email'] ?? '');
+require_csrf_token('public_contact');
+$name = trim(strip_tags($_POST['name'] ?? ''));
+$phone = trim(strip_tags($_POST['phone'] ?? ''));
+$emailRaw = trim($_POST['email'] ?? '');
 $message = trim($_POST['message'] ?? '');
+$email = filter_var($emailRaw, FILTER_VALIDATE_EMAIL) ? $emailRaw : '';
 if (!$name || !$phone || !$email || !$message) {
-    $_SESSION['flash'] = 'Пожалуйста, заполните все поля.';
+    $_SESSION['flash'] = 'Пожалуйста, заполните все поля корректно.';
+    header('Location: contact.php');
+    exit;
+}
+if (mb_strlen($message) > 2000) {
+    $_SESSION['flash'] = 'Сообщение слишком длинное.';
     header('Location: contact.php');
     exit;
 }

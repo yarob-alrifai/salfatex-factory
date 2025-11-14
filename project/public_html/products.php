@@ -1,7 +1,20 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
 $categories = get_all_categories();
-site_header('Каталог продукции');
+$meta = [
+    'title' => 'Каталог бумажной продукции — Salfatex',
+    'description' => 'Категории салфеток, полотенец и туалетной бумаги с характеристиками и вариантами упаковки.',
+    'canonical' => site_url('products.php'),
+    'schema' => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => 'Каталог продукции',
+            'url' => site_url('products.php')
+        ]
+    ]
+];
+site_header('Каталог продукции', $meta);
 ?>
 <section class="categories page bg-white py-16">
     <div class="mx-auto max-w-6xl space-y-6 px-6">
@@ -16,7 +29,7 @@ site_header('Каталог продукции');
                     <div class="category-card flex h-full flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand hover:shadow-glow">
                         <div class="category-card__media overflow-hidden rounded-2xl">
                             <?php if (!empty($category['hero_image'])): ?>
-                                <img class="h-52 w-full object-cover" src="<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
+                                <?php echo render_picture($category['hero_image'], $category['hero_image_alt'] ?: $category['name'], ['class' => 'h-52 w-full object-cover']); ?>
                             <?php else: ?>
                                 <div class="flex h-52 w-full items-center justify-center bg-slate-100 text-sm text-slate-500">Нет изображения</div>
                             <?php endif; ?>

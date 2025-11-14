@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /inc/
+Disallow: /sql/
+Sitemap: https://salfatex.ru/sitemap.php
+Host: salfatex.ru
+
+User-agent: Yandex
+Allow: /
+Clean-param: ref /$ 

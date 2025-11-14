@@ -1,13 +1,30 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
 $contact = get_contact_info($pdo);
-site_header('تواصل معنا');
+$mapEmbed = $contact ? sanitize_iframe_embed($contact['map_embed'] ?? '') : '';
+$meta = [
+    'title' => ($contact ? ($contact['meta_title'] ?? null) : null) ?: 'تواصل معنا — Salfatex',
+    'description' => ($contact ? ($contact['meta_description'] ?? null) : null) ?: 'Свяжитесь с фабрикой Salfatex и получите предложение по поставкам.',
+    'keywords' => ($contact ? ($contact['meta_keywords'] ?? null) : null) ?: 'контакты, salfatex',
+    'canonical' => ($contact ? ($contact['canonical_url'] ?? null) : null) ?: site_url('contact.php'),
+    'schema' => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'ContactPage',
+            'name' => 'Контакты Salfatex',
+            'url' => ($contact ? ($contact['canonical_url'] ?? null) : null) ?: site_url('contact.php'),
+            'description' => strip_tags($contact ? ($contact['seo_text'] ?? '') : '')
+        ]
+    ]
+];
+site_header('تواصل معنا', $meta);
+$h1 = ($contact['h1'] ?? null) ?: 'تحتاج إلى مساعدة؟ فريق سلفاتكس بانتظارك';
 ?>
 <section class="contact bg-white py-16">
     <div class="mx-auto max-w-5xl space-y-10 px-6">
         <div class="space-y-3 text-center">
             <p class="text-sm font-semibold uppercase tracking-[0.4em] text-sky-600">اتصل بنا</p>
-            <h1 class="text-3xl font-semibold text-slate-900">تحتاج إلى مساعدة؟ فريق سلفاتكس بانتظارك</h1>
+            <h1 class="text-3xl font-semibold text-slate-900"><?php echo h($h1); ?></h1>
             <p class="text-slate-600">نوفر لك كل المعلومات المتعلقة بالمنتجات، التوريد، وخدمات ما بعد البيع عبر قنوات تواصل واضحة ومباشرة.</p>
         </div>
         <?php if (!empty($_SESSION['flash'])): ?>
@@ -59,6 +76,7 @@ site_header('تواصل معنا');
                         <h2 class="text-2xl font-semibold text-slate-900">أرسل لنا رسالة</h2>
                         <p class="mt-1 text-sm text-slate-500">أخبرنا بما تحتاجه وسنقوم بالرد عليك عبر الهاتف أو البريد الإلكتروني.</p>
                         <form id="contactForm" class="mt-6 grid gap-4" method="post" action="send_message.php">
+                            <?php echo csrf_field('public_contact'); ?>
                             <input class="rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" name="name" placeholder="الاسم الكامل" required>
                             <input class="rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" name="phone" placeholder="رقم الهاتف" required>
                             <input class="rounded-2xl border border-slate-200 bg-slate-50/70 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="email" name="email" placeholder="البريد الإلكتروني" required>
@@ -68,10 +86,20 @@ site_header('تواصل معنا');
                     </div>
                 </div>
                 <div class="map overflow-hidden rounded-3xl border border-slate-200 shadow-lg">
-                    <?php echo $contact['map_embed']; ?>
+                    <?php if ($mapEmbed): ?>
+                        <?php echo $mapEmbed; ?>
+                    <?php else: ?>
+                        <div class="flex h-full min-h-[240px] w-full items-center justify-center bg-slate-50 text-slate-500">
+                            <p>Добавьте карту в панели администратора, чтобы показать адрес на странице контактов.</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
-        <?php else: ?>
+        <?php endif; ?>
+        <?php if ($contact && !empty($contact['seo_text'])): ?>
+            <div class="rounded-3xl border border-slate-200 bg-white px-6 py-6 text-slate-700 prose prose-slate max-w-3xl mx-auto"><?php echo safe_html($contact['seo_text']); ?></div>
+        <?php endif; ?>
+        <?php if (!$contact): ?>
             <div class="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-10 text-center text-slate-600">
                 <p>Контактная информация появится в ближайшее время.</p>
             </div>

@@ -10,6 +10,7 @@ $error = '';
 $usernameInput = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf_token('admin_login');
     $usernameInput = trim($_POST['username'] ?? '');
     $password = trim($_POST['password'] ?? '');
     $stmt = $pdo->prepare('SELECT * FROM admins WHERE username = :username LIMIT 1');
@@ -69,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="admin-alert admin-alert--error"><?php echo h($error); ?></div>
         <?php endif; ?>
         <form method="post" class="admin-form">
+            <?php echo csrf_field('admin_login'); ?>
             <label>
                 <span>اسم المستخدم</span>
                 <input type="text" name="username" value="<?php echo h($usernameInput); ?>" required autocomplete="username">

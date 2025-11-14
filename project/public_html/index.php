@@ -5,7 +5,43 @@ $latestNews = get_latest_news($pdo, 3);
 $contact = get_contact_info($pdo);
 $heroBanner = get_site_image('hero_banner');
 $productionGallery = get_site_images('production_gallery');
-site_header('Фабрика бумажной продукции');
+$heroSrc = site_image_src($heroBanner['image_data'] ?? null);
+$orgSchema = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Organization',
+    'name' => 'Salfatex Factory',
+    'url' => site_url('index.php'),
+    'logo' => $heroSrc ?: site_url('images/logo.svg')
+];
+if ($contact) {
+    $orgSchema['contactPoint'] = [
+        '@type' => 'ContactPoint',
+        'telephone' => $contact['phone_main'],
+        'contactType' => 'sales'
+    ];
+}
+$meta = [
+    'title' => 'Фабрика бумажной продукции полного цикла «Салфатекс»',
+    'description' => 'Производим салфетки, полотенца и туалетную бумагу с автоматическим контролем качества. Собственное оборудование и гибкие условия поставок.',
+    'keywords' => 'салфетки оптом, бумажные полотенца, туалетная бумага, производство',
+    'canonical' => site_url('index.php'),
+    'og_image' => $heroSrc ?: '',
+    'schema' => [
+        [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => 'Salfatex Factory',
+            'url' => site_url('index.php'),
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => site_url('products.php') . '?q={search_term_string}',
+                'query-input' => 'required name=search_term_string'
+            ]
+        ],
+        $orgSchema
+    ]
+];
+site_header('Фабрика бумажной продукции', $meta);
 ?>
 <section class="hero relative overflow-hidden">
     <div class="absolute inset-x-0 top-0 -z-10 h-[600px] bg-gradient-to-br from-sky-100 via-white to-indigo-100"></div>
@@ -35,9 +71,8 @@ site_header('Фабрика бумажной продукции');
         </div>
         <div class="hero-banner relative">
             <div class="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-tr from-sky-200/80 via-white to-indigo-200 blur-3xl"></div>
-            <?php $heroSrc = site_image_src($heroBanner['image_data'] ?? null); ?>
             <?php if ($heroSrc): ?>
-                <img class="relative rounded-[32px] shadow-2xl shadow-sky-200" src="<?php echo h($heroSrc); ?>" alt="<?php echo h($heroBanner['alt_text'] ?: 'Производство бумаги'); ?>" />
+                <?php echo render_picture($heroSrc, $heroBanner['alt_text'] ?? 'Производство бумаги', ['class' => 'relative block rounded-[32px] shadow-2xl shadow-sky-200', 'loading' => 'eager', 'decoding' => 'sync']); ?>
             <?php else: ?>
                 <div class="relative flex h-80 w-80 items-center justify-center rounded-[32px] border border-dashed border-slate-200 bg-white text-center text-slate-500">
                     <p class="px-6">Добавьте обложку в разделе «Медиа» панели администратора.</p>
@@ -59,7 +94,7 @@ site_header('Фабрика бумажной продукции');
                     <a class="category-card group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand hover:shadow-glow" href="category.php?category=<?php echo h($category['slug']); ?>">
                         <div class="category-card__media overflow-hidden rounded-2xl">
                             <?php if (!empty($category['hero_image'])): ?>
-                                <img class="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src="<?php echo h($category['hero_image']); ?>" alt="<?php echo h($category['name']); ?>">
+                                <?php echo render_picture($category['hero_image'], $category['hero_image_alt'] ?: $category['name'], ['class' => 'h-52 w-full object-cover transition duration-500 group-hover:scale-105']); ?>
                             <?php else: ?>
                                 <div class="flex h-52 w-full items-center justify-center bg-slate-100 text-sm text-slate-500">Нет изображения</div>
                             <?php endif; ?>
@@ -129,7 +164,7 @@ site_header('Фабрика бумажной продукции');
                         <?php $gallerySrc = site_image_src($galleryItem['image_data']); ?>
                         <?php if ($gallerySrc): ?>
                             <div class="gallery-slide">
-                                <img class="gallery-slide__image" src="<?php echo h($gallerySrc); ?>" alt="<?php echo h($galleryItem['alt_text'] ?: 'Производство'); ?>" />
+                                <?php echo render_picture($gallerySrc, $galleryItem['alt_text'] ?: 'Производство', ['class' => 'gallery-slide__image']); ?>
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -155,12 +190,12 @@ site_header('Фабрика бумажной продукции');
                     <?php $imageSrc = news_image_src($item['image']); ?>
                     <article class="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
                         <?php if ($imageSrc): ?>
-                            <img class="h-48 w-full rounded-2xl object-cover" src="<?php echo h($imageSrc); ?>" alt="<?php echo h($item['title']); ?>">
+                            <?php echo render_picture($imageSrc, $item['image_alt'] ?: $item['title'], ['class' => 'h-48 w-full rounded-2xl object-cover']); ?>
                         <?php endif; ?>
                         <div class="mt-5 flex flex-1 flex-col">
                             <h3 class="text-xl font-semibold text-slate-900"><?php echo h($item['title']); ?></h3>
                             <p class="mt-3 flex-1 text-sm text-slate-600"><?php echo h(mb_substr(strip_tags($item['short_text']), 0, 120)); ?>...</p>
-                            <a class="btn-secondary mt-5 inline-flex items-center justify-center rounded-2xl border border-slate-300 px-4 py-2 font-semibold text-slate-700 transition hover:border-brand hover:text-brand" href="news_item.php?id=<?php echo (int)$item['id']; ?>">Подробнее</a>
+                            <a class="btn-secondary mt-5 inline-flex items-center justify-center rounded-2xl border border-slate-300 px-4 py-2 font-semibold text-slate-700 transition hover:border-brand hover:text-brand" href="news_item.php?slug=<?php echo h($item['slug']); ?>">Подробнее</a>
                         </div>
                     </article>
                 <?php endforeach; ?>
