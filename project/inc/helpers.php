@@ -257,7 +257,7 @@ function site_header(string $title, array $meta = []): void
     $brandNameEscaped = h($brandName);
     $brandIconHtml = '';
     if ($brandIconSrc) {
-        $brandIconHtml = '<span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm" aria-hidden="true">'
+        $brandIconHtml = '<span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/15 shadow-lg backdrop-blur" aria-hidden="true">'
             . '<img src="' . h($brandIconSrc) . '" alt="' . $brandNameEscaped . '" class="h-full w-full object-cover">'
             . '</span>';
     }
@@ -274,16 +274,16 @@ function site_header(string $title, array $meta = []): void
     foreach ($navItems as $item) {
         $isActive = $currentScript === ($item['href'] ?? '');
         $isCta = ($item['variant'] ?? '') === 'cta';
-        $classes = 'block rounded px-3 py-2 text-slate-700 transition hover:bg-slate-100 md:border-0 md:px-0 md:py-0 md:hover:bg-transparent md:hover:text-brand';
+        $classes = 'block rounded-full px-3 py-2 text-sm font-medium text-white/80 transition hover:bg-white/10 hover:text-white md:border-0 md:px-0 md:py-0 md:hover:bg-transparent md:hover:text-white';
         $ariaCurrent = '';
 
         if ($isActive) {
-            $classes .= ' bg-brand text-white md:bg-transparent md:text-brand';
+            $classes .= ' bg-white/15 text-white shadow-sm md:bg-transparent md:text-white md:font-semibold';
             $ariaCurrent = ' aria-current="page"';
         }
 
         if ($isCta) {
-            $classes = 'block rounded-full bg-brand px-5 py-2.5 text-center font-semibold text-white transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand';
+            $classes = 'block rounded-full bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-slate-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white';
         }
 
         $navLinksHtml .= '<li><a href="' . h($item['href']) . '" class="' . $classes . '"' . $ariaCurrent . '>' . h($item['label']) . '</a></li>';
@@ -349,20 +349,20 @@ HTML;
     echo <<<HTML
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
-<nav class="bg-white/90 backdrop-blur fixed top-0 left-0 z-50 w-full border-b border-slate-200" aria-label="Главное меню">
-    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between px-6 py-4">
-        <a href="index.php" class="flex items-center gap-3 text-slate-900">
+<nav class="bg-gradient-to-r from-slate-950/95 via-slate-900/95 to-slate-950/90 backdrop-blur supports-[backdrop-filter]:bg-slate-950/80 fixed top-0 left-0 z-50 w-full border-b border-white/10 shadow-2xl" aria-label="Главное меню">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between px-6 py-4 text-white">
+        <a href="index.php" class="flex items-center gap-3 text-white">
             {$brandIconHtml}
-            <span class="text-xl font-semibold">{$brandNameEscaped}</span>
+            <span class="text-xl font-semibold tracking-tight">{$brandNameEscaped}</span>
         </a>
-        <button type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 md:hidden" data-nav-toggle aria-controls="site-navbar" aria-expanded="false">
+        <button type="button" class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white/80 transition hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/40 md:hidden" data-nav-toggle aria-controls="site-navbar" aria-expanded="false">
             <span class="sr-only">Открыть главное меню</span>
             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" d="M5 7h14M5 12h14M5 17h14" />
             </svg>
         </button>
         <div class="hidden w-full md:block md:w-auto" id="site-navbar" data-site-nav>
-            <ul class="mt-4 flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white/95 p-4 text-base font-medium text-slate-700 md:mt-0 md:flex-row md:items-center md:gap-8 md:border-0 md:bg-transparent md:p-0">
+            <ul class="mt-4 flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-900/90 p-4 text-base font-medium text-white/80 shadow-2xl md:mt-0 md:flex-row md:items-center md:gap-8 md:border-0 md:bg-transparent md:p-0 md:shadow-none">
                 {$navLinksHtml}
             </ul>
         </div>
