@@ -31,29 +31,21 @@ function render_admin_theme_assets(): void
     <style type="text/tailwindcss">
         @layer base {
             body.admin-body {
-                @apply font-sans transition-colors duration-300;
-            }
-
-            body.admin-body.theme-dark {
-                @apply bg-slate-950 text-slate-100;
-            }
-
-            body.admin-body.theme-light {
-                @apply bg-slate-100 text-slate-900;
+                @apply font-sans bg-slate-50 text-slate-900 transition-colors duration-300;
             }
 
             body.admin-auth {
-                @apply bg-slate-950 text-slate-100 font-sans;
+                @apply font-sans min-h-screen bg-gradient-to-br from-sky-50 via-white to-slate-50 text-slate-900;
             }
         }
 
         @layer components {
             .admin-app {
-                @apply min-h-screen bg-slate-950 flex flex-col lg:flex-row;
+                @apply min-h-screen bg-slate-50 flex flex-col lg:flex-row;
             }
 
             .admin-sidebar {
-                @apply w-full lg:w-72 xl:w-80 border-b border-slate-800/80 bg-slate-900/70 px-6 py-8 text-slate-100 flex flex-col gap-8 backdrop-blur lg:border-b-0 lg:border-r;
+                @apply w-full lg:w-72 xl:w-80 border-b border-slate-200 bg-white/95 px-6 py-8 text-slate-800 flex flex-col gap-8 backdrop-blur lg:border-b-0 lg:border-r shadow-lg shadow-slate-200/60;
             }
 
             .admin-brand {
@@ -61,27 +53,27 @@ function render_admin_theme_assets(): void
             }
 
             .admin-brand span {
-                @apply flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/40 to-sky-400/30 text-2xl font-bold text-white;
+                @apply flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-2xl font-bold text-blue-600 shadow-inner shadow-blue-100;
             }
 
             .admin-brand strong {
-                @apply block text-xl;
+                @apply block text-xl text-slate-900;
             }
 
             .admin-brand small {
-                @apply block text-xs font-normal text-slate-400;
+                @apply block text-xs font-normal text-slate-500;
             }
 
             .admin-user {
-                @apply rounded-2xl border border-slate-800 bg-slate-900/60 p-5 shadow-inner shadow-slate-900/40;
+                @apply rounded-2xl border border-slate-200 bg-slate-50 p-5 shadow-inner shadow-slate-200;
             }
 
             .admin-user p {
-                @apply text-sm text-slate-400;
+                @apply text-sm text-slate-500;
             }
 
             .admin-user strong {
-                @apply text-lg font-semibold text-white;
+                @apply text-lg font-semibold text-slate-900;
             }
 
             .admin-menu {
@@ -89,27 +81,27 @@ function render_admin_theme_assets(): void
             }
 
             .admin-menu__link {
-                @apply flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-200 transition hover:bg-slate-800/70;
+                @apply flex items-center justify-between rounded-2xl px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-100;
             }
 
             .admin-menu__link.is-active {
-                @apply bg-white text-slate-900 shadow-lg shadow-slate-900/20;
+                @apply bg-slate-900 text-white shadow-lg shadow-slate-400/50;
             }
 
             .admin-menu__link.is-destructive {
-                @apply text-rose-300 hover:bg-rose-500/10 hover:text-rose-100;
+                @apply text-rose-600 hover:bg-rose-50 hover:text-rose-700;
             }
 
             .admin-main {
-                @apply flex-1 min-h-screen bg-slate-900/30 p-6 lg:p-10;
+                @apply flex-1 min-h-screen bg-slate-100 p-6 lg:p-10;
             }
 
             .admin-topbar {
-                @apply flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/70 p-6 shadow-2xl shadow-slate-900/30 backdrop-blur lg:flex-row lg:items-center lg:justify-between;
+                @apply flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200 backdrop-blur lg:flex-row lg:items-center lg:justify-between;
             }
 
             .admin-topbar h1 {
-                @apply text-3xl font-bold text-white;
+                @apply text-3xl font-bold text-slate-900;
             }
 
             .admin-topbar__meta {
@@ -121,7 +113,7 @@ function render_admin_theme_assets(): void
             }
 
             .subtitle {
-                @apply text-base text-slate-400;
+                @apply text-base text-slate-500;
             }
 
             .badge {
@@ -129,19 +121,11 @@ function render_admin_theme_assets(): void
             }
 
             .badge--online {
-                @apply bg-emerald-500/15 text-emerald-200;
-            }
-
-            .admin-theme-toggle {
-                @apply inline-flex items-center gap-3 rounded-2xl border border-slate-800 bg-slate-900/70 px-4 py-2 text-sm font-semibold text-slate-100 shadow-lg shadow-slate-900/30 transition hover:border-slate-700 hover:bg-slate-900;
-            }
-
-            .admin-theme-toggle__icon {
-                @apply text-lg;
+                @apply bg-emerald-100 text-emerald-700;
             }
 
             .admin-panel {
-                @apply mt-8 rounded-3xl border border-slate-800/80 bg-slate-900/80 p-6 shadow-2xl shadow-slate-900/20;
+                @apply mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-200/80;
             }
 
             .admin-panel form {
@@ -149,26 +133,26 @@ function render_admin_theme_assets(): void
             }
 
             .admin-panel label {
-                @apply flex flex-col gap-2 text-sm font-semibold text-slate-100;
+                @apply flex flex-col gap-2 text-sm font-semibold text-slate-700;
             }
 
             .admin-panel input,
             .admin-panel textarea,
             .admin-panel select {
-                @apply w-full rounded-2xl border border-slate-800 bg-slate-950/60 px-4 py-3 text-base text-slate-100 placeholder-slate-500 focus:border-blue-500 focus:ring focus:ring-blue-500/30;
+                @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-base text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring focus:ring-blue-500/20;
             }
 
             .admin-panel button,
             .admin-panel .btn {
-                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-blue-600/40 transition hover:from-blue-500 hover:to-sky-400;
+                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-blue-200/70 transition hover:from-blue-500 hover:to-sky-400;
             }
 
             .admin-panel .btn-secondary {
-                @apply inline-flex items-center justify-center rounded-2xl border border-slate-700/70 bg-transparent px-5 py-3 text-base font-semibold text-slate-100 transition hover:border-slate-500 hover:text-white;
+                @apply inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 py-3 text-base font-semibold text-slate-700 transition hover:border-slate-400 hover:text-slate-900;
             }
 
             .admin-panel .btn-danger {
-                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-rose-600 to-pink-500 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-rose-600/40 transition hover:from-rose-500 hover:to-pink-400;
+                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-rose-600 to-pink-500 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-rose-200/70 transition hover:from-rose-500 hover:to-pink-400;
             }
 
             .admin-panel .btn-small {
@@ -180,7 +164,7 @@ function render_admin_theme_assets(): void
             }
 
             .stats-grid > div {
-                @apply rounded-2xl border border-slate-800 bg-slate-900/60 p-4 text-center text-lg font-semibold text-white shadow shadow-slate-900/40;
+                @apply rounded-2xl border border-slate-200 bg-white p-4 text-center text-lg font-semibold text-slate-900 shadow shadow-slate-200;
             }
 
             .admin-table {
@@ -188,23 +172,23 @@ function render_admin_theme_assets(): void
             }
 
             .admin-table thead {
-                @apply bg-slate-900/70;
+                @apply bg-slate-100;
             }
 
             .admin-table th {
-                @apply border-b border-slate-800 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-400;
+                @apply border-b border-slate-200 px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500;
             }
 
             .admin-table td {
-                @apply border-b border-slate-800 px-4 py-3 text-slate-100;
+                @apply border-b border-slate-200 px-4 py-3 text-slate-800;
             }
 
             .admin-table tbody tr:hover {
-                @apply bg-slate-900/50;
+                @apply bg-slate-50;
             }
 
             .admin-table a {
-                @apply text-blue-300 hover:text-blue-200;
+                @apply text-blue-600 hover:text-blue-700;
             }
 
             .admin-table .table-actions {
@@ -229,15 +213,15 @@ function render_admin_theme_assets(): void
             }
 
             .message-details__item {
-                @apply rounded-3xl border border-slate-800 bg-slate-950/50 p-5;
+                @apply rounded-3xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-200;
             }
 
             .message-details__label {
-                @apply text-xs font-semibold uppercase tracking-widest text-slate-400;
+                @apply text-xs font-semibold uppercase tracking-widest text-slate-500;
             }
 
             .message-details__list {
-                @apply mt-4 space-y-3 text-sm text-slate-100;
+                @apply mt-4 space-y-3 text-sm text-slate-700;
             }
 
             .message-details__list li {
@@ -245,23 +229,23 @@ function render_admin_theme_assets(): void
             }
 
             .message-details__list span {
-                @apply text-xs uppercase tracking-wide text-slate-400;
+                @apply text-xs uppercase tracking-wide text-slate-500;
             }
 
             .message-details__list a {
-                @apply text-blue-300 hover:text-blue-200;
+                @apply text-blue-600 hover:text-blue-500;
             }
 
             .message-body {
-                @apply rounded-3xl border border-slate-800 bg-slate-950/40 p-5;
+                @apply rounded-3xl border border-slate-200 bg-white p-5 shadow-sm shadow-slate-200;
             }
 
             .message-body__content {
-                @apply mt-3 whitespace-pre-line text-base leading-8 text-slate-100;
+                @apply mt-3 whitespace-pre-line text-base leading-8 text-slate-800;
             }
 
             .table-editor {
-                @apply mt-6 space-y-4 rounded-3xl border border-slate-800 bg-slate-900/70 p-5;
+                @apply mt-6 space-y-4 rounded-3xl border border-slate-200 bg-white p-5;
             }
 
             .table-editor .columns,
@@ -271,7 +255,7 @@ function render_admin_theme_assets(): void
 
             .table-editor .column-input,
             .table-editor .row-block {
-                @apply flex flex-col gap-3 rounded-2xl border border-dashed border-slate-700 bg-slate-950/40 p-4 sm:flex-row sm:items-center;
+                @apply flex flex-col gap-3 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 sm:flex-row sm:items-center;
             }
 
             .table-editor .cells {
@@ -279,139 +263,23 @@ function render_admin_theme_assets(): void
             }
 
             .table-editor textarea {
-                @apply min-h-[60px] rounded-2xl border border-slate-800 bg-slate-950/60 p-3 text-slate-100;
-            }
-
-            body.admin-body.theme-light .admin-app {
-                @apply bg-slate-50 text-slate-900;
-            }
-
-            body.admin-body.theme-light .admin-sidebar {
-                @apply border-slate-200 bg-white text-slate-900;
-            }
-
-            body.admin-body.theme-light .admin-user {
-                @apply border-slate-200 bg-slate-50 text-slate-900;
-            }
-
-            body.admin-body.theme-light .admin-user p {
-                @apply text-slate-500;
-            }
-
-            body.admin-body.theme-light .admin-user strong {
-                @apply text-slate-900;
-            }
-
-            body.admin-body.theme-light .admin-menu__link {
-                @apply text-slate-700 hover:bg-slate-100;
-            }
-
-            body.admin-body.theme-light .admin-menu__link.is-active {
-                @apply bg-slate-900 text-white shadow-lg shadow-slate-300;
-            }
-
-            body.admin-body.theme-light .admin-menu__link.is-destructive {
-                @apply text-rose-600 hover:bg-rose-50 hover:text-rose-700;
-            }
-
-            body.admin-body.theme-light .admin-main {
-                @apply bg-slate-100;
-            }
-
-            body.admin-body.theme-light .admin-topbar {
-                @apply border-slate-200 bg-white text-slate-900 shadow-slate-200;
-            }
-
-            body.admin-body.theme-light .admin-topbar h1 {
-                @apply text-slate-900;
-            }
-
-            body.admin-body.theme-light .eyebrow {
-                @apply text-slate-500;
-            }
-
-            body.admin-body.theme-light .subtitle {
-                @apply text-slate-500;
-            }
-
-            body.admin-body.theme-light .badge--online {
-                @apply bg-emerald-100 text-emerald-700;
-            }
-
-            body.admin-body.theme-light .admin-theme-toggle {
-                @apply border-slate-200 bg-white text-slate-800 shadow-slate-200;
-            }
-
-            body.admin-body.theme-light .admin-panel {
-                @apply border-slate-200 bg-white text-slate-900 shadow-slate-200;
-            }
-
-            body.admin-body.theme-light .admin-panel label {
-                @apply text-slate-900;
-            }
-
-            body.admin-body.theme-light .admin-panel input,
-            body.admin-body.theme-light .admin-panel textarea,
-            body.admin-body.theme-light .admin-panel select {
-                @apply border-slate-200 bg-white text-slate-900 placeholder-slate-400;
-            }
-
-            body.admin-body.theme-light .admin-panel button,
-            body.admin-body.theme-light .admin-panel .btn {
-                @apply shadow-blue-200/70;
-            }
-
-            body.admin-body.theme-light .stats-grid > div {
-                @apply border-slate-200 bg-white text-slate-900 shadow-slate-200;
-            }
-
-            body.admin-body.theme-light .admin-table thead {
-                @apply bg-slate-100;
-            }
-
-            body.admin-body.theme-light .admin-table th {
-                @apply border-slate-200 text-slate-500;
-            }
-
-            body.admin-body.theme-light .admin-table td {
-                @apply border-slate-200 text-slate-800;
-            }
-
-            body.admin-body.theme-light .admin-table tbody tr:hover {
-                @apply bg-slate-50;
-            }
-
-            body.admin-body.theme-light .admin-table a {
-                @apply text-blue-600 hover:text-blue-700;
-            }
-
-            body.admin-body.theme-light .table-editor {
-                @apply border-slate-200 bg-white;
-            }
-
-            body.admin-body.theme-light .table-editor .column-input,
-            body.admin-body.theme-light .table-editor .row-block {
-                @apply border-slate-200 bg-slate-50;
-            }
-
-            body.admin-body.theme-light .table-editor textarea {
-                @apply border-slate-200 bg-white text-slate-900;
+                @apply min-h-[60px] rounded-2xl border border-slate-200 bg-white p-3 text-slate-900;
             }
 
             .btn--primary {
-                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-600/40 transition hover:from-blue-500 hover:to-sky-400;
+                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-200/70 transition hover:from-blue-500 hover:to-sky-400;
             }
 
             .admin-alert {
-                @apply rounded-2xl border border-rose-600/30 bg-rose-500/10 p-4 text-sm font-semibold text-rose-100;
+                @apply rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800;
             }
 
             .admin-alert--error {
-                @apply border-rose-500/40 bg-rose-500/20 text-rose-50;
+                @apply border-rose-200 bg-rose-50 text-rose-700;
             }
 
             .admin-auth {
-                @apply min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-6 py-12;
+                @apply px-6 py-12;
             }
 
             .admin-auth__shell {
@@ -419,7 +287,7 @@ function render_admin_theme_assets(): void
             }
 
             .admin-auth__intro {
-                @apply rounded-[32px] border border-white/10 bg-white/5 p-8 text-white shadow-2xl shadow-slate-950/40 backdrop-blur;
+                @apply rounded-[32px] border border-blue-100 bg-gradient-to-br from-sky-500 to-blue-600 p-8 text-white shadow-2xl shadow-blue-500/30;
             }
 
             .admin-auth__intro h1 {
@@ -427,7 +295,7 @@ function render_admin_theme_assets(): void
             }
 
             .admin-auth__intro p {
-                @apply text-slate-200/90 leading-relaxed;
+                @apply text-white/90 leading-relaxed;
             }
 
             .admin-auth__stats {
@@ -435,7 +303,7 @@ function render_admin_theme_assets(): void
             }
 
             .admin-auth__stats li {
-                @apply rounded-2xl border border-white/15 bg-white/10 p-4;
+                @apply rounded-2xl border border-white/30 bg-white/10 p-4;
             }
 
             .admin-auth__stats strong {
@@ -443,11 +311,11 @@ function render_admin_theme_assets(): void
             }
 
             .admin-auth__stats span {
-                @apply text-sm text-slate-200/80;
+                @apply text-sm text-white/90;
             }
 
             .admin-auth__card {
-                @apply rounded-[32px] bg-white p-8 text-slate-900 shadow-2xl shadow-slate-900/30;
+                @apply rounded-[32px] bg-white p-8 text-slate-900 shadow-2xl shadow-slate-200;
             }
 
             .admin-auth__logo {

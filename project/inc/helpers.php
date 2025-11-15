@@ -261,7 +261,7 @@ function site_header(string $title, array $meta = []): void
     }
     echo <<<HTML
 <!DOCTYPE html>
-<html lang="ru" data-theme="light">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -312,18 +312,6 @@ window.tailwind.config = {
 };
 </script>
 <script src="https://cdn.tailwindcss.com?plugins=typography,forms,aspect-ratio"></script>
-<script>
-(function() {
-    try {
-        var storedTheme = localStorage.getItem('salfatex-theme');
-        if (storedTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
-    } catch (error) {
-        document.documentElement.setAttribute('data-theme', 'light');
-    }
-})();
-</script>
 <link rel="stylesheet" href="css/styles.css">
 HTML;
     foreach ($schemas as $schema) {
@@ -342,10 +330,6 @@ HTML;
             <a class="transition hover:text-slate-900" href="products.php">Продукция</a>
             <a class="transition hover:text-slate-900" href="news.php">Новости</a>
             <a class="transition hover:text-slate-900" href="contact.php">Контакты</a>
-            <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">
-                <span class="theme-toggle__icon" aria-hidden="true"></span>
-                <span class="theme-toggle__text" data-theme-toggle-text>Ночной режим</span>
-            </button>
             <a class="hidden rounded-full bg-brand px-4 py-2 text-white shadow-glow transition hover:bg-brand-dark md:inline-flex" href="products.php">Каталог</a>
         </nav>
     </div>

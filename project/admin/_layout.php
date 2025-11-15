@@ -43,7 +43,7 @@ function admin_header(string $title): void
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css">
         <?php render_admin_theme_assets(); ?>
     </head>
-    <body class="admin-body theme-dark">
+    <body class="admin-body">
     <div class="admin-app">
         <aside class="admin-sidebar">
             <div class="admin-brand">
@@ -89,10 +89,6 @@ function admin_header(string $title): void
                 </div>
                 <div class="admin-topbar__meta">
                     <span class="badge badge--online">نشط الآن</span>
-                    <button type="button" class="admin-theme-toggle" data-admin-theme-toggle aria-pressed="true">
-                        <span class="admin-theme-toggle__icon" data-admin-theme-icon>🌙</span>
-                        <span data-admin-theme-label>الوضع الليلي</span>
-                    </button>
                 </div>
             </header>
             <section class="admin-panel">
@@ -226,8 +222,8 @@ function admin_footer(): void
                 plugins: 'link lists table code directionality',
                 toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link table | removeformat | ltr rtl | code',
                 directionality: direction,
-                skin: document.body.classList.contains('theme-light') ? 'oxide' : 'oxide-dark',
-                content_css: document.body.classList.contains('theme-light') ? 'default' : 'dark',
+                skin: 'oxide',
+                content_css: 'default',
                 height: 320,
                 branding: false,
                 convert_urls: false,
