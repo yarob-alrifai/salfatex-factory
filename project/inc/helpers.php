@@ -368,7 +368,7 @@ HTML;
         </div>
     </div>
 </nav>
-<main class="site-main min-h-screen pb-16 pt-28">
+<main class="site-main min-h-screen pb-16">
 HTML;
 }
 

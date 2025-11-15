@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const headerNav = document.querySelector('nav[aria-label="Главное меню"]');
+    const rootElement = document.documentElement;
+
+    const updateHeaderOffset = () => {
+        if (!headerNav) return;
+        const height = headerNav.offsetHeight;
+        if (height > 0) {
+            rootElement.style.setProperty('--header-height', `${height}px`);
+        }
+    };
+
+    updateHeaderOffset();
+    window.addEventListener('load', updateHeaderOffset, { once: true });
+    window.addEventListener('resize', updateHeaderOffset);
     document.querySelectorAll('[data-gallery]').forEach(track => {
         track.addEventListener('wheel', (event) => {
             if (event.deltaY === 0) return;
@@ -123,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.toggle('is-active', shouldOpen);
                 btn.setAttribute('aria-expanded', String(shouldOpen));
             });
+            requestAnimationFrame(updateHeaderOffset);
         };
 
         navToggles.forEach(button => {
