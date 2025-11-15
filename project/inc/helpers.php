@@ -330,7 +330,6 @@ HTML;
             <a class="transition hover:text-slate-900" href="products.php">Продукция</a>
             <a class="transition hover:text-slate-900" href="news.php">Новости</a>
             <a class="transition hover:text-slate-900" href="contact.php">Контакты</a>
-            <a class="hidden rounded-full bg-brand px-4 py-2 text-white shadow-glow transition hover:bg-brand-dark md:inline-flex" href="products.php">Каталог</a>
         </nav>
     </div>
 </header>
