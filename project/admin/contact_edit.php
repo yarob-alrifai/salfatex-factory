@@ -2,12 +2,32 @@
 require_once __DIR__ . '/_layout.php';
 require_admin();
 $contact = get_contact_info($pdo);
+$navbarIconSrc = site_image_src($contact['navbar_icon'] ?? null);
 admin_header('Contacts');
 ?>
-<form method="post" action="contact_save.php" class="admin-form-grid">
+<form method="post" action="contact_save.php" class="admin-form-grid" enctype="multipart/form-data">
     <?php echo csrf_field('contact_form'); ?>
     <label>Slug<input type="text" name="slug" value="<?php echo h($contact['slug'] ?? 'contact'); ?>" required></label>
     <label>H1<input type="text" name="h1" value="<?php echo h($contact['h1'] ?? ''); ?>" placeholder="Главный заголовок"></label>
+    <label>اسم الشركة في الشريط العلوي
+        <input type="text" name="navbar_company_name" value="<?php echo h($contact['navbar_company_name'] ?? ''); ?>" placeholder="مثال: Salfatex Factory">
+        <span class="form-hint">سيتم عرض هذا الاسم بجوار شعار الموقع في النافبار.</span>
+    </label>
+    <div class="form-field" data-crop-group>
+        <label>أيقونة النافبار (شكل مربع)
+            <input type="file" name="navbar_icon" accept="image/*" data-crop-field>
+        </label>
+        <p class="form-hint">يفضل استخدام صورة مربعة صغيرة (مثلاً 64×64 بكسل) لتظهر بجوار الاسم.</p>
+        <?php if ($navbarIconSrc): ?>
+            <div class="admin-preview">
+                <img src="<?php echo h($navbarIconSrc); ?>" alt="Navbar icon" style="max-width: 90px; max-height: 90px; object-fit: cover; border-radius: 12px;">
+                <label class="mt-3 flex items-center gap-2 text-sm text-rose-400">
+                    <input type="checkbox" name="remove_navbar_icon" value="1">
+                    إزالة الأيقونة الحالية
+                </label>
+            </div>
+        <?php endif; ?>
+    </div>
     <label>Phone main<input type="text" name="phone_main" value="<?php echo h($contact['phone_main'] ?? ''); ?>" required></label>
     <label>Phone secondary<input type="text" name="phone_secondary" value="<?php echo h($contact['phone_secondary'] ?? ''); ?>"></label>
     <label>Email<input type="email" name="email" value="<?php echo h($contact['email'] ?? ''); ?>" required></label>

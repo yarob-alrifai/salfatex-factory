@@ -229,6 +229,36 @@ function site_header(string $title, array $meta = []): void
         'url' => $canonical,
     ];
     $schemas = is_assoc_array((array)$schemaData) ? [$schemaData] : (array)$schemaData;
+    $defaultBrandName = 'Фабрика Салфатекс';
+    $brandName = $defaultBrandName;
+    $brandIconSrc = null;
+    if (function_exists('site_image_src')) {
+        try {
+            global $pdo;
+            if ($pdo instanceof PDO) {
+                $stmt = $pdo->query('SELECT navbar_company_name, navbar_icon FROM contact_info LIMIT 1');
+                if ($stmt) {
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    if ($row) {
+                        if (!empty($row['navbar_company_name'])) {
+                            $brandName = trim($row['navbar_company_name']);
+                        }
+                        $brandIconSrc = site_image_src($row['navbar_icon'] ?? null);
+                    }
+                }
+            }
+        } catch (Throwable $exception) {
+            $brandIconSrc = null;
+        }
+    }
+    if ($brandName === '') {
+        $brandName = $defaultBrandName;
+    }
+    $brandNameEscaped = h($brandName);
+    $brandIconHtml = '';
+    if ($brandIconSrc) {
+        $brandIconHtml = '<span class="logo__icon" aria-hidden="true"><img src="' . h($brandIconSrc) . '" alt="' . $brandNameEscaped . '"></span>';
+    }
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="ru" data-theme="light">
@@ -305,7 +335,8 @@ HTML;
 <header class="site-header sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
     <div class="container mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a class="logo text-lg font-semibold tracking-tight text-slate-900" href="index.php">
-            <span class="text-brand">Фабрика</span> Салфатекс
+            {$brandIconHtml}
+            <span class="logo__text">{$brandNameEscaped}</span>
         </a>
         <nav class="flex items-center gap-4 text-sm font-medium text-slate-600">
             <a class="transition hover:text-slate-900" href="products.php">Продукция</a>

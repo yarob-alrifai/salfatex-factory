@@ -2,6 +2,8 @@ CREATE TABLE contact_info (
     id INT AUTO_INCREMENT PRIMARY KEY,
     slug VARCHAR(120) NOT NULL DEFAULT 'contact',
     h1 VARCHAR(255) DEFAULT NULL,
+    navbar_company_name VARCHAR(255) DEFAULT NULL,
+    navbar_icon MEDIUMTEXT,
     phone_main VARCHAR(50) NOT NULL,
     phone_secondary VARCHAR(50),
     email VARCHAR(120) NOT NULL,
