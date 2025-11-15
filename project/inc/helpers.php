@@ -339,7 +339,130 @@ HTML;
 
 function site_footer(): void
 {
+    global $pdo;
+
     $year = date('Y');
+    $contact = null;
+    if (isset($pdo) && $pdo instanceof PDO) {
+        $contact = get_contact_info($pdo);
+    }
+
+    $normalizePhoneHref = static function (?string $phone): ?string {
+        if (!$phone) {
+            return null;
+        }
+        $normalized = preg_replace('/[^0-9+]/', '', $phone) ?: '';
+        if ($normalized === '') {
+            return null;
+        }
+        return 'tel:' . $normalized;
+    };
+
+    $phoneMain = trim((string)($contact['phone_main'] ?? '')) ?: null;
+    $phoneSecondary = trim((string)($contact['phone_secondary'] ?? '')) ?: null;
+    $email = trim((string)($contact['email'] ?? '')) ?: null;
+    $address = trim((string)($contact['address'] ?? '')) ?: null;
+    $whatsapp = trim((string)($contact['whatsapp_link'] ?? '')) ?: null;
+    $telegram = trim((string)($contact['telegram_link'] ?? '')) ?: null;
+
+    $icons = [
+        'phone' => '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><path d="M6.65 4.5c-.3-.8-1.05-1.3-1.87-1.2l-1.7.2c-.84.1-1.48.78-1.48 1.63 0 10.26 8.32 18.58 18.58 18.58.85 0 1.53-.64 1.63-1.48l.2-1.7c.1-.82-.4-1.57-1.2-1.87l-3.52-1.34c-.72-.27-1.54-.08-2.08.46l-.83.83a2.38 2.38 0 0 1-2.42.58 15.6 15.6 0 0 1-7.1-7.1 2.38 2.38 0 0 1 .58-2.42l.83-.83c.54-.54.73-1.36.46-2.08Z"/></svg>',
+        'mail' => '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="m4 7 8 6 8-6"/></svg>',
+        'pin' => '<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><path d="M12 12.75a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z"/><path d="M19.5 10.5c0 7.5-7.5 11.25-7.5 11.25S4.5 18 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>'
+    ];
+
+    $contactDetails = [];
+    if ($phoneMain) {
+        $contactDetails[] = [
+            'label' => 'Отдел продаж',
+            'value' => $phoneMain,
+            'href' => $normalizePhoneHref($phoneMain),
+            'icon' => $icons['phone'],
+        ];
+    }
+    if ($phoneSecondary) {
+        $contactDetails[] = [
+            'label' => 'Линия качества',
+            'value' => $phoneSecondary,
+            'href' => $normalizePhoneHref($phoneSecondary),
+            'icon' => $icons['phone'],
+        ];
+    }
+    if ($email) {
+        $contactDetails[] = [
+            'label' => 'Электронная почта',
+            'value' => $email,
+            'href' => 'mailto:' . $email,
+            'icon' => $icons['mail'],
+        ];
+    }
+
+    $contactDetailsHtml = '';
+    if ($contactDetails) {
+        $contactDetailsHtml .= '<ul class="space-y-4">';
+        foreach ($contactDetails as $detail) {
+            $label = h($detail['label']);
+            $value = h($detail['value']);
+            $href = $detail['href'] ? h($detail['href']) : null;
+            $contactDetailsHtml .= '<li class="flex items-start gap-3">';
+            $contactDetailsHtml .= '<span class="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-brand">' . $detail['icon'] . '</span>';
+            $contactDetailsHtml .= '<div>';
+            $contactDetailsHtml .= '<p class="text-xs uppercase tracking-[0.45em] text-slate-400">' . $label . '</p>';
+            if ($href) {
+                $contactDetailsHtml .= '<a class="text-lg font-semibold text-white transition hover:text-brand" href="' . $href . '">' . $value . '</a>';
+            } else {
+                $contactDetailsHtml .= '<p class="text-lg font-semibold text-white">' . $value . '</p>';
+            }
+            $contactDetailsHtml .= '</div></li>';
+        }
+        $contactDetailsHtml .= '</ul>';
+    }
+
+    $addressHtml = '';
+    if ($address) {
+        $addressHtml = '<div class="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-slate-200 backdrop-blur">'
+            . '<p class="mb-1 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.45em] text-slate-400">'
+            . $icons['pin'] . '<span>Офис и склад</span></p>'
+            . '<p class="text-base font-medium text-white">' . nl2br(h($address), false) . '</p>'
+            . '</div>';
+    }
+
+    $messengerLinks = [];
+    if ($whatsapp) {
+        $messengerLinks[] = ['label' => 'WhatsApp', 'href' => $whatsapp];
+    }
+    if ($telegram) {
+        $messengerLinks[] = ['label' => 'Telegram', 'href' => $telegram];
+    }
+
+    $messengerHtml = '';
+    if ($messengerLinks) {
+        $messengerHtml .= '<div class="mt-6 flex flex-wrap gap-3">';
+        foreach ($messengerLinks as $link) {
+            $messengerHtml .= '<a class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-brand hover:text-brand" target="_blank" rel="noopener" href="' . h($link['href']) . '">' . h($link['label']) . '</a>';
+        }
+        $messengerHtml .= '</div>';
+    }
+
+    $navLinks = [
+        ['label' => 'Главная', 'href' => 'index.php'],
+        ['label' => 'Категории', 'href' => 'products.php'],
+        ['label' => 'Новости', 'href' => 'news.php'],
+        ['label' => 'Контакты', 'href' => 'contact.php'],
+    ];
+    $navHtml = '<ul class="space-y-3 text-slate-400">';
+    foreach ($navLinks as $link) {
+        $navHtml .= '<li><a class="transition hover:text-white" href="' . h($link['href']) . '">' . h($link['label']) . '</a></li>';
+    }
+    $navHtml .= '</ul>';
+
+    $ctaHtml = '<div class="mt-6 flex flex-wrap gap-3">';
+    if ($phoneMain && ($mainHref = $normalizePhoneHref($phoneMain))) {
+        $ctaHtml .= '<a class="inline-flex items-center justify-center rounded-2xl bg-brand px-5 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-dark" href="' . h($mainHref) . '">Позвонить сейчас</a>';
+    }
+    $ctaHtml .= '<a class="inline-flex items-center justify-center rounded-2xl border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:border-brand hover:text-brand" href="contact.php">Отправить заявку</a>';
+    $ctaHtml .= '</div>';
+
     echo <<<HTML
 </main>
 <section class="global-contact relative isolate overflow-hidden bg-slate-900 text-white">
@@ -399,30 +522,45 @@ HTML;
         </div>
     </div>
 </section>
-<footer class="site-footer bg-slate-900 text-slate-200">
-    <div class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
-        <div>
-            <p class="text-lg font-semibold">Фабрика бумажных изделий</p>
-            <p class="mt-1 text-sm text-slate-400">Современные линии производства салфеток, полотенец и туалетной бумаги.</p>
-        </div>
-        <div class="flex flex-wrap gap-3 text-sm font-medium">
-            <a class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-brand hover:text-white" href="products.php">Каталог</a>
-            <a class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-brand hover:text-white" href="news.php">Новости</a>
-            <a class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-brand hover:text-white" href="contact.php">Контакты</a>
+<footer class="site-footer relative overflow-hidden bg-slate-950 text-slate-100">
+    <div aria-hidden="true" class="pointer-events-none">
+        <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-brand/20 to-transparent"></div>
+        <div class="absolute -right-16 top-10 h-48 w-48 rounded-full bg-brand/10 blur-3xl"></div>
+        <div class="absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-cyan-500/10 blur-3xl"></div>
+    </div>
+    <div class="relative mx-auto max-w-6xl px-6 py-16">
+        <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr]">
+            <div class="space-y-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.55em] text-brand/80">Salfatex Factory</p>
+                <h3 class="text-3xl font-semibold text-white">Фабрика бумажных изделий полного цикла</h3>
+                <p class="text-base text-slate-300">Поставляем салфетки, бумажные полотенца и туалетную бумагу для сетей и HoReCa, поддерживаем гибкие партии и кастомную упаковку.</p>
+                {$ctaHtml}
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold uppercase tracking-[0.45em] text-slate-400">Контактные данные</h4>
+                <div class="mt-5 space-y-5">
+                    {$contactDetailsHtml}
+                    {$addressHtml}
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-semibold uppercase tracking-[0.45em] text-slate-400">Навигация</h4>
+                <div class="mt-5 space-y-5">
+                    {$navHtml}
+                    {$messengerHtml}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="border-t border-slate-800 px-6 py-4 text-center text-sm text-slate-400">&copy; {$year} Фабрика бумажных изделий. Все права защищены.</div>
+    <div class="relative border-t border-white/10 px-6 py-4 text-center text-sm text-slate-400">&copy; {$year} Фабрика бумажных изделий. Все права защищены.</div>
 </footer>
 <a class="contact-floating-btn" href="contact.php" aria-label="Перейти на страницу контактов">
     <span class="contact-floating-btn__icon" aria-hidden="true">📞</span>
     <span class="contact-floating-btn__label">Связаться</span>
 </a>
 <script src="js/main.js"></script>
-</body>
-</html>
 HTML;
 }
-
 function get_contact_info(PDO $pdo): ?array
 {
     $stmt = $pdo->query('SELECT * FROM contact_info LIMIT 1');
