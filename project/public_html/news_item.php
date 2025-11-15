@@ -52,7 +52,6 @@ $shareUrl = rawurlencode($canonical);
 $shareText = rawurlencode($news['title']);
 $shareLinks = [
     'telegram' => 'https://t.me/share/url?url=' . $shareUrl . '&text=' . $shareText,
-    'vk' => 'https://vk.com/share.php?url=' . $shareUrl,
     'whatsapp' => 'https://api.whatsapp.com/send?text=' . $shareText . '%20' . $shareUrl,
 ];
 $moreNewsRaw = get_latest_news($pdo, 4);
@@ -128,9 +127,7 @@ $moreNews = array_slice($moreNews, 0, 3);
                     <a class="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/20" href="<?php echo h($shareLinks['telegram']); ?>" target="_blank" rel="noopener">
                         <span>Telegram</span>
                     </a>
-                    <a class="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/20" href="<?php echo h($shareLinks['vk']); ?>" target="_blank" rel="noopener">
-                        <span>VK</span>
-                    </a>
+                
                     <a class="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/20" href="<?php echo h($shareLinks['whatsapp']); ?>" target="_blank" rel="noopener">
                         <span>WhatsApp</span>
                     </a>
