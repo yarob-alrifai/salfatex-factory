@@ -328,7 +328,64 @@ function site_footer(): void
     $year = date('Y');
     echo <<<HTML
 </main>
-<footer class="site-footer mt-16 bg-slate-900 text-slate-200">
+<section class="global-contact relative isolate overflow-hidden bg-slate-900 text-white">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 opacity-70">
+        <div class="absolute -top-20 left-1/3 h-72 w-72 rounded-full bg-brand/40 blur-3xl"></div>
+        <div class="absolute -bottom-16 right-1/4 h-80 w-80 rounded-full bg-cyan-500/40 blur-3xl"></div>
+    </div>
+    <div class="relative mx-auto grid max-w-6xl gap-10 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr]">
+        <div class="space-y-6">
+            <p class="text-sm font-semibold uppercase tracking-[0.55em] text-brand/80">أرسل لنا رسالة</p>
+            <h2 class="text-3xl font-bold leading-tight text-white lg:text-4xl">لدينا فريق جاهز للرد على استفساراتك خلال دقائق</h2>
+            <p class="text-base text-slate-200">املأ النموذج وأخبرنا بنوعية المنتجات أو الخدمات التي تبحث عنها، وسيقوم مستشارونا بالتواصل معك لتقديم أفضل العروض والحلول اللوجستية.</p>
+            <div class="grid gap-4 text-sm text-slate-200 md:grid-cols-2">
+                <div class="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                    <p class="text-xs uppercase tracking-[0.4em] text-slate-400">خطوات سريعة</p>
+                    <p class="mt-2 text-lg font-semibold text-white">استشارة مجانية + عرض سعر مخصص</p>
+                </div>
+                <div class="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+                    <p class="text-xs uppercase tracking-[0.4em] text-slate-400">تحديثات فورية</p>
+                    <p class="mt-2 text-lg font-semibold text-white">متابعة عبر الهاتف أو البريد الإلكتروني</p>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-[32px] border border-white/10 bg-white/95 p-8 text-slate-900 shadow-2xl shadow-brand/20">
+            <h3 class="text-2xl font-semibold text-slate-900">نموذج طلب التعاون</h3>
+            <p class="mt-2 text-sm text-slate-500">سنراجع رسالتك خلال ساعات العمل ونعود إليك بأفضل حل.</p>
+            <form class="mt-6 grid gap-4" method="post" action="send_message.php">
+HTML;
+    echo csrf_field('public_contact');
+    echo <<<HTML
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-slate-600" for="global-name">الاسم الكامل</label>
+                    <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" id="global-name" name="name" placeholder="مثال: أحمد بن يوسف" required>
+                </div>
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-slate-600" for="global-phone">رقم الهاتف</label>
+                        <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" id="global-phone" name="phone" placeholder="00966 50 000 0000" required>
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-sm font-medium text-slate-600" for="global-email">البريد الإلكتروني</label>
+                        <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="email" id="global-email" name="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="mb-1 block text-sm font-medium text-slate-600" for="global-message">أدخل رسالتك</label>
+                    <textarea class="min-h-[140px] w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" id="global-message" name="message" placeholder="حدثنا عن احتياجاتك من المنتجات أو الخدمات اللوجستية" required></textarea>
+                </div>
+                <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-brand px-6 py-3 text-base font-semibold text-white shadow-glow transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand">
+                    إرسال الطلب الآن
+                    <svg class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 0 1 1.414 0l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L13.586 11H4a1 1 0 1 1 0-2h9.586l-3.293-3.293a1 1 0 0 1 0-1.414Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <p class="text-xs text-slate-500">بالنقر على إرسال، فإنك توافق على سياسة الخصوصية وشروط الاستخدام الخاصة بسلفاتكس.</p>
+            </form>
+        </div>
+    </div>
+</section>
+<footer class="site-footer bg-slate-900 text-slate-200">
     <div class="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10 md:flex-row md:items-center md:justify-between">
         <div>
             <p class="text-lg font-semibold">Фабрика бумажных изделий</p>
