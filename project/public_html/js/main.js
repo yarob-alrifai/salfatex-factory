@@ -116,8 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
 
     if (siteNav && navToggles.length) {
-        const toggleNav = (shouldOpen) => {
-            siteNav.classList.toggle('is-open', shouldOpen);
+        const setNavState = (shouldOpen) => {
+            siteNav.classList.toggle('hidden', !shouldOpen);
             body.classList.toggle('nav-open', shouldOpen);
             navToggles.forEach(btn => {
                 btn.classList.toggle('is-active', shouldOpen);
@@ -127,18 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         navToggles.forEach(button => {
             button.addEventListener('click', () => {
-                const willOpen = !siteNav.classList.contains('is-open');
-                toggleNav(willOpen);
+                const isHidden = siteNav.classList.contains('hidden');
+                setNavState(isHidden);
             });
         });
 
         siteNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => toggleNav(false));
+            link.addEventListener('click', () => setNavState(false));
         });
 
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 1024) {
-                toggleNav(false);
+            if (window.innerWidth >= 1024) {
+                setNavState(false);
             }
         });
     }

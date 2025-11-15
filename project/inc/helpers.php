@@ -257,7 +257,36 @@ function site_header(string $title, array $meta = []): void
     $brandNameEscaped = h($brandName);
     $brandIconHtml = '';
     if ($brandIconSrc) {
-        $brandIconHtml = '<span class="logo__icon" aria-hidden="true"><img src="' . h($brandIconSrc) . '" alt="' . $brandNameEscaped . '"></span>';
+        $brandIconHtml = '<span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm" aria-hidden="true">'
+            . '<img src="' . h($brandIconSrc) . '" alt="' . $brandNameEscaped . '" class="h-full w-full object-cover">'
+            . '</span>';
+    }
+
+    $currentScript = basename((string)($_SERVER['SCRIPT_NAME'] ?? ''));
+    $navItems = [
+        ['href' => 'index.php', 'label' => 'Главная'],
+        ['href' => 'products.php', 'label' => 'Каталог'],
+        ['href' => 'news.php', 'label' => 'Новости'],
+        ['href' => 'contact.php', 'label' => 'Свяжитесь с нами', 'variant' => 'cta'],
+    ];
+
+    $navLinksHtml = '';
+    foreach ($navItems as $item) {
+        $isActive = $currentScript === ($item['href'] ?? '');
+        $isCta = ($item['variant'] ?? '') === 'cta';
+        $classes = 'block rounded px-3 py-2 text-slate-700 transition hover:bg-slate-100 md:border-0 md:px-0 md:py-0 md:hover:bg-transparent md:hover:text-brand';
+        $ariaCurrent = '';
+
+        if ($isActive) {
+            $classes .= ' bg-brand text-white md:bg-transparent md:text-brand';
+            $ariaCurrent = ' aria-current="page"';
+        }
+
+        if ($isCta) {
+            $classes = 'block rounded-full bg-brand px-5 py-2.5 text-center font-semibold text-white transition hover:bg-brand-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand';
+        }
+
+        $navLinksHtml .= '<li><a href="' . h($item['href']) . '" class="' . $classes . '"' . $ariaCurrent . '>' . h($item['label']) . '</a></li>';
     }
     echo <<<HTML
 <!DOCTYPE html>
@@ -320,30 +349,26 @@ HTML;
     echo <<<HTML
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
-<header class="site-header sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-    <div class="container mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a class="logo text-lg font-semibold tracking-tight text-slate-900" href="index.php">
+<nav class="bg-white/90 backdrop-blur fixed top-0 left-0 z-50 w-full border-b border-slate-200" aria-label="Главное меню">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between px-6 py-4">
+        <a href="index.php" class="flex items-center gap-3 text-slate-900">
             {$brandIconHtml}
-            <span class="logo__text">{$brandNameEscaped}</span>
+            <span class="text-xl font-semibold">{$brandNameEscaped}</span>
         </a>
-        <button class="nav-toggle" type="button" aria-label="Открыть меню" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
-            <span class="sr-only">Переключить меню</span>
-            <span aria-hidden="true" class="nav-toggle__box">
-                <span class="nav-toggle__bar"></span>
-                <span class="nav-toggle__bar"></span>
-                <span class="nav-toggle__bar"></span>
-            </span>
-            <span class="nav-toggle__label">Меню</span>
+        <button type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-200 md:hidden" data-nav-toggle aria-controls="site-navbar" aria-expanded="false">
+            <span class="sr-only">Открыть главное меню</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" d="M5 7h14M5 12h14M5 17h14" />
+            </svg>
         </button>
-        <nav id="site-nav" class="site-nav text-sm font-medium text-slate-600" data-site-nav>
-            <a class="site-nav__link" href="index.php">Главная</a>
-            <a class="site-nav__link" href="products.php">Каталог</a>
-            <a class="site-nav__link" href="news.php">Новости</a>
-            <a class="site-nav__link site-nav__cta" href="contact.php">Свяжитесь с нами</a>
-        </nav>
+        <div class="hidden w-full md:block md:w-auto" id="site-navbar" data-site-nav>
+            <ul class="mt-4 flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white/95 p-4 text-base font-medium text-slate-700 md:mt-0 md:flex-row md:items-center md:gap-8 md:border-0 md:bg-transparent md:p-0">
+                {$navLinksHtml}
+            </ul>
+        </div>
     </div>
-</header>
-<main class="site-main min-h-screen pb-16">
+</nav>
+<main class="site-main min-h-screen pb-16 pt-28">
 HTML;
 }
 
