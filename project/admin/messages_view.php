@@ -12,6 +12,12 @@ if (!$message) {
     exit;
 }
 
+if (array_key_exists('is_read', $message) && empty($message['is_read'])) {
+    $markRead = $pdo->prepare('UPDATE messages SET is_read = 1 WHERE id = :id LIMIT 1');
+    $markRead->execute(['id' => $message['id']]);
+    $message['is_read'] = 1;
+}
+
 $sentAt = date('Y-m-d H:i', strtotime($message['created_at'] ?? 'now'));
 admin_header('رسالة #' . $message['id']);
 ?>

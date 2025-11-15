@@ -34,8 +34,14 @@ admin_header('Messages');
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($messages as $message): ?>
-                    <tr>
+                <?php foreach ($messages as $message):
+                    $isUnread = empty($message['is_read']);
+                    $rowClasses = 'message-row';
+                    if ($isUnread) {
+                        $rowClasses .= ' is-unread';
+                    }
+                    ?>
+                    <tr class="<?php echo h($rowClasses); ?>" data-message-row="messages_view.php?id=<?php echo (int)$message['id']; ?>" tabindex="0" role="button">
                         <td><?php echo (int)$message['id']; ?></td>
                         <td>
                             <strong><?php echo h($message['name']); ?></strong>
@@ -43,7 +49,7 @@ admin_header('Messages');
                         <td>
                             <div class="stacked">
                                 <span>📞 <?php echo h($message['phone']); ?></span>
-                                <span>✉️ <a href="mailto:<?php echo h($message['email']); ?>"><?php echo h($message['email']); ?></a></span>
+                                <span>✉️ <a data-row-ignore href="mailto:<?php echo h($message['email']); ?>"><?php echo h($message['email']); ?></a></span>
                             </div>
                         </td>
                         <td>
@@ -52,8 +58,8 @@ admin_header('Messages');
                         <td><?php echo h(date('Y-m-d H:i', strtotime($message['created_at']))); ?></td>
                         <td>
                             <div class="table-actions">
-                                <a class="btn-secondary btn-small" href="messages_view.php?id=<?php echo (int)$message['id']; ?>">قراءة</a>
-                                <a class="btn-danger btn-small" href="messages_delete.php?id=<?php echo (int)$message['id']; ?>" onclick="return confirm('هل أنت متأكد من حذف هذه الرسالة؟');">حذف</a>
+                                <a class="btn-secondary btn-small" data-row-ignore href="messages_view.php?id=<?php echo (int)$message['id']; ?>">قراءة</a>
+                                <a class="btn-danger btn-small" data-row-ignore href="messages_delete.php?id=<?php echo (int)$message['id']; ?>" onclick="return confirm('هل أنت متأكد من حذف هذه الرسالة؟');">حذف</a>
                             </div>
                         </td>
                     </tr>
@@ -63,4 +69,27 @@ admin_header('Messages');
         </div>
     <?php endif; ?>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('[data-message-row]').forEach((row) => {
+            const href = row.dataset.messageRow;
+            if (!href) {
+                return;
+            }
+            row.addEventListener('click', () => {
+                window.location.href = href;
+            });
+            row.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    window.location.href = href;
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-row-ignore]').forEach((el) => {
+            el.addEventListener('click', (event) => event.stopPropagation());
+        });
+    });
+</script>
 <?php admin_footer(); ?>

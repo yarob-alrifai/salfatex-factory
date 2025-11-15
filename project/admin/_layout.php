@@ -18,6 +18,17 @@ function admin_header(string $title): void
         'logout.php' => 'Logout',
     ];
 
+    $unreadMessages = 0;
+    if (isset($GLOBALS['pdo'])) {
+        try {
+            $unreadMessages = (int)$GLOBALS['pdo']
+                ->query('SELECT COUNT(*) FROM messages WHERE is_read = 0')
+                ->fetchColumn();
+        } catch (Throwable $e) {
+            $unreadMessages = 0;
+        }
+    }
+
     ?>
     <!DOCTYPE html>
     <html lang="ar">
@@ -57,7 +68,14 @@ function admin_header(string $title): void
                     }
                     ?>
                     <a href="<?php echo h($file); ?>" class="<?php echo h($classes); ?>">
-                        <span><?php echo h($label); ?></span>
+                        <span class="admin-menu__label">
+                            <?php echo h($label); ?>
+                            <?php if ($file === 'messages_list.php' && $unreadMessages > 0): ?>
+                                <span class="admin-menu__badge" aria-label="رسائل جديدة">
+                                    <?php echo (int)$unreadMessages; ?>
+                                </span>
+                            <?php endif; ?>
+                        </span>
                     </a>
                 <?php endforeach; ?>
             </nav>
