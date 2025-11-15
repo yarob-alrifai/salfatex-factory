@@ -17,8 +17,8 @@ admin_header('Edit news');
     <label>Title<input type="text" name="title" value="<?php echo h($news['title']); ?>" required></label>
     <label>Slug<input type="text" name="slug" value="<?php echo h($news['slug']); ?>" required></label>
     <label>H1<input type="text" name="h1" value="<?php echo h($news['h1']); ?>"></label>
-    <label>Short text<textarea name="short_text" rows="3" required><?php echo h($news['short_text']); ?></textarea></label>
-    <label>Full text<textarea name="full_text" rows="8" required><?php echo h($news['full_text']); ?></textarea></label>
+    <label>Short text<textarea name="short_text" rows="3" data-rich-text required><?php echo h($news['short_text']); ?></textarea></label>
+    <label>Full text<textarea name="full_text" rows="8" data-rich-text required><?php echo h($news['full_text']); ?></textarea></label>
     <?php $currentImage = news_image_src($news['image']); ?>
     <?php if ($currentImage): ?>
         <div class="admin-preview">

@@ -109,7 +109,139 @@ function admin_footer(): void
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="../public_html/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.tinymce) {
+                return;
+            }
+
+            const richTextAreas = document.querySelectorAll('textarea[data-rich-text]');
+            if (!richTextAreas.length) {
+                return;
+            }
+
+            const formsWithValidation = new WeakSet();
+
+            const assignIds = () => {
+                richTextAreas.forEach((textarea, index) => {
+                    if (!textarea.id) {
+                        textarea.id = `rich-text-${index + 1}`;
+                    }
+                });
+            };
+
+            const showRichTextError = (textarea, message = 'هذا الحقل مطلوب.') => {
+                const fieldWrapper = textarea.closest('label, .form-field');
+                if (!fieldWrapper) {
+                    return;
+                }
+                let errorEl = fieldWrapper.querySelector('[data-rich-text-error]');
+                if (!errorEl) {
+                    errorEl = document.createElement('p');
+                    errorEl.className = 'form-error';
+                    errorEl.dataset.richTextError = 'true';
+                    fieldWrapper.appendChild(errorEl);
+                }
+                errorEl.textContent = message;
+                errorEl.hidden = false;
+            };
+
+            const clearRichTextError = (textarea) => {
+                const fieldWrapper = textarea.closest('label, .form-field');
+                const errorEl = fieldWrapper ? fieldWrapper.querySelector('[data-rich-text-error]') : null;
+                if (errorEl) {
+                    errorEl.hidden = true;
+                    errorEl.textContent = '';
+                }
+            };
+
+            const getEditorText = (editor) => editor
+                .getContent({ format: 'text' })
+                .replace(/\u00a0/g, ' ')
+                .trim();
+
+            const attachFormValidation = (form) => {
+                if (!form || formsWithValidation.has(form)) {
+                    return;
+                }
+                formsWithValidation.add(form);
+
+                form.addEventListener('submit', (event) => {
+                    let hasErrors = false;
+                    let firstInvalidControl = null;
+
+                    form.querySelectorAll('textarea[data-rich-text][data-rich-text-required="true"]').forEach((textarea) => {
+                        const editor = tinymce.get(textarea.id);
+                        const textContent = editor ? getEditorText(editor) : textarea.value.trim();
+                        if (!textContent.length) {
+                            hasErrors = true;
+                            if (!firstInvalidControl) {
+                                firstInvalidControl = editor || textarea;
+                            }
+                            showRichTextError(textarea);
+                        } else {
+                            clearRichTextError(textarea);
+                        }
+                    });
+
+                    if (hasErrors) {
+                        event.preventDefault();
+                        if (firstInvalidControl && typeof firstInvalidControl.focus === 'function') {
+                            firstInvalidControl.focus();
+                        }
+                        return;
+                    }
+
+                    tinymce.triggerSave();
+                });
+            };
+
+            assignIds();
+
+            const direction = document.documentElement.getAttribute('dir') === 'rtl' ? 'rtl' : 'ltr';
+            tinymce.init({
+                selector: 'textarea[data-rich-text]',
+                menubar: false,
+                plugins: 'link lists table code directionality',
+                toolbar: 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link table | removeformat | ltr rtl | code',
+                directionality: direction,
+                skin: document.body.classList.contains('theme-light') ? 'oxide' : 'oxide-dark',
+                content_css: document.body.classList.contains('theme-light') ? 'default' : 'dark',
+                height: 320,
+                branding: false,
+                convert_urls: false,
+                relative_urls: false,
+                contextmenu: false,
+                content_style: 'body { font-family: "Cairo", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.7; }',
+                setup(editor) {
+                    editor.on('init', () => {
+                        const textarea = editor.getElement();
+                        if (!textarea) {
+                            return;
+                        }
+                        if (textarea.required) {
+                            textarea.dataset.richTextRequired = 'true';
+                            textarea.required = false;
+                        }
+                        attachFormValidation(textarea.form);
+                    });
+
+                    editor.on('input change keyup paste', () => {
+                        const textarea = editor.getElement();
+                        if (!textarea || !textarea.dataset.richTextRequired) {
+                            return;
+                        }
+                        const textContent = getEditorText(editor);
+                        if (textContent.length) {
+                            clearRichTextError(textarea);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     </body>
     </html>
     <?php

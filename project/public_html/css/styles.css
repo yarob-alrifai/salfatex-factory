@@ -65,6 +65,13 @@ body {
     color: var(--text-strong);
 }
 
+.form-error {
+    margin: 0;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #ef4444;
+}
+
 .admin-form-grid input,
 .admin-form-grid textarea,
 .admin-form-grid select {

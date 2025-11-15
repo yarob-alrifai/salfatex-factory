@@ -8,8 +8,8 @@ admin_header('Add news');
     <label>Title<input type="text" name="title" required></label>
     <label>Slug<input type="text" name="slug" placeholder="factory-updates" required></label>
     <label>H1<input type="text" name="h1" placeholder="Заголовок на странице"></label>
-    <label>Short text<textarea name="short_text" rows="3" required></textarea></label>
-    <label>Full text<textarea name="full_text" rows="8" required></textarea></label>
+    <label>Short text<textarea name="short_text" rows="3" data-rich-text required></textarea></label>
+    <label>Full text<textarea name="full_text" rows="8" data-rich-text required></textarea></label>
     <div class="form-field" data-crop-group>
         <label>Image
             <input type="file" name="image" accept="image/*" data-crop-field>
