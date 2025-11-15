@@ -32,6 +32,17 @@ $meta = [
     ]
 ];
 site_header('Новости фабрики', $meta);
+$breadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home'],
+    ['label' => 'Новости', 'href' => site_url('news.php'), 'current' => true],
+];
+$newsBreadcrumbOptions = [
+    'class' => 'text-slate-500',
+    'link_class' => 'inline-flex items-center text-slate-600 hover:text-slate-900',
+    'home_link_class' => 'inline-flex items-center text-slate-600 hover:text-slate-900',
+    'current_class' => 'inline-flex items-center text-slate-400',
+    'separator_class' => 'size-3.5 text-slate-400',
+];
 ?>
 
 <section class="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-white pb-16 pt-24">
@@ -40,6 +51,7 @@ site_header('Новости фабрики', $meta);
         <div class="absolute right-10 top-1/3 h-80 w-80 rounded-full bg-cyan-100 blur-3xl"></div>
     </div>
     <div class="relative mx-auto max-w-6xl px-6">
+        <?php echo render_breadcrumbs($breadcrumbs, $newsBreadcrumbOptions); ?>
         <p class="text-xs font-semibold uppercase tracking-[0.4em] text-sky-500">Новости фабрики</p>
         <div class="mt-4 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <div class="max-w-3xl space-y-4">

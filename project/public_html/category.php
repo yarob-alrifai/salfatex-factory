@@ -55,10 +55,16 @@ $meta = [
 ];
 site_header('Категория: ' . $category['name'], $meta);
 $h1 = $category['h1'] ?: $category['name'];
+$breadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home'],
+    ['label' => 'Каталог', 'href' => site_url('products.php')],
+    ['label' => $category['name'], 'current' => true],
+];
 ?>
 <section class="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 py-16 text-white">
     <div class="mx-auto flex max-w-6xl flex-col gap-12 px-4 sm:px-6 lg:flex-row lg:items-center lg:px-8">
         <div class="flex-1 space-y-6">
+            <?php echo render_breadcrumbs($breadcrumbs, ['class' => 'text-slate-300']); ?>
             <div class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs uppercase tracking-[0.2em] text-slate-300">
                 <span class="size-2 rounded-full bg-emerald-400"></span>
                 Категория каталога

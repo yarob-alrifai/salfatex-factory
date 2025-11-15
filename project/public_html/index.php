@@ -42,11 +42,22 @@ $meta = [
     ]
 ];
 site_header('Фабрика бумажной продукции', $meta);
+$heroBreadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home', 'current' => true],
+];
+$lightBreadcrumbOptions = [
+    'class' => 'mb-4 text-slate-500',
+    'link_class' => 'inline-flex items-center text-slate-600 hover:text-slate-900',
+    'home_link_class' => 'inline-flex items-center text-slate-600 hover:text-slate-900',
+    'current_class' => 'inline-flex items-center text-slate-400',
+    'separator_class' => 'size-3.5 text-slate-400',
+];
 ?>
 <section class="hero relative overflow-hidden">
     <div class="absolute inset-x-0 top-0 -z-10 h-[600px] bg-gradient-to-br from-sky-100 via-white to-indigo-100"></div>
     <div class="mx-auto flex max-w-6xl flex-col-reverse items-center gap-12 px-6 py-20 lg:flex-row">
         <div class="hero-text max-w-2xl space-y-6">
+            <?php echo render_breadcrumbs($heroBreadcrumbs, $lightBreadcrumbOptions); ?>
             <p class="text-sm font-semibold uppercase tracking-[0.3em] text-sky-600">Производство полного цикла</p>
             <h1 class="font-display text-4xl font-bold text-slate-900 md:text-5xl">Современное производство бумажной продукции</h1>
             <p class="text-lg text-slate-600">Мы выпускаем салфетки, бумажные полотенца, туалетную бумагу и косметические салфетки для российских сетей и оптовых клиентов. Контролируем каждый этап и гарантируем чистоту упаковки.</p>

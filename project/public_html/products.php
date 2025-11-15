@@ -15,10 +15,15 @@ $meta = [
     ]
 ];
 site_header('Каталог продукции', $meta);
+$breadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home'],
+    ['label' => 'Каталог', 'href' => site_url('products.php'), 'current' => true],
+];
 ?>
 <section class="relative isolate overflow-hidden bg-slate-950 py-20 text-white">
     <div class="absolute inset-0 -z-10 bg-gradient-to-br from-sky-600/60 via-indigo-500/30 to-transparent"></div>
     <div class="mx-auto flex max-w-6xl flex-col gap-10 px-6 text-center">
+        <?php echo render_breadcrumbs($breadcrumbs, ['class' => 'justify-center text-slate-200 md:justify-start']); ?>
         <div class="space-y-5">
             <p class="text-xs font-semibold uppercase tracking-[0.45em] text-sky-200">Каталог продукции</p>
             <h1 class="text-4xl font-semibold leading-tight md:text-5xl">Готовые решения из бумаги для HoReCa и ритейла</h1>

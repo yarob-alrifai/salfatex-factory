@@ -19,10 +19,22 @@ $meta = [
 ];
 site_header('Свяжитесь с нами', $meta);
 $h1 = ($contact['h1'] ?? null) ?: 'Нужна помощь? Команда Salfatex на связи';
+$breadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home'],
+    ['label' => 'Контакты', 'href' => site_url('contact.php'), 'current' => true],
+];
+$contactBreadcrumbOptions = [
+    'class' => 'justify-center text-slate-500',
+    'link_class' => 'inline-flex items-center text-slate-600 hover:text-slate-900',
+    'home_link_class' => 'inline-flex items-center text-slate-600 hover:text-slate-900',
+    'current_class' => 'inline-flex items-center text-slate-400',
+    'separator_class' => 'size-3.5 text-slate-400',
+];
 ?>
 <section class="contact bg-gradient-to-b from-slate-50 via-white to-slate-100 py-20">
     <div class="mx-auto max-w-6xl space-y-12 px-6">
         <div class="mx-auto max-w-3xl text-center">
+            <?php echo render_breadcrumbs($breadcrumbs, $contactBreadcrumbOptions); ?>
             <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-1 text-xs font-semibold tracking-[0.4em] text-sky-600">
                 <span class="inline-block h-2 w-2 rounded-full bg-sky-500"></span>
                 <span>Контакты</span>

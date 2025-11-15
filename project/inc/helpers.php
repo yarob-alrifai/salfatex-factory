@@ -212,6 +212,80 @@ function render_picture(?string $source, string $altText, array $options = []): 
     return $html;
 }
 
+function render_breadcrumbs(array $items, array $options = []): string
+{
+    $normalized = [];
+    foreach ($items as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $label = trim((string)($item['label'] ?? ''));
+        if ($label === '') {
+            continue;
+        }
+        $normalized[] = [
+            'label' => $label,
+            'href' => $item['href'] ?? null,
+            'icon' => $item['icon'] ?? null,
+            'current' => !empty($item['current']),
+        ];
+    }
+    if (!$normalized) {
+        return '';
+    }
+    $navClass = trim('flex ' . ($options['class'] ?? 'text-slate-300'));
+    $listClass = $options['list_class'] ?? 'inline-flex items-center space-x-1 text-xs font-medium md:space-x-2';
+    $homeLinkClass = $options['home_link_class'] ?? 'inline-flex items-center hover:text-white';
+    $linkClass = $options['link_class'] ?? 'inline-flex items-center hover:text-white';
+    $currentClass = $options['current_class'] ?? 'inline-flex items-center text-slate-400';
+    $separatorClass = $options['separator_class'] ?? 'size-3.5 text-slate-400';
+    $gapClass = $options['gap_class'] ?? 'space-x-1.5';
+    $homeIconClass = $options['home_icon_class'] ?? 'me-1.5 size-4';
+    $homeIconSvg = '<svg class="' . h($homeIconClass) . '" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">'
+        . '<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5" />'
+        . '</svg>';
+    $separatorSvg = '<svg class="' . h($separatorClass) . '" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">'
+        . '<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7" />'
+        . '</svg>';
+    $html = '<nav class="' . h($navClass) . '" aria-label="Хлебные крошки">';
+    $html .= '<ol class="' . h($listClass) . '">';
+    $total = count($normalized);
+    foreach ($normalized as $index => $item) {
+        $label = h($item['label']);
+        $href = $item['href'] ?? null;
+        $isCurrent = $index === $total - 1 || !empty($item['current']);
+        $iconHtml = ($item['icon'] ?? null) === 'home' ? $homeIconSvg : '';
+        if ($index === 0) {
+            $html .= '<li class="inline-flex items-center">';
+            $tag = ($href && !$isCurrent) ? 'a' : 'span';
+            $classAttr = $tag === 'a' ? $homeLinkClass : $currentClass;
+            $aria = $isCurrent ? ' aria-current="page"' : '';
+            if ($tag === 'a') {
+                $html .= '<a href="' . h($href) . '" class="' . h($classAttr) . '"' . $aria . '>' . $iconHtml . $label . '</a>';
+            } else {
+                $html .= '<span class="' . h($classAttr) . '"' . $aria . '>' . $iconHtml . $label . '</span>';
+            }
+            $html .= '</li>';
+            continue;
+        }
+        $html .= '<li>';
+        $html .= '<div class="flex items-center ' . h($gapClass) . '">';
+        $html .= $separatorSvg;
+        $tag = ($href && !$isCurrent) ? 'a' : 'span';
+        $classAttr = $tag === 'a' ? $linkClass : $currentClass;
+        $aria = $isCurrent ? ' aria-current="page"' : '';
+        if ($tag === 'a') {
+            $html .= '<a href="' . h($href) . '" class="' . h($classAttr) . '"' . $aria . '>' . $label . '</a>';
+        } else {
+            $html .= '<span class="' . h($classAttr) . '"' . $aria . '>' . $label . '</span>';
+        }
+        $html .= '</div>';
+        $html .= '</li>';
+    }
+    $html .= '</ol></nav>';
+    return $html;
+}
+
 function site_header(string $title, array $meta = []): void
 {
     $metaTitle = h($meta['title'] ?? $title);

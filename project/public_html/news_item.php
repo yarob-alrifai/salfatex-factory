@@ -59,6 +59,11 @@ $moreNews = array_values(array_filter($moreNewsRaw, function ($item) use ($news)
     return (int)$item['id'] !== (int)$news['id'];
 }));
 $moreNews = array_slice($moreNews, 0, 3);
+$breadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home'],
+    ['label' => 'Новости', 'href' => site_url('news.php')],
+    ['label' => $news['title'], 'current' => true],
+];
 ?>
 <div class="pointer-events-none fixed inset-x-0 top-0 z-[60] hidden md:block">
     <div class="h-1 bg-transparent">
@@ -71,6 +76,7 @@ $moreNews = array_slice($moreNews, 0, 3);
         <div class="absolute right-12 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-indigo-500 blur-[160px]"></div>
     </div>
     <div class="mx-auto max-w-6xl px-6 py-16">
+        <?php echo render_breadcrumbs($breadcrumbs, ['class' => 'text-white/80']); ?>
         <div class="mb-6 flex items-center gap-3 text-sm text-white/70">
             <a class="flex items-center gap-2 font-semibold text-white/80 transition hover:text-white" href="news.php">
                 <span aria-hidden="true">←</span>

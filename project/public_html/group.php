@@ -45,10 +45,17 @@ $meta = [
 ];
 site_header($group['group_title'], $meta);
 $h1 = $group['h1'] ?: $group['group_title'];
+$breadcrumbs = [
+    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home'],
+    ['label' => 'Каталог', 'href' => site_url('products.php')],
+    ['label' => $group['category_name'], 'href' => site_url('category.php?category=' . urlencode($group['category_slug']))],
+    ['label' => $group['group_title'], 'current' => true],
+];
 ?>
 <section class="relative isolate overflow-hidden bg-slate-950 text-white">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,.35),_transparent_55%)]"></div>
-    <div class="container mx-auto px-4 py-16 relative">
+    <div class="container mx-auto px-4 py-16 relative space-y-6">
+        <?php echo render_breadcrumbs($breadcrumbs, ['class' => 'text-slate-300']); ?>
         <div class="flex flex-wrap items-center gap-4 text-sm text-slate-200">
             <a class="inline-flex items-center gap-2 font-semibold text-cyan-300 transition hover:text-white" href="category.php?category=<?php echo h($group['category_slug']); ?>">
                 <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M12.707 15.707a1 1 0 01-1.414 0L6.586 11l4.707-4.707a1 1 0 00-1.414-1.414l-5.414 5.414a1 1 0 000 1.414l5.414 5.414a1 1 0 001.414-1.414z"/></svg>
@@ -58,7 +65,7 @@ $h1 = $group['h1'] ?: $group['group_title'];
                 <?php echo h($group['category_name']); ?>
             </span>
         </div>
-        <div class="mt-8 max-w-3xl space-y-6">
+        <div class="max-w-3xl space-y-6">
             <div class="inline-flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-400">Коллекция</div>
             <h1 class="text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
                 <?php echo h($h1); ?>
