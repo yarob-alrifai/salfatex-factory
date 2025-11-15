@@ -111,6 +111,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const siteNav = document.querySelector('[data-site-nav]');
+    const navToggles = document.querySelectorAll('[data-nav-toggle]');
+    const body = document.body;
+
+    if (siteNav && navToggles.length) {
+        const toggleNav = (shouldOpen) => {
+            siteNav.classList.toggle('is-open', shouldOpen);
+            body.classList.toggle('nav-open', shouldOpen);
+            navToggles.forEach(btn => {
+                btn.classList.toggle('is-active', shouldOpen);
+                btn.setAttribute('aria-expanded', String(shouldOpen));
+            });
+        };
+
+        navToggles.forEach(button => {
+            button.addEventListener('click', () => {
+                const willOpen = !siteNav.classList.contains('is-open');
+                toggleNav(willOpen);
+            });
+        });
+
+        siteNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => toggleNav(false));
+        });
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                toggleNav(false);
+            }
+        });
+    }
+
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', (event) => {

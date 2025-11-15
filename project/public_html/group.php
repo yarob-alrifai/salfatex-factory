@@ -137,7 +137,7 @@ $h1 = $group['h1'] ?: $group['group_title'];
                 </div>
                 <div class="overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-slate-100">
                     <div class="overflow-auto">
-                        <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+                        <table class="product-table min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
                             <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
                                 <tr>
                                     <?php foreach ($columns as $column): ?>
@@ -150,7 +150,7 @@ $h1 = $group['h1'] ?: $group['group_title'];
                                     <tr class="hover:bg-slate-50/80">
                                         <?php foreach ($columns as $column): ?>
                                             <?php $value = $cellMap[$row['id']][$column['id']] ?? ''; ?>
-                                            <td class="whitespace-pre-line px-6 py-4 text-sm text-slate-700"><?php echo nl2br(h($value)); ?></td>
+                                            <td class="whitespace-pre-line px-6 py-4 text-sm text-slate-700" data-label="<?php echo h($column['column_name']); ?>"><?php echo nl2br(h($value)); ?></td>
                                         <?php endforeach; ?>
                                     </tr>
                                 <?php endforeach; ?>

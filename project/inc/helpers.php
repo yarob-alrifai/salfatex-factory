@@ -326,11 +326,20 @@ HTML;
             {$brandIconHtml}
             <span class="logo__text">{$brandNameEscaped}</span>
         </a>
-        <nav class="flex items-center gap-4 text-sm font-medium text-slate-600">
-            <a class="transition hover:text-slate-900" href="index.php">Главная</a>
-            <a class="transition hover:text-slate-900" href="products.php">Каталог</a>
-            <a class="transition hover:text-slate-900" href="news.php">Новости</a>
-            <a class="transition hover:text-slate-900" href="contact.php">Свяжитесь с нами</a>
+        <button class="nav-toggle" type="button" aria-label="Открыть меню" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
+            <span class="sr-only">Переключить меню</span>
+            <span aria-hidden="true" class="nav-toggle__box">
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+                <span class="nav-toggle__bar"></span>
+            </span>
+            <span class="nav-toggle__label">Меню</span>
+        </button>
+        <nav id="site-nav" class="site-nav text-sm font-medium text-slate-600" data-site-nav>
+            <a class="site-nav__link" href="index.php">Главная</a>
+            <a class="site-nav__link" href="products.php">Каталог</a>
+            <a class="site-nav__link" href="news.php">Новости</a>
+            <a class="site-nav__link site-nav__cta" href="contact.php">Свяжитесь с нами</a>
         </nav>
     </div>
 </header>
