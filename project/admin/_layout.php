@@ -10,6 +10,7 @@ function admin_header(string $title): void
         'dashboard.php' => 'Dashboard',
         'contact_edit.php' => 'Contacts',
         'site_media.php' => 'Media',
+        'messages_list.php' => 'Messages',
         'news_list.php' => 'News',
         'categories_list.php' => 'Categories',
         'groups_list.php' => 'Groups',

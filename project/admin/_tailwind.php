@@ -163,6 +163,18 @@ function render_admin_theme_assets(): void
                 @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-blue-600/40 transition hover:from-blue-500 hover:to-sky-400;
             }
 
+            .admin-panel .btn-secondary {
+                @apply inline-flex items-center justify-center rounded-2xl border border-slate-700/70 bg-transparent px-5 py-3 text-base font-semibold text-slate-100 transition hover:border-slate-500 hover:text-white;
+            }
+
+            .admin-panel .btn-danger {
+                @apply inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-rose-600 to-pink-500 px-5 py-3 text-base font-semibold text-white shadow-lg shadow-rose-600/40 transition hover:from-rose-500 hover:to-pink-400;
+            }
+
+            .admin-panel .btn-small {
+                @apply rounded-xl px-3 py-2 text-sm;
+            }
+
             .stats-grid {
                 @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5;
             }
@@ -193,6 +205,59 @@ function render_admin_theme_assets(): void
 
             .admin-table a {
                 @apply text-blue-300 hover:text-blue-200;
+            }
+
+            .admin-table .table-actions {
+                @apply flex flex-wrap gap-2;
+            }
+
+            .admin-table .table-actions .btn-secondary,
+            .admin-table .table-actions .btn-danger {
+                @apply w-auto;
+            }
+
+            .message-details {
+                @apply space-y-6;
+            }
+
+            .message-actions {
+                @apply flex flex-wrap items-center justify-end gap-3;
+            }
+
+            .message-details__grid {
+                @apply mt-6 grid gap-4 lg:grid-cols-2;
+            }
+
+            .message-details__item {
+                @apply rounded-3xl border border-slate-800 bg-slate-950/50 p-5;
+            }
+
+            .message-details__label {
+                @apply text-xs font-semibold uppercase tracking-widest text-slate-400;
+            }
+
+            .message-details__list {
+                @apply mt-4 space-y-3 text-sm text-slate-100;
+            }
+
+            .message-details__list li {
+                @apply flex flex-col gap-1;
+            }
+
+            .message-details__list span {
+                @apply text-xs uppercase tracking-wide text-slate-400;
+            }
+
+            .message-details__list a {
+                @apply text-blue-300 hover:text-blue-200;
+            }
+
+            .message-body {
+                @apply rounded-3xl border border-slate-800 bg-slate-950/40 p-5;
+            }
+
+            .message-body__content {
+                @apply mt-3 whitespace-pre-line text-base leading-8 text-slate-100;
             }
 
             .table-editor {
