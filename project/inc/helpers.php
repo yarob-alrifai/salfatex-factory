@@ -327,9 +327,10 @@ HTML;
             <span class="logo__text">{$brandNameEscaped}</span>
         </a>
         <nav class="flex items-center gap-4 text-sm font-medium text-slate-600">
-            <a class="transition hover:text-slate-900" href="products.php">Продукция</a>
+            <a class="transition hover:text-slate-900" href="index.php">Главная</a>
+            <a class="transition hover:text-slate-900" href="products.php">Каталог</a>
             <a class="transition hover:text-slate-900" href="news.php">Новости</a>
-            <a class="transition hover:text-slate-900" href="contact.php">Контакты</a>
+            <a class="transition hover:text-slate-900" href="contact.php">Свяжитесь с нами</a>
         </nav>
     </div>
 </header>
@@ -446,9 +447,9 @@ function site_footer(): void
 
     $navLinks = [
         ['label' => 'Главная', 'href' => 'index.php'],
-        ['label' => 'Категории', 'href' => 'products.php'],
+        ['label' => 'Каталог', 'href' => 'products.php'],
         ['label' => 'Новости', 'href' => 'news.php'],
-        ['label' => 'Контакты', 'href' => 'contact.php'],
+        ['label' => 'Свяжитесь с нами', 'href' => 'contact.php'],
     ];
     $navHtml = '<ul class="space-y-3 text-slate-400">';
     foreach ($navLinks as $link) {
