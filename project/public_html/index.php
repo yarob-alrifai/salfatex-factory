@@ -59,7 +59,7 @@ $lightBreadcrumbOptions = [
         <div class="hero-text max-w-2xl space-y-6">
             <?php echo render_breadcrumbs($heroBreadcrumbs, $lightBreadcrumbOptions); ?>
             <p class="text-sm font-semibold uppercase tracking-[0.3em] text-sky-600">Производство полного цикла</p>
-            <h1 class="font-display text-4xl font-bold text-slate-900 md:text-5xl">Современное производство бумажной продукции</h1>
+            <h1 class="font-display text-4xl font-bold text-slate-900 md:text-5xl">Производство бумажной продукции</h1>
             <p class="text-lg text-slate-600">Мы выпускаем салфетки, бумажные полотенца, туалетную бумагу и косметические салфетки для российских сетей и оптовых клиентов. Контролируем каждый этап и гарантируем чистоту упаковки.</p>
             <div class="flex flex-wrap gap-4">
                 <a class="btn inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 text-base font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-brand-dark" href="products.php">Каталог продукции</a>
@@ -75,21 +75,12 @@ $lightBreadcrumbOptions = [
                     <p class="text-sm text-slate-500">онлайн контроль качества</p>
                 </div>
                 <div class="rounded-2xl border border-slate-200 bg-white/70 p-4 text-center shadow-sm">
-                    <p class="text-3xl font-bold text-slate-900">15 лет</p>
+                    <p class="text-3xl font-bold text-slate-900">23 лет</p>
                     <p class="text-sm text-slate-500">на рынке HoReCa</p>
                 </div>
             </div>
         </div>
-        <div class="hero-banner relative">
-            <div class="absolute -inset-6 -z-10 rounded-[40px] bg-gradient-to-tr from-sky-200/80 via-white to-indigo-200 blur-3xl"></div>
-            <?php if ($heroSrc): ?>
-                <?php echo render_picture($heroSrc, $heroBanner['alt_text'] ?? 'Производство бумаги', ['class' => 'relative block rounded-[32px] shadow-2xl shadow-sky-200', 'loading' => 'eager', 'decoding' => 'sync']); ?>
-            <?php else: ?>
-                <div class="relative flex h-80 w-80 items-center justify-center rounded-[32px] border border-dashed border-slate-200 bg-white text-center text-slate-500">
-                    <p class="px-6">Добавьте обложку в разделе «Медиа» панели администратора.</p>
-                </div>
-            <?php endif; ?>
-        </div>
+      
     </div>
 </section>
 <section class="categories bg-white py-16">

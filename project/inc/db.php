@@ -1,4 +1,22 @@
 <?php
+// prod
+// $host = 'localhost';
+// $db   = 'yalrifd7_salfate';
+// $user = 'yalrifd7_salfate';
+// $pass = 'P@$$w0rd';
+
+
+
+
+
+
+// prod
+// $host = 'yalrifd7.beget.tech';
+// $db   = 'yalrifd7_salfate';
+// $user = 'yalrifd7_salfate';
+// $pass = 'P@$$w0rd';
+
+// localhost
 $host = getenv('DB_HOST') ?: '127.0.0.1';
 $db   = getenv('DB_NAME') ?: 'salfatex_factory';
 $user = getenv('DB_USER') ?: 'root';
