@@ -30,6 +30,11 @@ admin_header('Contacts');
     </div>
     <label>Phone main<input type="text" name="phone_main" value="<?php echo h($contact['phone_main'] ?? ''); ?>" required></label>
     <label>Phone secondary<input type="text" name="phone_secondary" value="<?php echo h($contact['phone_secondary'] ?? ''); ?>"></label>
+    <label>Phone secondary 2<input type="text" name="phone_secondary_alt" value="<?php echo h($contact['phone_secondary_alt'] ?? ''); ?>"></label>
+    <label>اسم موظف المبيعات
+        <input type="text" name="sales_rep_name" value="<?php echo h($contact['sales_rep_name'] ?? ''); ?>" placeholder="مثال: Елена Киреева">
+        <span class="form-hint">سيتم عرض اسم ممثل المبيعات بجوار أرقام الاتصال.</span>
+    </label>
     <label>Email<input type="email" name="email" value="<?php echo h($contact['email'] ?? ''); ?>" required></label>
     <label>WhatsApp link<input type="text" name="whatsapp_link" value="<?php echo h($contact['whatsapp_link'] ?? ''); ?>"></label>
     <label>Telegram link<input type="text" name="telegram_link" value="<?php echo h($contact['telegram_link'] ?? ''); ?>"></label>

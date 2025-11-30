@@ -8,6 +8,8 @@ $data = [
     'navbar_company_name' => trim($_POST['navbar_company_name'] ?? ''),
     'phone_main' => trim($_POST['phone_main'] ?? ''),
     'phone_secondary' => trim($_POST['phone_secondary'] ?? ''),
+    'phone_secondary_alt' => trim($_POST['phone_secondary_alt'] ?? ''),
+    'sales_rep_name' => trim($_POST['sales_rep_name'] ?? ''),
     'email' => trim($_POST['email'] ?? ''),
     'whatsapp_link' => trim($_POST['whatsapp_link'] ?? ''),
     'telegram_link' => trim($_POST['telegram_link'] ?? ''),
@@ -31,12 +33,12 @@ if ($navbarIconUpload !== null) {
     $data['navbar_icon'] = $existing['navbar_icon'] ?? null;
 }
 if ($existing) {
-    $sql = 'UPDATE contact_info SET slug=:slug, h1=:h1, navbar_company_name=:navbar_company_name, navbar_icon=:navbar_icon, phone_main=:phone_main, phone_secondary=:phone_secondary, email=:email, whatsapp_link=:whatsapp_link, telegram_link=:telegram_link, address=:address, map_embed=:map_embed, seo_text=:seo_text, meta_title=:meta_title, meta_description=:meta_description, meta_keywords=:meta_keywords, canonical_url=:canonical_url WHERE id=:id';
+    $sql = 'UPDATE contact_info SET slug=:slug, h1=:h1, navbar_company_name=:navbar_company_name, navbar_icon=:navbar_icon, phone_main=:phone_main, phone_secondary=:phone_secondary, phone_secondary_alt=:phone_secondary_alt, sales_rep_name=:sales_rep_name, email=:email, whatsapp_link=:whatsapp_link, telegram_link=:telegram_link, address=:address, map_embed=:map_embed, seo_text=:seo_text, meta_title=:meta_title, meta_description=:meta_description, meta_keywords=:meta_keywords, canonical_url=:canonical_url WHERE id=:id';
     $data['id'] = $existing['id'];
     $update = $pdo->prepare($sql);
     $update->execute($data);
 } else {
-    $sql = 'INSERT INTO contact_info (slug, h1, navbar_company_name, navbar_icon, phone_main, phone_secondary, email, whatsapp_link, telegram_link, address, map_embed, seo_text, meta_title, meta_description, meta_keywords, canonical_url) VALUES (:slug, :h1, :navbar_company_name, :navbar_icon, :phone_main, :phone_secondary, :email, :whatsapp_link, :telegram_link, :address, :map_embed, :seo_text, :meta_title, :meta_description, :meta_keywords, :canonical_url)';
+    $sql = 'INSERT INTO contact_info (slug, h1, navbar_company_name, navbar_icon, phone_main, phone_secondary, phone_secondary_alt, sales_rep_name, email, whatsapp_link, telegram_link, address, map_embed, seo_text, meta_title, meta_description, meta_keywords, canonical_url) VALUES (:slug, :h1, :navbar_company_name, :navbar_icon, :phone_main, :phone_secondary, :phone_secondary_alt, :sales_rep_name, :email, :whatsapp_link, :telegram_link, :address, :map_embed, :seo_text, :meta_title, :meta_description, :meta_keywords, :canonical_url)';
     $insert = $pdo->prepare($sql);
     $insert->execute($data);
 }

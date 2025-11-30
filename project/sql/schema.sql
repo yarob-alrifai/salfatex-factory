@@ -6,6 +6,8 @@ CREATE TABLE contact_info (
     navbar_icon MEDIUMTEXT,
     phone_main VARCHAR(50) NOT NULL,
     phone_secondary VARCHAR(50),
+    phone_secondary_alt VARCHAR(50),
+    sales_rep_name VARCHAR(255),
     email VARCHAR(120) NOT NULL,
     whatsapp_link VARCHAR(255),
     telegram_link VARCHAR(255),

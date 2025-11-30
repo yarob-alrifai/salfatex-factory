@@ -469,6 +469,7 @@ function site_footer(): void
 
     $phoneMain = trim((string)($contact['phone_main'] ?? '')) ?: null;
     $phoneSecondary = trim((string)($contact['phone_secondary'] ?? '')) ?: null;
+    $phoneSecondaryAlt = trim((string)($contact['phone_secondary_alt'] ?? '')) ?: null;
     $email = trim((string)($contact['email'] ?? '')) ?: null;
     $address = trim((string)($contact['address'] ?? '')) ?: null;
     $whatsapp = trim((string)($contact['whatsapp_link'] ?? '')) ?: null;
@@ -494,6 +495,14 @@ function site_footer(): void
             'label' => 'Линия качества',
             'value' => $phoneSecondary,
             'href' => $normalizePhoneHref($phoneSecondary),
+            'icon' => $icons['phone'],
+        ];
+    }
+    if ($phoneSecondaryAlt) {
+        $contactDetails[] = [
+            'label' => 'Линия качества 2',
+            'value' => $phoneSecondaryAlt,
+            'href' => $normalizePhoneHref($phoneSecondaryAlt),
             'icon' => $icons['phone'],
         ];
     }
@@ -604,12 +613,12 @@ HTML;
     echo <<<HTML
                 <div>
                     <label class="mb-1 block text-sm font-medium text-slate-600" for="global-name">Полное имя</label>
-                    <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" id="global-name" name="name" placeholder="Например: Ахмед бин Юсуф" required>
+                    <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" id="global-name" name="name" placeholder="Например: Антония Тарасова" required>
                 </div>
                 <div class="grid gap-4 md:grid-cols-2">
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-600" for="global-phone">Номер телефона</label>
-                        <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" id="global-phone" name="phone" placeholder="00966 50 000 0000" required>
+                        <input class="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-brand focus:ring-2 focus:ring-brand/20" type="text" id="global-phone" name="phone" placeholder="+7 50 000 0000" required>
                     </div>
                     <div>
                         <label class="mb-1 block text-sm font-medium text-slate-600" for="global-email">Электронная почта</label>

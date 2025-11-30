@@ -1,6 +1,22 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
 $contact = get_contact_info($pdo);
+$salesRepName = trim((string)($contact['sales_rep_name'] ?? ''));
+$secondaryPhones = [];
+$secondaryPrimary = trim((string)($contact['phone_secondary'] ?? ''));
+if ($secondaryPrimary !== '') {
+    $secondaryPhones[] = [
+        'label' => 'Дополнительный телефон',
+        'value' => $secondaryPrimary,
+    ];
+}
+$secondaryAlt = trim((string)($contact['phone_secondary_alt'] ?? ''));
+if ($secondaryAlt !== '') {
+    $secondaryPhones[] = [
+        'label' => $secondaryPhones ? 'Дополнительный телефон 2' : 'Дополнительный телефон',
+        'value' => $secondaryAlt,
+    ];
+}
 $mapEmbed = $contact ? sanitize_iframe_embed($contact['map_embed'] ?? '') : '';
 $meta = [
     'title' => ($contact ? ($contact['meta_title'] ?? null) : null) ?: 'Свяжитесь с нами — Salfatex',
@@ -61,14 +77,19 @@ $contactBreadcrumbOptions = [
                                 <p class="info-label text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Основной телефон</p>
                                 <a class="info-action mt-2 block text-2xl font-semibold text-slate-900" href="tel:<?php echo h($contact['phone_main']); ?>"><?php echo h($contact['phone_main']); ?></a>
                                 <p class="text-sm text-slate-500">Отдел продаж и клиентский сервис</p>
+                                <?php if ($salesRepName): ?>
+                                    <p class="mt-1 text-sm font-semibold text-slate-800"><?php echo h($salesRepName); ?></p>
+                                <?php endif; ?>
                             </div>
-                            <?php if (!empty($contact['phone_secondary'])): ?>
+                            <?php foreach ($secondaryPhones as $index => $secondary): ?>
                                 <div class="info-card rounded-2xl border border-slate-100 bg-slate-50/80 p-5">
-                                    <p class="info-label text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Дополнительный телефон</p>
-                                    <a class="info-action mt-2 block text-2xl font-semibold text-slate-900" href="tel:<?php echo h($contact['phone_secondary']); ?>"><?php echo h($contact['phone_secondary']); ?></a>
-                                    <p class="text-sm text-slate-500">По вопросам логистики и отгрузок</p>
+                                    <p class="info-label text-xs font-semibold uppercase tracking-[0.3em] text-slate-500"><?php echo h($secondary['label']); ?></p>
+                                    <a class="info-action mt-2 block text-2xl font-semibold text-slate-900" href="tel:<?php echo h($secondary['value']); ?>"><?php echo h($secondary['value']); ?></a>
+                                    <p class="text-sm text-slate-500">
+                                        <?php if ($salesRepName): ?>Прямой номер менеджера продаж — <?php echo h($salesRepName); ?><?php else: ?>По вопросам логистики и отгрузок<?php endif; ?>
+                                    </p>
                                 </div>
-                            <?php endif; ?>
+                            <?php endforeach; ?>
                             <div class="info-card rounded-2xl border border-slate-100 bg-slate-50/80 p-5">
                                 <p class="info-label text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Электронная почта</p>
                                 <a class="info-action mt-2 block text-lg font-semibold text-sky-600" href="mailto:<?php echo h($contact['email']); ?>"><?php echo h($contact['email']); ?></a>
