@@ -19,6 +19,7 @@ admin_header('Edit category');
     <input type="hidden" name="id" value="<?php echo (int)$category['id']; ?>">
     <label>Name<input type="text" name="name" value="<?php echo h($category['name']); ?>" required></label>
     <label>Slug<input type="text" name="slug" value="<?php echo h($category['slug']); ?>" required></label>
+    <label>Display order<input type="number" name="sort_order" min="0" step="1" value="<?php echo (int)$category['sort_order']; ?>"></label>
     <label>H1<input type="text" name="h1" value="<?php echo h($category['h1']); ?>" placeholder="Основной заголовок"></label>
     <label>Description<textarea name="description" rows="4"><?php echo h($category['description']); ?></textarea></label>
     <label>SEO text<textarea name="seo_text" rows="5"><?php echo h($category['seo_text']); ?></textarea></label>

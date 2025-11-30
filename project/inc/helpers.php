@@ -787,7 +787,7 @@ function news_image_src(?string $image): ?string
 function get_all_categories(): array
 {
     global $pdo;
-    $stmt = $pdo->query('SELECT * FROM product_categories ORDER BY name');
+    $stmt = $pdo->query('SELECT * FROM product_categories ORDER BY sort_order ASC, name');
     return $stmt->fetchAll();
 }
 
@@ -822,7 +822,7 @@ function site_image_src(?string $image): ?string
 function get_category_options(): array
 {
     global $pdo;
-    $stmt = $pdo->query('SELECT id, name FROM product_categories ORDER BY name');
+    $stmt = $pdo->query('SELECT id, name FROM product_categories ORDER BY sort_order ASC, name');
     return $stmt->fetchAll();
 }
 

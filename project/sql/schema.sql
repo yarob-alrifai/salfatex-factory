@@ -24,7 +24,8 @@ CREATE TABLE admins (
     password VARCHAR(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO admins (username, password) VALUES ('admin', '$2y$12$8fQXMLH/Fmb6n.KZIUomau9vdc6BysdWN9i8LU1KqKA1Pt7zRlYWW');
+-- admin123456
+INSERT INTO admins (username, password) VALUES ('admin', '$2a$12$ROhT2h0.Ck7E6/5DHmrPY.iolQpNC7l6BSoaYrzvwgc9gzVtC9ynW');
 
 CREATE TABLE news (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -63,6 +64,7 @@ CREATE TABLE product_categories (
     og_description VARCHAR(255),
     og_image MEDIUMTEXT,
     canonical_url VARCHAR(255),
+    sort_order INT NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

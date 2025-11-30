@@ -7,6 +7,7 @@ admin_header('Add category');
     <?php echo csrf_field('category_form'); ?>
     <label>Name<input type="text" name="name" required></label>
     <label>Slug<input type="text" name="slug" placeholder="napkins" required></label>
+    <label>Display order<input type="number" name="sort_order" min="0" step="1" placeholder="1"></label>
     <label>H1<input type="text" name="h1" placeholder="Основной заголовок"></label>
     <label>Description<textarea name="description" rows="4"></textarea></label>
     <label>SEO text<textarea name="seo_text" rows="5"></textarea></label>

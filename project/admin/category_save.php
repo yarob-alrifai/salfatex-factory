@@ -14,6 +14,8 @@ $metaKeywords = trim($_POST['meta_keywords'] ?? '');
 $ogTitle = trim($_POST['og_title'] ?? '');
 $ogDescription = trim($_POST['og_description'] ?? '');
 $canonicalUrl = trim($_POST['canonical_url'] ?? '');
+$sortOrderInput = trim($_POST['sort_order'] ?? '');
+$sortOrder = $sortOrderInput === '' ? null : (int)$sortOrderInput;
 $galleryDefaultAlt = trim($_POST['gallery_default_alt'] ?? '') ?: $name;
 if ($name === '' || $slugInput === '') {
     die('Name and slug are required');
@@ -28,7 +30,10 @@ $heroImage = upload_single_image($_FILES['hero_image'] ?? null);
 $ogImage = upload_single_image($_FILES['og_image'] ?? null);
 $pdo->beginTransaction();
 try {
-    $stmt = $pdo->prepare('INSERT INTO product_categories (slug, name, h1, description, seo_text, hero_image, hero_image_alt, meta_title, meta_description, meta_keywords, og_title, og_description, og_image, canonical_url, created_at) VALUES (:slug, :name, :h1, :description, :seo_text, :hero_image, :hero_image_alt, :meta_title, :meta_description, :meta_keywords, :og_title, :og_description, :og_image, :canonical_url, NOW())');
+    if ($sortOrder === null) {
+        $sortOrder = (int)$pdo->query('SELECT COALESCE(MAX(sort_order), 0) + 1 FROM product_categories')->fetchColumn();
+    }
+    $stmt = $pdo->prepare('INSERT INTO product_categories (slug, name, h1, description, seo_text, hero_image, hero_image_alt, meta_title, meta_description, meta_keywords, og_title, og_description, og_image, canonical_url, sort_order, created_at) VALUES (:slug, :name, :h1, :description, :seo_text, :hero_image, :hero_image_alt, :meta_title, :meta_description, :meta_keywords, :og_title, :og_description, :og_image, :canonical_url, :sort_order, NOW())');
     $stmt->execute([
         'slug' => $slug,
         'name' => $name,
@@ -44,6 +49,7 @@ try {
         'og_description' => $ogDescription,
         'og_image' => $ogImage,
         'canonical_url' => $canonicalUrl,
+        'sort_order' => $sortOrder,
     ]);
     $categoryId = (int)$pdo->lastInsertId();
     if (!empty($_FILES['gallery']['name'][0])) {

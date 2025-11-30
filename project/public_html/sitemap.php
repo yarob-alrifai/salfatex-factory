@@ -7,7 +7,7 @@ $urls[] = ['loc' => site_url('index.php'), 'lastmod' => $now];
 $urls[] = ['loc' => site_url('products.php'), 'lastmod' => $now];
 $urls[] = ['loc' => site_url('news.php'), 'lastmod' => $now];
 $urls[] = ['loc' => site_url('contact.php'), 'lastmod' => $now];
-$catStmt = $pdo->query('SELECT slug, canonical_url, created_at FROM product_categories');
+$catStmt = $pdo->query('SELECT slug, canonical_url, created_at FROM product_categories ORDER BY sort_order ASC, name');
 while ($row = $catStmt->fetch()) {
     $urls[] = [
         'loc' => $row['canonical_url'] ?: site_url('category.php?category=' . $row['slug']),

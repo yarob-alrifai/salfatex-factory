@@ -15,17 +15,19 @@ $metaKeywords = trim($_POST['meta_keywords'] ?? '');
 $ogTitle = trim($_POST['og_title'] ?? '');
 $ogDescription = trim($_POST['og_description'] ?? '');
 $canonicalUrl = trim($_POST['canonical_url'] ?? '');
+$sortOrderInput = trim($_POST['sort_order'] ?? '');
 $galleryDefaultAlt = trim($_POST['gallery_default_alt'] ?? '') ?: $name;
 if ($id <= 0 || $name === '' || $slugInput === '') {
     die('Invalid data');
 }
 $slug = sanitize_slug($slugInput);
-$categoryStmt = $pdo->prepare('SELECT hero_image, og_image FROM product_categories WHERE id = :id');
+$categoryStmt = $pdo->prepare('SELECT hero_image, og_image, sort_order FROM product_categories WHERE id = :id');
 $categoryStmt->execute(['id' => $id]);
 $current = $categoryStmt->fetch();
 if (!$current) {
     die('Category not found');
 }
+$sortOrder = $sortOrderInput === '' ? (int)$current['sort_order'] : (int)$sortOrderInput;
 $existsStmt = $pdo->prepare('SELECT COUNT(*) FROM product_categories WHERE slug = :slug AND id != :id');
 $existsStmt->execute(['slug' => $slug, 'id' => $id]);
 if ($existsStmt->fetchColumn() > 0) {
@@ -44,7 +46,7 @@ if ($newOg) {
 $galleryAltUpdates = $_POST['gallery_alt'] ?? [];
 $pdo->beginTransaction();
 try {
-    $stmt = $pdo->prepare('UPDATE product_categories SET slug=:slug, name=:name, h1=:h1, description=:description, seo_text=:seo_text, hero_image=:hero_image, hero_image_alt=:hero_image_alt, meta_title=:meta_title, meta_description=:meta_description, meta_keywords=:meta_keywords, og_title=:og_title, og_description=:og_description, og_image=:og_image, canonical_url=:canonical_url WHERE id=:id');
+    $stmt = $pdo->prepare('UPDATE product_categories SET slug=:slug, name=:name, h1=:h1, description=:description, seo_text=:seo_text, hero_image=:hero_image, hero_image_alt=:hero_image_alt, meta_title=:meta_title, meta_description=:meta_description, meta_keywords=:meta_keywords, og_title=:og_title, og_description=:og_description, og_image=:og_image, canonical_url=:canonical_url, sort_order=:sort_order WHERE id=:id');
     $stmt->execute([
         'slug' => $slug,
         'name' => $name,
@@ -60,6 +62,7 @@ try {
         'og_description' => $ogDescription,
         'og_image' => $ogImage,
         'canonical_url' => $canonicalUrl,
+        'sort_order' => $sortOrder,
         'id' => $id,
     ]);
     if (!empty($_FILES['gallery']['name'][0])) {
