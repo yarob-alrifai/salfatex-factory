@@ -10,6 +10,35 @@ if (!$category) {
 $groupStmt = $pdo->prepare('SELECT * FROM product_groups WHERE category_id = :category ORDER BY created_at DESC');
 $groupStmt->execute(['category' => $category['id']]);
 $groups = $groupStmt->fetchAll();
+$columnsByGroup = [];
+$rowsByGroup = [];
+$cellMapByGroup = [];
+$groupImages = [];
+
+if ($groups) {
+    $columnStmt = $pdo->prepare('SELECT * FROM product_group_columns WHERE group_id = :id ORDER BY order_index');
+    $rowStmt = $pdo->prepare('SELECT * FROM product_group_rows WHERE group_id = :id ORDER BY row_index');
+    $cellsStmt = $pdo->prepare('SELECT c.id as column_id, r.id as row_id, cell.value FROM product_group_cells cell JOIN product_group_rows r ON cell.row_id = r.id JOIN product_group_columns c ON cell.column_id = c.id WHERE r.group_id = :id');
+    $imagesStmt = $pdo->prepare('SELECT * FROM product_group_images WHERE group_id = :id ORDER BY id');
+
+    foreach ($groups as $group) {
+        $columnStmt->execute(['id' => $group['id']]);
+        $columnsByGroup[$group['id']] = $columnStmt->fetchAll();
+
+        $rowStmt->execute(['id' => $group['id']]);
+        $rowsByGroup[$group['id']] = $rowStmt->fetchAll();
+
+        $cellsStmt->execute(['id' => $group['id']]);
+        $cellMap = [];
+        foreach ($cellsStmt as $cell) {
+            $cellMap[$cell['row_id']][$cell['column_id']] = $cell['value'];
+        }
+        $cellMapByGroup[$group['id']] = $cellMap;
+
+        $imagesStmt->execute(['id' => $group['id']]);
+        $groupImages[$group['id']] = $imagesStmt->fetchAll();
+    }
+}
 $galleryStmt = $pdo->prepare('SELECT * FROM product_category_images WHERE category_id = :id');
 $galleryStmt->execute(['id' => $category['id']]);
 $categoryGallery = $galleryStmt->fetchAll();
@@ -132,34 +161,88 @@ $breadcrumbs = [
 <section class="bg-slate-50 py-16">
     <div class="mx-auto max-w-6xl space-y-12 px-4 sm:px-6 lg:px-8">
         <?php if ($groups): ?>
-            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div class="space-y-10">
                 <?php foreach ($groups as $group): ?>
-                    <a href="group.php?slug=<?php echo h($group['slug']); ?>" class="group flex flex-col overflow-hidden rounded-[28px] border border-slate-100 bg-white/90 p-6 shadow-lg shadow-slate-200/60 transition hover:-translate-y-1 hover:shadow-emerald-100 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200" aria-label="Открыть серию <?php echo h($group['group_title']); ?>">
-                        <div class="relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50">
-                            <?php if (!empty($group['main_image'])): ?>
-                                <?php echo render_picture($group['main_image'], $group['main_image_alt'] ?: $group['group_title'], ['class' => 'aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-105']); ?>
-                            <?php else: ?>
-                                <div class="flex aspect-[4/3] w-full items-center justify-center text-sm text-slate-500">Нет изображения</div>
-                            <?php endif; ?>
-                        </div>
-                        <div class="mt-6 flex flex-col gap-4 text-slate-700">
-                            <div class="space-y-2">
-                                <p class="text-xs uppercase tracking-[0.3em] text-slate-400">серия</p>
-                                <h2 class="text-xl font-semibold text-slate-900">
-                                    <?php echo h($group['group_title']); ?>
-                                </h2>
+                    <?php $columns = $columnsByGroup[$group['id']] ?? []; ?>
+                    <?php $rows = $rowsByGroup[$group['id']] ?? []; ?>
+                    <?php $cellMap = $cellMapByGroup[$group['id']] ?? []; ?>
+                    <?php $galleryImages = $groupImages[$group['id']] ?? []; ?>
+                    <article class="overflow-hidden rounded-[32px] border border-slate-100 bg-white shadow-lg shadow-slate-200/60">
+                        <div class="grid gap-8 lg:grid-cols-[minmax(0,_0.9fr)_minmax(0,_1.1fr)]">
+                            <div class="relative">
+                                <div class="h-full overflow-hidden rounded-[32px] border-b border-slate-100 bg-slate-50 lg:border-b-0 lg:border-r">
+                                    <?php if (!empty($group['main_image'])): ?>
+                                        <?php echo render_picture($group['main_image'], $group['main_image_alt'] ?: $group['group_title'], ['class' => 'h-full w-full object-cover']); ?>
+                                    <?php else: ?>
+                                        <div class="flex h-full min-h-[260px] items-center justify-center text-sm text-slate-500">Нет изображения</div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="pointer-events-none absolute inset-x-6 bottom-6 hidden rounded-2xl bg-black/40 px-4 py-2 text-xs font-medium text-white backdrop-blur lg:block">
+                                    Серия: <?php echo h($group['group_title']); ?>
+                                </div>
                             </div>
-                            <div class="prose max-w-none text-sm text-slate-600">
-                                <?php echo safe_html($group['left_description']); ?>
+                            <div class="flex flex-col gap-6 p-8">
+                                <div class="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-400">
+                                    <span class="rounded-full bg-emerald-50 px-3 py-1 text-emerald-700">серия</span>
+                                    <span class="rounded-full bg-slate-100 px-3 py-1 text-slate-700"><?php echo h($group['category_name'] ?? $category['name']); ?></span>
+                                </div>
+                                <header class="space-y-3">
+                                    <h2 class="text-2xl font-semibold text-slate-900"><?php echo h($group['group_title']); ?></h2>
+                                    <?php if (!empty($group['article'])): ?>
+                                        <p class="text-sm font-medium text-slate-500">Артикул: <?php echo h($group['article']); ?></p>
+                                    <?php endif; ?>
+                                </header>
+                                <div class="prose max-w-none text-sm text-slate-600">
+                                    <?php echo safe_html($group['left_description']); ?>
+                                </div>
+                                <?php if ($columns && $rows): ?>
+                                    <div class="overflow-hidden rounded-2xl border border-slate-100">
+                                        <div class="overflow-auto">
+                                            <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-700">
+                                                <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                                    <tr>
+                                                        <?php foreach ($columns as $column): ?>
+                                                            <th scope="col" class="px-4 py-3"><?php echo h($column['column_name']); ?></th>
+                                                        <?php endforeach; ?>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="divide-y divide-slate-100 bg-white">
+                                                    <?php foreach ($rows as $row): ?>
+                                                        <tr class="hover:bg-slate-50/80">
+                                                            <?php foreach ($columns as $column): ?>
+                                                                <?php $value = $cellMap[$row['id']][$column['id']] ?? ''; ?>
+                                                                <td class="whitespace-pre-line px-4 py-3 text-sm text-slate-700" data-label="<?php echo h($column['column_name']); ?>"><?php echo nl2br(h($value)); ?></td>
+                                                            <?php endforeach; ?>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if (!empty($group['seo_text'])): ?>
+                                    <div class="rounded-2xl bg-slate-50 p-5 text-sm text-slate-600">
+                                        <?php echo safe_html($group['seo_text']); ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php if ($galleryImages): ?>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between text-xs uppercase tracking-[0.25em] text-slate-400">
+                                            <span>галерея продукта</span>
+                                            <span class="text-slate-500">Изображения коллекции</span>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-3 md:grid-cols-4" data-gallery>
+                                            <?php foreach ($galleryImages as $image): ?>
+                                                <div class="group relative overflow-hidden rounded-xl border border-slate-100 bg-slate-50 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+                                                    <?php echo render_picture($image['image_path'], $image['alt_text'] ?: $group['group_title'], ['class' => 'h-28 w-full object-cover transition duration-300 group-hover:scale-105']); ?>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
-                        <div class="mt-6 flex items-center justify-between text-sm font-semibold text-emerald-600">
-                            <span class="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-emerald-600 transition group-hover:bg-emerald-500 group-hover:text-white">Открыть</span>
-                            <svg class="size-5 text-current transition group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7m0 0H9m8 0v8" />
-                            </svg>
-                        </div>
-                    </a>
+                    </article>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
