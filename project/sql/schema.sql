@@ -17,7 +17,11 @@ CREATE TABLE contact_info (
     meta_title VARCHAR(255),
     meta_description VARCHAR(255),
     meta_keywords VARCHAR(255),
-    canonical_url VARCHAR(255)
+    canonical_url VARCHAR(255),
+    product_list_label VARCHAR(255),
+    product_list_file MEDIUMBLOB,
+    product_list_file_name VARCHAR(255),
+    product_list_file_type VARCHAR(120)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE admins (

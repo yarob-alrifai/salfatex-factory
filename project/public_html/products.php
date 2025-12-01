@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../inc/helpers.php';
 $categories = get_all_categories();
+$contact = get_contact_info($pdo);
+$productListUrl = !empty($contact['product_list_file']) ? site_url('download_product_list.php') : null;
+$productListLabel = $contact['product_list_label'] ?? 'قائمة المنتجات';
 $meta = [
     'title' => 'Каталог бумажной продукции — Salfatex',
     'description' => 'Категории салфеток, полотенец и туалетной бумаги с характеристиками и вариантами упаковки.',
@@ -28,6 +31,13 @@ $breadcrumbs = [
             <p class="text-xs font-semibold uppercase tracking-[0.45em] text-sky-200">Каталог продукции</p>
             <h1 class="text-4xl font-semibold leading-tight md:text-5xl">Готовые решения из бумаги для HoReCa и ритейла</h1>
             <p class="text-base text-slate-200 md:text-lg">Соберите индивидуальную линейку салфеток, полотенец и туалетной бумаги с нужной плотностью, цветом и упаковкой. Мы поможем подобрать технологию под ваши требования.</p>
+            <?php if ($productListUrl): ?>
+                <div class="flex justify-center">
+                    <a class="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:text-white" href="<?php echo h($productListUrl); ?>" download>
+                        <?php echo h($productListLabel ?: 'قائمة المنتجات'); ?>
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
         <div class="mx-auto flex w-full flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur md:flex-row md:items-center">
             <div>

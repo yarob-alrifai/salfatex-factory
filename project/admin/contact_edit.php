@@ -45,6 +45,23 @@ admin_header('Contacts');
     <label>Meta description<textarea name="meta_description" rows="2"><?php echo h($contact['meta_description'] ?? ''); ?></textarea></label>
     <label>Meta keywords<input type="text" name="meta_keywords" value="<?php echo h($contact['meta_keywords'] ?? ''); ?>"></label>
     <label>Canonical URL<input type="url" name="canonical_url" value="<?php echo h($contact['canonical_url'] ?? ''); ?>" placeholder="https://example.com/contact"></label>
+    <label>نص زر قائمة المنتجات
+        <input type="text" name="product_list_label" value="<?php echo h($contact['product_list_label'] ?? 'قائمة المنتجات'); ?>" placeholder="قائمة المنتجات">
+        <span class="form-hint">سيتم عرض هذا النص على زر تحميل ملف المنتجات.</span>
+    </label>
+    <div class="form-field">
+        <label>ملف قائمة المنتجات (XLS/XLSX)
+            <input type="file" name="product_list_file" accept=".xls,.xlsx">
+        </label>
+        <p class="form-hint">سيظهر زر التحميل في الصفحة الرئيسية وقائمة الكاتيجوري.</p>
+        <?php if (!empty($contact['product_list_file'])): ?>
+            <?php $currentFileName = $contact['product_list_file_name'] ?? 'product_list.xls'; ?>
+            <p class="form-hint">الملف الحالي: <a class="text-sky-300 hover:text-sky-200" href="../download_product_list.php" target="_blank" rel="noopener">تحميل (<?php echo h($currentFileName); ?>)</a></p>
+            <label class="mt-2 flex items-center gap-2 text-sm text-rose-400">
+                <input type="checkbox" name="remove_product_list_file" value="1"> إزالة الملف الحالي
+            </label>
+        <?php endif; ?>
+    </div>
     <button class="btn" type="submit">Save</button>
 </form>
 <?php admin_footer(); ?>

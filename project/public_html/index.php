@@ -6,6 +6,8 @@ $contact = get_contact_info($pdo);
 $heroBanner = get_site_image('hero_banner');
 $productionGallery = get_site_images('production_gallery');
 $heroSrc = site_image_src($heroBanner['image_data'] ?? null);
+$productListUrl = !empty($contact['product_list_file']) ? site_url('download_product_list.php') : null;
+$productListLabel = $contact['product_list_label'] ?? 'قائمة المنتجات';
 $orgSchema = [
     '@context' => 'https://schema.org',
     '@type' => 'Organization',
@@ -64,6 +66,11 @@ $lightBreadcrumbOptions = [
             <div class="flex flex-wrap gap-4">
                 <a class="btn inline-flex items-center justify-center rounded-full bg-brand px-6 py-3 text-base font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-brand-dark" href="products.php">Каталог продукции</a>
                 <a class="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-base font-semibold text-slate-700 transition hover:border-slate-900 hover:text-slate-900" href="contact.php">Связаться с нами</a>
+                <?php if ($productListUrl): ?>
+                    <a class="inline-flex items-center justify-center rounded-full border border-slate-300 px-6 py-3 text-base font-semibold text-slate-700 transition hover:border-slate-900 hover:text-slate-900" href="<?php echo h($productListUrl); ?>" download>
+                        <?php echo h($productListLabel ?: 'قائمة المنتجات'); ?>
+                    </a>
+                <?php endif; ?>
             </div>
             <div class="grid gap-6 pt-4 sm:grid-cols-3">
                 <div class="rounded-2xl border border-slate-200 bg-white/70 p-4 text-center shadow-sm">
