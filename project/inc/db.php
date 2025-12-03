@@ -1,6 +1,6 @@
 <?php
 // prod
-$host = 'localhost';
+$host = 'salfatrf.beget.tech';
 $db   = 'salfatrf_prod';
 $user = 'salfatrf_prod';
 $pass = 'P@$$w0rd';
