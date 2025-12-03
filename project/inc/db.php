@@ -3,7 +3,8 @@
 $host = 'localhost';
 $db   = 'salfatrf_prod';
 $user = 'salfatrf_prod';
-$pass = 'KHB&EMtfSET0';
+$pass = 'P@$$w0rd';
+$charset = 'utf8mb4';
 
 
 // prod
