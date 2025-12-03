@@ -101,7 +101,7 @@ $lightBreadcrumbOptions = [
             <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 <?php foreach ($categories as $category): ?>
                     <a class="category-card group flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/70 p-6 shadow-sm transition hover:-translate-y-1 hover:border-brand hover:shadow-glow" href="category.php?category=<?php echo h($category['slug']); ?>">
-                        <div class="category-card__media overflow-hidden rounded-2xl">
+                        <div class=" overflow-hidden rounded-2xl">
                             <?php if (!empty($category['hero_image'])): ?>
                                 <?php echo render_picture($category['hero_image'], $category['hero_image_alt'] ?: $category['name'], ['class' => 'h-52 w-full object-cover transition duration-500 group-hover:scale-105']); ?>
                             <?php else: ?>

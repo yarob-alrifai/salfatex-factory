@@ -1,13 +1,9 @@
 <?php
 // prod
-// $host = 'localhost';
-// $db   = 'yalrifd7_salfate';
-// $user = 'yalrifd7_salfate';
-// $pass = 'P@$$w0rd';
-
-
-
-
+$host = 'localhost';
+$db   = 'salfatrf_prod';
+$user = 'salfatrf_prod';
+$pass = 'KHB&EMtfSET0';
 
 
 // prod
@@ -17,11 +13,11 @@
 // $pass = 'P@$$w0rd';
 
 // localhost
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$db   = getenv('DB_NAME') ?: 'salfatex_factory';
-$user = getenv('DB_USER') ?: 'root';
-$pass = getenv('DB_PASS') ?: '';
-$charset = 'utf8mb4';
+// $host = getenv('DB_HOST') ?: '127.0.0.1';
+// $db   = getenv('DB_NAME') ?: 'salfatex_factory';
+// $user = getenv('DB_USER') ?: 'root';
+// $pass = getenv('DB_PASS') ?: '';
+// $charset = 'utf8mb4';
 
 $dsn = "mysql:host={$host};dbname={$db};charset={$charset}";
 $options = [

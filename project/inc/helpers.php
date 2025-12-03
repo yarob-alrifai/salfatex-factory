@@ -331,7 +331,7 @@ function site_header(string $title, array $meta = []): void
     $brandNameEscaped = h($brandName);
     $brandIconHtml = '';
     if ($brandIconSrc) {
-        $brandIconHtml = '<span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/15 shadow-lg backdrop-blur" aria-hidden="true">'
+        $brandIconHtml = '<span class="inline-flex h-10 w-10 items-center justify-center overflow-hidden   bg-white/15 shadow-lg backdrop-blur" aria-hidden="true">'
             . '<img src="' . h($brandIconSrc) . '" alt="' . $brandNameEscaped . '" class="h-full w-full object-cover">'
             . '</span>';
     }
