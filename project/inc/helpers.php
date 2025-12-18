@@ -421,6 +421,34 @@ HTML;
         echo '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
     }
     echo <<<HTML
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {
+            if (document.scripts[j].src === r) { return; }
+        }
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0];
+        k.async=1;k.src=r;a.parentNode.insertBefore(k,a)
+    })(window, document,'script',
+    'https://mc.webvisor.org/metrika/tag_ww.js?id=105858146','ym');
+
+    ym(105858146, 'init', {
+        ssr:true,
+        webvisor:true,
+        clickmap:true,
+        accurateTrackBounce:true,
+        trackLinks:true
+    });
+</script>
+<noscript>
+    <div>
+        <img src="https://mc.yandex.ru/watch/105858146"
+             style="position:absolute; left:-9999px;" alt="" />
+    </div>
+</noscript>
+<!-- /Yandex.Metrika counter -->
 </head>
 <body class="bg-slate-50 text-slate-900 antialiased font-sans">
 <nav class="bg-gradient-to-r from-slate-950/95 via-slate-900/95 to-slate-950/90 backdrop-blur supports-[backdrop-filter]:bg-slate-950/80 fixed top-0 left-0 z-50 w-full border-b border-white/10 shadow-2xl" aria-label="Главное меню">
