@@ -3,7 +3,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /inc/
 Disallow: /sql/
-Sitemap: https://salfatex.ru/sitemap.php
+Sitemap: https://salfatex.ru/sitemap.xml
 Host: salfatex.ru
 
 User-agent: Yandex

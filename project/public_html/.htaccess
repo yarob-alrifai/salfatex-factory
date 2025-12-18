@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# Route sitemap.xml to the dynamic generator
+RewriteRule ^sitemap\.xml$ sitemap.php [L,NC]
