@@ -8,11 +8,12 @@ $productionGallery = get_site_images('production_gallery');
 $heroSrc = site_image_src($heroBanner['image_data'] ?? null);
 $productListUrl = !empty($contact['product_list_file']) ? site_url('download_product_list.php') : null;
 $productListLabel = $contact['product_list_label'] ?? 'قائمة المنتجات';
+$homeUrl = site_url('');
 $orgSchema = [
     '@context' => 'https://schema.org',
     '@type' => 'Organization',
     'name' => 'Salfatex Factory',
-    'url' => site_url('index.php'),
+    'url' => $homeUrl,
     'logo' => $heroSrc ?: site_url('images/logo.svg')
 ];
 if ($contact) {
@@ -26,14 +27,14 @@ $meta = [
     'title' => 'Фабрика бумажной продукции полного цикла «Салфатекс»',
     'description' => 'Производим салфетки, полотенца и туалетную бумагу с автоматическим контролем качества. Собственное оборудование и гибкие условия поставок.',
     'keywords' => 'салфетки оптом, бумажные полотенца, туалетная бумага, производство',
-    'canonical' => site_url('index.php'),
+    'canonical' => $homeUrl,
     'og_image' => $heroSrc ?: '',
     'schema' => [
         [
             '@context' => 'https://schema.org',
             '@type' => 'WebSite',
             'name' => 'Salfatex Factory',
-            'url' => site_url('index.php'),
+            'url' => $homeUrl,
             'potentialAction' => [
                 '@type' => 'SearchAction',
                 'target' => site_url('products.php') . '?q={search_term_string}',
@@ -45,7 +46,7 @@ $meta = [
 ];
 site_header('Фабрика бумажной продукции', $meta);
 $heroBreadcrumbs = [
-    ['label' => 'Главная', 'href' => site_url('index.php'), 'icon' => 'home', 'current' => true],
+    ['label' => 'Главная', 'href' => $homeUrl, 'icon' => 'home', 'current' => true],
 ];
 $lightBreadcrumbOptions = [
     'class' => 'mb-4 text-slate-500',

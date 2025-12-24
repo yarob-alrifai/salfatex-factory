@@ -28,10 +28,16 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 
+$allowFail = defined('SALFATEX_DB_ALLOW_FAIL') && SALFATEX_DB_ALLOW_FAIL;
+
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
-    http_response_code(500);
-    echo 'Database connection failed.';
-    exit;
+    if ($allowFail) {
+        $pdo = null;
+    } else {
+        http_response_code(500);
+        echo 'Database connection failed.';
+        exit;
+    }
 }
