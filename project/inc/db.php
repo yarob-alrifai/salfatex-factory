@@ -1,9 +1,10 @@
 <?php
 // prod
-$host = 'salfatrf.beget.tech';
-$db   = 'salfatrf_prod';
-$user = 'salfatrf_prod';
-$pass = 'P@$$w0rd';
+// $host = 'localhost';
+$host = 'remishfb.beget.tech';
+$db   = 'remishfb_yarob';
+$user = 'remishfb_yarob';
+$pass = 'n&O8xVOrbtlB';
 $charset = 'utf8mb4';
 
 
