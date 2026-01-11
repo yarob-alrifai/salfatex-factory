@@ -1,0 +1,7 @@
+allow from all
+RewriteEngine off
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+
+#php_value auto_prepend_file none
