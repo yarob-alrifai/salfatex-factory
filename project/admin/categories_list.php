@@ -1,19 +1,20 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/_layout.php';
 require_admin();
 $categories = $pdo->query('SELECT pc.*, COUNT(pg.id) AS products_count FROM product_categories pc LEFT JOIN product_groups pg ON pg.category_id = pc.id GROUP BY pc.id ORDER BY pc.sort_order ASC, pc.name')->fetchAll();
-admin_header('Categories');
+admin_header(admin_t('Categories'));
 ?>
-<a class="btn" href="category_add.php">Add category</a>
+<a class="btn" href="category_add.php"><?php echo h(admin_t('Add category')); ?></a>
 <table class="admin-table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Slug</th>
-            <th>Name</th>
-            <th>Order</th>
-            <th>Products</th>
-            <th>Actions</th>
+            <th><?php echo h(admin_t('ID')); ?></th>
+            <th><?php echo h(admin_t('Slug')); ?></th>
+            <th><?php echo h(admin_t('Name')); ?></th>
+            <th><?php echo h(admin_t('Order')); ?></th>
+            <th><?php echo h(admin_t('Products')); ?></th>
+            <th><?php echo h(admin_t('Actions')); ?></th>
         </tr>
     </thead>
     <tbody>
@@ -25,8 +26,8 @@ admin_header('Categories');
             <td><?php echo (int)$category['sort_order']; ?></td>
             <td><?php echo (int)($category['products_count'] ?? 0); ?></td>
             <td>
-                <a href="category_edit.php?id=<?php echo (int)$category['id']; ?>">Edit</a> |
-                <a href="category_delete.php?id=<?php echo (int)$category['id']; ?>" onclick="return confirm('Delete category?');">Delete</a>
+                <a href="category_edit.php?id=<?php echo (int)$category['id']; ?>"><?php echo h(admin_t('Edit')); ?></a> |
+                <a href="category_delete.php?id=<?php echo (int)$category['id']; ?>" onclick="return confirm(<?php echo h(json_encode(admin_t('Delete category?'), JSON_UNESCAPED_UNICODE)); ?>);"><?php echo h(admin_t('Delete')); ?></a>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -1,21 +1,22 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_once __DIR__ . '/_tailwind.php';
 
 function admin_header(string $title): void
 {
-    $username = $_SESSION['admin_username'] ?? 'Administrator';
+    $username = $_SESSION['admin_username'] ?? admin_t('Administrator');
     $currentPage = basename($_SERVER['PHP_SELF'] ?? '');
     $navLinks = [
-        'dashboard.php' => 'Dashboard',
-        'contact_edit.php' => 'Contacts',
-        'site_media.php' => 'Media',
-        'messages_list.php' => 'Messages',
-        'news_list.php' => 'News',
-        'categories_list.php' => 'Categories',
-        'groups_list.php' => 'Groups',
-        'variants_list.php' => 'Variants',
-        'logout.php' => 'Logout',
+        'dashboard.php' => admin_t('Dashboard'),
+        'contact_edit.php' => admin_t('Contacts'),
+        'site_media.php' => admin_t('Media'),
+        'messages_list.php' => admin_t('Messages'),
+        'news_list.php' => admin_t('News'),
+        'categories_list.php' => admin_t('Categories'),
+        'groups_list.php' => admin_t('Groups'),
+        'variants_list.php' => admin_t('Variants'),
+        'logout.php' => admin_t('Logout'),
     ];
 
     $unreadMessages = 0;
@@ -31,7 +32,7 @@ function admin_header(string $title): void
 
     ?>
     <!DOCTYPE html>
-    <html lang="ar">
+    <html lang="<?php echo admin_lang(); ?>" dir="<?php echo admin_lang() === 'ar' ? 'rtl' : 'ltr'; ?>">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,7 +40,7 @@ function admin_header(string $title): void
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../public_html/css/styles.css">
+        <link rel="stylesheet" href="<?php echo h(admin_asset_url('css/styles.css')); ?>">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css">
         <?php render_admin_theme_assets(); ?>
     </head>
@@ -50,11 +51,11 @@ function admin_header(string $title): void
                 <span>SF</span>
                 <div>
                     <strong>Salfatex</strong>
-                    <small>Admin Center</small>
+                    <small><?php echo h(admin_t('Admin Center')); ?></small>
                 </div>
             </div>
             <div class="admin-user">
-                <p>مرحباً،</p>
+                <p><?php echo h(admin_t('مرحباً،')); ?></p>
                 <strong><?php echo h($username); ?></strong>
             </div>
             <nav class="admin-menu">
@@ -71,7 +72,7 @@ function admin_header(string $title): void
                         <span class="admin-menu__label">
                             <?php echo h($label); ?>
                             <?php if ($file === 'messages_list.php' && $unreadMessages > 0): ?>
-                                <span class="admin-menu__badge" aria-label="رسائل جديدة">
+                                <span class="admin-menu__badge" aria-label="<?php echo h(admin_t('رسائل جديدة')); ?>">
                                     <?php echo (int)$unreadMessages; ?>
                                 </span>
                             <?php endif; ?>
@@ -83,12 +84,13 @@ function admin_header(string $title): void
         <main class="admin-main">
             <header class="admin-topbar">
                 <div>
-                    <p class="eyebrow">مركز التحكم</p>
+                    <p class="eyebrow"><?php echo h(admin_t('مركز التحكم')); ?></p>
                     <h1><?php echo h($title); ?></h1>
-                    <p class="subtitle">متابعة المحتوى والتحديثات اليومية</p>
+                    <p class="subtitle"><?php echo h(admin_t('متابعة المحتوى والتحديثات اليومية')); ?></p>
                 </div>
                 <div class="admin-topbar__meta">
-                    <span class="badge badge--online">نشط الآن</span>
+                    <?php admin_language_selector(); ?>
+                    <span class="badge badge--online"><?php echo h(admin_t('نشط الآن')); ?></span>
                 </div>
             </header>
             <section class="admin-panel">
@@ -105,27 +107,28 @@ function admin_footer(): void
         <div class="admin-cropper__dialog" role="dialog" aria-modal="true" aria-labelledby="imageCropTitle">
             <header class="admin-cropper__header">
                 <div>
-                    <p class="eyebrow" id="imageCropTitle">قص الصورة</p>
+                    <p class="eyebrow" id="imageCropTitle"><?php echo h(admin_t('قص الصورة')); ?></p>
                     <p data-crop-filename class="admin-cropper__filename"></p>
                 </div>
-                <button type="button" class="admin-cropper__close" data-crop-cancel aria-label="إغلاق">×</button>
+                <button type="button" class="admin-cropper__close" data-crop-cancel aria-label="<?php echo h(admin_t('إغلاق')); ?>">×</button>
             </header>
             <div class="admin-cropper__body">
                 <div class="admin-cropper__canvas">
-                    <img src="" alt="صورة للقص" data-crop-image>
+                    <img src="" alt="<?php echo h(admin_t('صورة للقص')); ?>" data-crop-image>
                 </div>
-                <p class="admin-cropper__hint">حدد المربع الذي تريد استخدامه ثم اضغط «تأكيد القص».</p>
+                <p class="admin-cropper__hint"><?php echo h(admin_t('حدد المربع الذي تريد استخدامه ثم اضغط «تأكيد القص».')); ?></p>
             </div>
             <footer class="admin-cropper__actions">
-                <button type="button" class="btn" data-crop-confirm>تأكيد القص</button>
-                <button type="button" class="btn-secondary" data-crop-skip>استخدام القص التلقائي</button>
-                <button type="button" class="btn-secondary" data-crop-cancel>إلغاء</button>
+                <button type="button" class="btn" data-crop-confirm><?php echo h(admin_t('تأكيد القص')); ?></button>
+                <button type="button" class="btn-secondary" data-crop-skip><?php echo h(admin_t('استخدام القص التلقائي')); ?></button>
+                <button type="button" class="btn-secondary" data-crop-cancel><?php echo h(admin_t('إلغاء')); ?></button>
             </footer>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="../public_html/js/main.js"></script>
+    <script>window.adminUi = <?php echo json_encode(['deleteRow' => admin_t('Delete row'), 'invalidContact' => admin_t('Check the phone number and email.')], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP); ?>;</script>
+    <script src="<?php echo h(admin_asset_url('js/main.js')); ?>"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (!window.tinymce) {
@@ -147,7 +150,7 @@ function admin_footer(): void
                 });
             };
 
-            const showRichTextError = (textarea, message = 'هذا الحقل مطلوب.') => {
+            const showRichTextError = (textarea, message = <?php echo json_encode(admin_t('هذا الحقل مطلوب.'), JSON_UNESCAPED_UNICODE); ?>) => {
                 const fieldWrapper = textarea.closest('label, .form-field');
                 if (!fieldWrapper) {
                     return;

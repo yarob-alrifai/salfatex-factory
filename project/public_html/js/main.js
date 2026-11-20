@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = contactForm.querySelector('input[name="email"]').value.trim();
             if (phone.length < 5 || !email.includes('@')) {
                 event.preventDefault();
-                alert('Проверьте корректность телефона и email.');
+                alert(window.adminUi?.invalidContact || 'Проверьте корректность телефона и email.');
             }
         });
     }
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             rowBlock.appendChild(label);
             const remove = document.createElement('button');
             remove.type = 'button';
-            remove.textContent = 'Удалить строку';
+            remove.textContent = window.adminUi?.deleteRow || 'Удалить строку';
             remove.addEventListener('click', () => {
                 rowBlock.remove();
             });

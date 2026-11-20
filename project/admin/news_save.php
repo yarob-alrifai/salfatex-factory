@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
 require_csrf_token('news_form');
@@ -15,13 +16,13 @@ $ogTitle = trim($_POST['og_title'] ?? '');
 $ogDescription = trim($_POST['og_description'] ?? '');
 $canonicalUrl = trim($_POST['canonical_url'] ?? '');
 if ($title === '' || $slugInput === '' || $short === '' || $full === '') {
-    die('Заполните все обязательные поля');
+    die(h(admin_t('Заполните все обязательные поля')));
 }
 $slug = sanitize_slug($slugInput);
 $exists = $pdo->prepare('SELECT COUNT(*) FROM news WHERE slug = :slug');
 $exists->execute(['slug' => $slug]);
 if ($exists->fetchColumn() > 0) {
-    die('Slug already exists');
+    die(h(admin_t('Slug already exists')));
 }
 $imageData = upload_single_image($_FILES['image'] ?? null);
 $ogImage = upload_single_image($_FILES['og_image'] ?? null);

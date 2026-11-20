@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/_layout.php';
 require_admin();
 $groups = $pdo->query('SELECT id, group_title FROM product_groups ORDER BY group_title')->fetchAll();
@@ -19,12 +20,12 @@ if ($selectedGroup) {
         $cellMap[$row['id']] = $cellsStmt->fetchAll();
     }
 }
-admin_header('Variants');
+admin_header(admin_t('Variants'));
 ?>
 <form method="get">
-    <label>Select group
+    <label><?php echo h(admin_t('Select group')); ?>
         <select name="group_id" onchange="this.form.submit()">
-            <option value="0">Choose...</option>
+            <option value="0"><?php echo h(admin_t('Choose...')); ?></option>
             <?php foreach ($groups as $group): ?>
                 <option value="<?php echo (int)$group['id']; ?>" <?php echo $selectedGroup === (int)$group['id'] ? 'selected' : ''; ?>><?php echo h($group['group_title']); ?></option>
             <?php endforeach; ?>
@@ -32,7 +33,7 @@ admin_header('Variants');
     </label>
 </form>
 <?php if ($selectedGroup): ?>
-    <a class="btn" href="variant_add.php?group_id=<?php echo $selectedGroup; ?>">Add variant</a>
+    <a class="btn" href="variant_add.php?group_id=<?php echo $selectedGroup; ?>"><?php echo h(admin_t('Add variant')); ?></a>
     <table class="admin-table">
         <thead>
             <tr>
@@ -40,7 +41,7 @@ admin_header('Variants');
                 <?php foreach ($columns as $column): ?>
                     <th><?php echo h($column['column_name']); ?></th>
                 <?php endforeach; ?>
-                <th>Actions</th>
+                <th><?php echo h(admin_t('Actions')); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -62,8 +63,8 @@ admin_header('Variants');
                         <td><?php echo h($value); ?></td>
                     <?php endforeach; ?>
                     <td>
-                        <a href="variant_edit.php?id=<?php echo (int)$row['id']; ?>&group_id=<?php echo $selectedGroup; ?>">Edit</a> |
-                        <a href="variant_delete.php?id=<?php echo (int)$row['id']; ?>&group_id=<?php echo $selectedGroup; ?>" onclick="return confirm('Delete?');">Delete</a>
+                        <a href="variant_edit.php?id=<?php echo (int)$row['id']; ?>&group_id=<?php echo $selectedGroup; ?>"><?php echo h(admin_t('Edit')); ?></a> |
+                        <a href="variant_delete.php?id=<?php echo (int)$row['id']; ?>&group_id=<?php echo $selectedGroup; ?>" onclick="return confirm(<?php echo h(json_encode(admin_t('Delete?'), JSON_UNESCAPED_UNICODE)); ?>);"><?php echo h(admin_t('Delete')); ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

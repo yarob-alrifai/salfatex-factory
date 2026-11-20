@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/_layout.php';
 require_admin();
 $id = (int)($_GET['id'] ?? 0);
@@ -22,7 +23,7 @@ $values = [];
 foreach ($cellsStmt as $cell) {
     $values[$cell['column_id']] = $cell['value'];
 }
-admin_header('Edit variant');
+admin_header(admin_t('Edit variant'));
 ?>
 <form method="post" action="variant_update.php">
     <input type="hidden" name="id" value="<?php echo $id; ?>">
@@ -31,6 +32,6 @@ admin_header('Edit variant');
     <?php foreach ($columns as $column): ?>
         <label><?php echo h($column['column_name']); ?><textarea name="values[<?php echo (int)$column['id']; ?>]" rows="2"><?php echo h($values[$column['id']] ?? ''); ?></textarea></label>
     <?php endforeach; ?>
-    <button class="btn" type="submit">Update variant</button>
+    <button class="btn" type="submit"><?php echo h(admin_t('Update variant')); ?></button>
 </form>
 <?php admin_footer(); ?>

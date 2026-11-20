@@ -1,11 +1,12 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
 require_csrf_token('group_form');
 $categoryId = (int)($_POST['category_id'] ?? 0);
 $category = $categoryId ? get_category_by_id($categoryId) : null;
 if (!$category) {
-    die('Invalid category');
+    die(h(admin_t('Invalid category')));
 }
 $title = trim($_POST['group_title'] ?? '');
 $slugInput = trim($_POST['slug'] ?? $title);
@@ -24,13 +25,13 @@ $columns = $_POST['columns'] ?? [];
 $rows = $_POST['rows'] ?? [];
 $cells = $_POST['cells'] ?? [];
 if ($title === '' || $slugInput === '' || $leftDescription === '') {
-    die('Missing required fields');
+    die(h(admin_t('Missing required fields')));
 }
 $slug = sanitize_slug($slugInput);
 $existsStmt = $pdo->prepare('SELECT COUNT(*) FROM product_groups WHERE slug = :slug');
 $existsStmt->execute(['slug' => $slug]);
 if ($existsStmt->fetchColumn() > 0) {
-    die('Slug already exists');
+    die(h(admin_t('Slug already exists')));
 }
 $mainImage = upload_single_image($_FILES['main_image'] ?? null);
 $ogImage = upload_single_image($_FILES['og_image'] ?? null);

@@ -1465,3 +1465,12 @@ select {
     font-size: clamp(1.8rem, 1.35rem + 2vw, 2.4rem);
   }
 }
+/* Admin language layout */
+.admin-language{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.85rem;margin-block:.5rem}
+.admin-language select,.admin-language button{border:1px solid #cbd5e1;border-radius:8px;padding:.4rem .6rem;background:#fff;color:#0f172a}
+.admin-language label{width:100%}
+html[dir] .admin-table th,html[dir] .admin-table td{text-align:start}
+html[dir] .admin-topbar__meta{text-align:end}
+html[dir=rtl] .admin-sidebar{border-right:0;border-inline-end:1px solid #e2e8f0}
+html[dir=rtl] .admin-auth__card{text-align:right}
+html[dir] input[type=email],html[dir] input[type=url],html[dir] input[type=tel]{direction:ltr;text-align:start}

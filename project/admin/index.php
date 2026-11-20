@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/helpers.php';
 require_once __DIR__ . '/_tailwind.php';
 if (!empty($_SESSION['admin_id'])) {
@@ -22,49 +23,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: dashboard.php');
         exit;
     } else {
-        $error = 'بيانات الدخول غير صحيحة، حاول مرة أخرى.';
+        $error = admin_t('بيانات الدخول غير صحيحة، حاول مرة أخرى.');
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="<?php echo admin_lang(); ?>" dir="<?php echo admin_lang() === 'ar' ? 'rtl' : 'ltr'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم | Salfatex Factory</title>
+    <title><?php echo h(admin_t('لوحة التحكم')); ?> | Salfatex Factory</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../public_html/css/styles.css">
+    <link rel="stylesheet" href="<?php echo h(admin_asset_url('css/styles.css')); ?>">
     <?php render_admin_theme_assets(); ?>
 </head>
 <body class="admin-auth">
 <div class="admin-auth__shell">
     <div class="admin-auth__intro">
         <p class="eyebrow">Salfatex Factory</p>
-        <h1>مرحباً بعودتك إلى مركز الإدارة</h1>
-        <p>تستطيع من هنا متابعة الأخبار والمنتجات والفئات وتحديث محتوى الموقع بسهولة واحترافية.</p>
+        <h1><?php echo h(admin_t('مرحباً بعودتك إلى مركز الإدارة')); ?></h1>
+        <p><?php echo h(admin_t('تستطيع من هنا متابعة الأخبار والمنتجات والفئات وتحديث محتوى الموقع بسهولة واحترافية.')); ?></p>
         <ul class="admin-auth__stats">
             <li>
-                <strong>إدارة شاملة</strong>
-                <span>تحكم كامل بالمحتوى</span>
+                <strong><?php echo h(admin_t('إدارة شاملة')); ?></strong>
+                <span><?php echo h(admin_t('تحكم كامل بالمحتوى')); ?></span>
             </li>
             <li>
-                <strong>دعم سريع</strong>
-                <span>تحديثات مباشرة</span>
+                <strong><?php echo h(admin_t('دعم سريع')); ?></strong>
+                <span><?php echo h(admin_t('تحديثات مباشرة')); ?></span>
             </li>
             <li>
-                <strong>تجربة عربية</strong>
-                <span>واجهة سلسة وحديثة</span>
+                <strong><?php echo h(admin_t('تجربة عربية')); ?></strong>
+                <span><?php echo h(admin_t('واجهة سلسة وحديثة')); ?></span>
             </li>
         </ul>
     </div>
     <div class="admin-auth__card">
+        <?php admin_language_selector(); ?>
         <div class="admin-auth__logo" aria-hidden="true">SF</div>
         <div class="admin-auth__heading">
-            <p class="eyebrow">لوحة تحكم المسؤول</p>
-            <h2>تسجيل الدخول</h2>
-            <p>أدخل بياناتك لمتابعة إدارة الموقع.</p>
+            <p class="eyebrow"><?php echo h(admin_t('لوحة تحكم المسؤول')); ?></p>
+            <h2><?php echo h(admin_t('تسجيل الدخول')); ?></h2>
+            <p><?php echo h(admin_t('أدخل بياناتك لمتابعة إدارة الموقع.')); ?></p>
         </div>
         <?php if ($error): ?>
             <div class="admin-alert admin-alert--error"><?php echo h($error); ?></div>
@@ -72,14 +74,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="post" class="admin-form">
             <?php echo csrf_field('admin_login'); ?>
             <label>
-                <span>اسم المستخدم</span>
+                <span><?php echo h(admin_t('اسم المستخدم')); ?></span>
                 <input type="text" name="username" value="<?php echo h($usernameInput); ?>" required autocomplete="username">
             </label>
             <label>
-                <span>كلمة المرور</span>
+                <span><?php echo h(admin_t('كلمة المرور')); ?></span>
                 <input type="password" name="password" required autocomplete="current-password">
             </label>
-            <button class="btn btn--primary" type="submit">تسجيل الدخول</button>
+            <button class="btn btn--primary" type="submit"><?php echo h(admin_t('تسجيل الدخول')); ?></button>
         </form>
     </div>
 </div>

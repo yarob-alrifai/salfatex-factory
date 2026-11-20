@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
 require_csrf_token('category_form');
@@ -18,13 +19,13 @@ $sortOrderInput = trim($_POST['sort_order'] ?? '');
 $sortOrder = $sortOrderInput === '' ? null : (int)$sortOrderInput;
 $galleryDefaultAlt = trim($_POST['gallery_default_alt'] ?? '') ?: $name;
 if ($name === '' || $slugInput === '') {
-    die('Name and slug are required');
+    die(h(admin_t('Name and slug are required')));
 }
 $slug = sanitize_slug($slugInput);
 $existsStmt = $pdo->prepare('SELECT COUNT(*) FROM product_categories WHERE slug = :slug');
 $existsStmt->execute(['slug' => $slug]);
 if ($existsStmt->fetchColumn() > 0) {
-    die('Slug already exists');
+    die(h(admin_t('Slug already exists')));
 }
 $heroImage = upload_single_image($_FILES['hero_image'] ?? null);
 $ogImage = upload_single_image($_FILES['og_image'] ?? null);

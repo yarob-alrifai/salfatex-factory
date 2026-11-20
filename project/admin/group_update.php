@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
 require_csrf_token('group_form');
@@ -6,7 +7,7 @@ $id = (int)($_POST['id'] ?? 0);
 $categoryId = (int)($_POST['category_id'] ?? 0);
 $category = $categoryId ? get_category_by_id($categoryId) : null;
 if ($id <= 0 || !$category) {
-    die('Invalid data');
+    die(h(admin_t('Invalid data')));
 }
 $title = trim($_POST['group_title'] ?? '');
 $slugInput = trim($_POST['slug'] ?? $title);
@@ -25,19 +26,19 @@ $columns = $_POST['columns'] ?? [];
 $rows = $_POST['rows'] ?? [];
 $cells = $_POST['cells'] ?? [];
 if ($title === '' || $slugInput === '' || $leftDescription === '') {
-    die('Missing fields');
+    die(h(admin_t('Missing fields')));
 }
 $slug = sanitize_slug($slugInput);
 $currentStmt = $pdo->prepare('SELECT * FROM product_groups WHERE id = :id');
 $currentStmt->execute(['id' => $id]);
 $current = $currentStmt->fetch();
 if (!$current) {
-    die('Group not found');
+    die(h(admin_t('Group not found')));
 }
 $existsStmt = $pdo->prepare('SELECT COUNT(*) FROM product_groups WHERE slug = :slug AND id != :id');
 $existsStmt->execute(['slug' => $slug, 'id' => $id]);
 if ($existsStmt->fetchColumn() > 0) {
-    die('Slug already exists');
+    die(h(admin_t('Slug already exists')));
 }
 $newMainImage = upload_single_image($_FILES['main_image'] ?? null);
 $mainImage = $newMainImage ?: $current['main_image'];

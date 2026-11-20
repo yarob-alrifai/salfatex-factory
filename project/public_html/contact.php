@@ -166,7 +166,7 @@ $contactBreadcrumbOptions = [
                     </div>
                     <div class="map overflow-hidden rounded-[32px] border border-slate-200 shadow-2xl shadow-slate-200/70">
                         <?php if ($mapEmbed): ?>
-                            <?php echo $mapEmbed; ?>
+                            <div data-consent-map><p>Карта доступна после согласия на функциональные cookie.</p><button type="button" data-cookie-settings>Настройки cookie</button><?php echo $mapEmbed; ?></div>
                         <?php else: ?>
                             <div class="flex h-full min-h-[320px] w-full items-center justify-center bg-slate-50 text-slate-500">
                                 <p>Добавьте карту в панели администратора, чтобы показать адрес на странице контактов.</p>

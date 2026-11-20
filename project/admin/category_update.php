@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/_i18n.php';
 require_once __DIR__ . '/../inc/auth.php';
 require_admin();
 require_csrf_token('category_form');
@@ -18,20 +19,20 @@ $canonicalUrl = trim($_POST['canonical_url'] ?? '');
 $sortOrderInput = trim($_POST['sort_order'] ?? '');
 $galleryDefaultAlt = trim($_POST['gallery_default_alt'] ?? '') ?: $name;
 if ($id <= 0 || $name === '' || $slugInput === '') {
-    die('Invalid data');
+    die(h(admin_t('Invalid data')));
 }
 $slug = sanitize_slug($slugInput);
 $categoryStmt = $pdo->prepare('SELECT hero_image, og_image, sort_order FROM product_categories WHERE id = :id');
 $categoryStmt->execute(['id' => $id]);
 $current = $categoryStmt->fetch();
 if (!$current) {
-    die('Category not found');
+    die(h(admin_t('Category not found')));
 }
 $sortOrder = $sortOrderInput === '' ? (int)$current['sort_order'] : (int)$sortOrderInput;
 $existsStmt = $pdo->prepare('SELECT COUNT(*) FROM product_categories WHERE slug = :slug AND id != :id');
 $existsStmt->execute(['slug' => $slug, 'id' => $id]);
 if ($existsStmt->fetchColumn() > 0) {
-    die('Slug already exists');
+    die(h(admin_t('Slug already exists')));
 }
 $newHero = upload_single_image($_FILES['hero_image'] ?? null);
 $heroImage = $newHero ?: $current['hero_image'];
